@@ -17,7 +17,7 @@ class disciplineController extends Controller
     {
         $disciplines = Discipline::all();
 
-        return view('admin.editDiscipline.index', compact('disciplines'));
+        return view('admin.discipline.editDiscipline.index', compact('disciplines'));
     }
 
     /**
@@ -30,8 +30,8 @@ class disciplineController extends Controller
         try {
 
             $discipline = new Discipline;
-            $discipline->acronym_discipline = "$request->acronym";
-            $discipline->name = "$request->name";
+            $discipline->acronym_discipline = $request->acronym;
+            $discipline->name = $request->name;
             $discipline->save();
 
         } catch (\Exception $e) {
@@ -77,14 +77,7 @@ class disciplineController extends Controller
     public function edit($id)
     {
         $discipline = Discipline::findOrFail($id);
-        $id = $discipline->id;
-        $acronym = $discipline->acronym_discipline;
-        $name = $discipline->name;
-        return view('admin.editDiscipline.edit.editDiscipline', [
-            'acronym' => $acronym,
-            'name' => $name,
-            'id' => $id
-        ]);
+        return view('admin.discipline.editDiscipline.edit.editDiscipline', compact('discipline'));
     }
 
     /**
@@ -94,9 +87,25 @@ class disciplineController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        dd($id);
+    public function update(CreateDisciplinesRequest $request,$id)
+    {   
+        try{
+
+        $discipline = Discipline::findOrFail($id);
+        $discipline->acronym_discipline = $request->acronym;
+        $discipline->name = $request->name;
+        $discipline->save();
+
+        } catch (\Exception $e) {
+            return view('admin.discipline.editDiscipline.index', [
+                'error' => 'Erro ao alterar a disciplina',
+                'disciplines' => $disciplines = Discipline::all()
+            ]);
+        }
+        return view('admin.discipline.editDiscipline.index', [
+            'successfully' => 'Disciplina alterada com sucesso',
+            'disciplines' => $disciplines = Discipline::all()
+        ]);
     }
 
     /**
@@ -107,6 +116,21 @@ class disciplineController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            
+            $discipline = Discipline::findOrFail($id);
+            $discipline->delete();
+            
+        } catch (\Exception $e) {
+            return view('admin.discipline.editDiscipline.index', [
+                'error' => 'Erro ao apagar a disciplina',
+                'disciplines' => $disciplines = Discipline::all()
+            ]);
+        }
+
+        return view('admin.discipline.editDiscipline.index', [
+            'successfully' => 'Disciplina apagada com sucesso',
+            'disciplines' => $disciplines = Discipline::all()
+        ]);
     }
 }

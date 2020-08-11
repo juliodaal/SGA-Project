@@ -1,8 +1,18 @@
 @extends('layouts.template')
 
-@section('title', 'Editar Disciplina')
+@section('title', 'Editar '.$discipline->acronym_discipline)
 
 @section('content')
+
+@if($errors->isNotEmpty())
+        <div class="alert alert-warning alert-dismissible fade show rounded border border-warning" role="alert">
+            <strong>Campos vazios</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+@endif
+
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
   Apagar Disciplina
@@ -23,7 +33,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
-        {!! Form::open(['url' => 'admin/discipline/{discipline} ','method' => 'DELETE']) !!}
+        {!! Form::open(['action' => ['disciplineController@destroy',$discipline->id],'method' => 'DELETE']) !!}
         {!! Form::hidden('hidden', $hidden ?? '',['class' => 'form-control']) !!}
         {!! Form::submit('Apagar Disciplina', ['class' => 'btn btn-danger']) !!}
         {!! Form::close() !!}
@@ -32,13 +42,13 @@
   </div>
 </div>
 <div class="form-group">
-    {!! Form::open(['url' => 'admin/discipline/','method' => 'put']) !!}
+    {!! Form::open(['action' => ['disciplineController@update',$discipline->id],'method' => 'put']) !!}
         {!! Form::label('acronym', 'Acronimo', ['class' => 'control-label mt-2']) !!}
-        {!! Form::text('acronym', $acronym ?? '{{ $acronym }}', ['class' => 'form-control']) !!}
+        {!! Form::text('acronym', $acronym ?? $discipline->acronym_discipline , ['class' => 'form-control']) !!}
         {!! Form::label('name', 'Nome Disciplina', ['class' => 'control-label mt-2']) !!}
-        {!! Form::text('name', $name ?? '{{ $name }}', ['class' => 'form-control']) !!}
+        {!! Form::text('name', $name ?? $discipline->name, ['class' => 'form-control']) !!}
         {!! Form::submit('Editar', ['class' => 'btn btn-primary mt-2']) !!}
-        {!! Form::reset('Borrar Datos', ['class' => 'btn btn-warning mt-2']) !!}
+        {!! Form::reset('Limpar Campos', ['class' => 'btn btn-warning mt-2']) !!}
     {!! Form::close() !!}
 </div>
 

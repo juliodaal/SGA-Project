@@ -3,7 +3,7 @@
 
 @extends('layouts.template')
 
-@section('title', 'Admin')
+@section('title', 'Administrador')
 
 @section('content')
 
@@ -29,6 +29,7 @@
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
+    </div>
 @endisset
 
 <div class="accordion my-5" id="accordionExample">
@@ -39,7 +40,7 @@
                     data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                     Adicionar Disciplinas
                 </button>
-                <span class="float-right"><a class="btn btn-info" href="/admin/discipline">Editar Disciplina</a></span>
+                <span class="float-right"><a class="btn btn-info" href="/admin/discipline">Ver Disciplinas</a></span>
             </h2>
         </div>
 
@@ -47,17 +48,17 @@
             <div class="card-body">
                 <div class="form-group">
                     {!! Form::open(['action' => 'disciplineController@create','method' => 'get']) !!}
-                    {!! Form::label('acronym', 'Acronimo', ['class' => 'control-label mt-2']) !!}
-                    {!! Form::text('acronym', $acronym ?? '', ['class' => 'form-control']) !!}
-                    {!! Form::label('name', 'Nome Disciplina', ['class' => 'control-label mt-2']) !!}
-                    {!! Form::text('name', $name ?? '', ['class' => 'form-control']) !!}
-                    <small id="emailHelp" class="form-text text-muted">
-                        Envia informacão de uma lista de <strong>disciplinas</strong> através de um fichero excel
-                    </small>
-                    {!! Form::label('document', 'Enviar através de um documento', ['class' => 'control-label mt-2']) !!}
-                    {!! Form::file('document', ['class' => 'form-control-file']) !!}
-                    {!! Form::submit('Enviar', ['class' => 'btn btn-primary mt-2']) !!}
-                    {!! Form::reset('Limpar campos', ['class' => 'btn btn-warning mt-2']) !!}
+                        {!! Form::label('acronym', 'Acronimo', ['class' => 'control-label mt-2']) !!}
+                        {!! Form::text('acronym', $acronym ?? '', ['class' => 'form-control']) !!}
+                        {!! Form::label('name', 'Nome Disciplina', ['class' => 'control-label mt-2']) !!}
+                        {!! Form::text('name', $name ?? '', ['class' => 'form-control']) !!}
+                        <small id="emailHelp" class="form-text text-muted">
+                            Envia informacão de uma lista de <strong>disciplinas</strong> através de um fichero excel
+                        </small>
+                        {!! Form::label('document', 'Enviar através de um documento', ['class' => 'control-label mt-2']) !!}
+                        {!! Form::file('document', ['class' => 'form-control-file']) !!}
+                        {!! Form::submit('Enviar', ['class' => 'btn btn-primary mt-2']) !!}
+                        {!! Form::reset('Limpar campos', ['class' => 'btn btn-warning mt-2']) !!}
                     {!! Form::close() !!}
                 </div>
             </div>
@@ -68,9 +69,9 @@
             <h2 class="mb-0">
                 <button class="btn btn-link text-left text-decoration-none" type="button" data-toggle="collapse"
                     data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                    Adicionar Aluno
+                    Adicionar Estudante
                 </button>
-                <span class="float-right"><a class="btn btn-info" href="admin/discipline">Editar Aluno</a></span>
+                <span class="float-right"><a class="btn btn-info" href="/admin/student">Ver Estudante</a></span>
             </h2>
         </div>
 
@@ -94,10 +95,12 @@
                     {!! Form::text('passwordConfirm', $passwordConfirm ?? '', ['class' => 'form-control']) !!}
                     {!! Form::label('cardId', 'Id Cartão', ['class' => 'control-label mt-2']) !!}
                     {!! Form::text('cardId', $cardId ?? '', ['class' => 'form-control']) !!}
-                    {!! Form::label('addStudentToDiscipline', 'Adicionar Aluno à Disciplina', ['class' => 'control-label
-                    mt-2']) !!}
-                    {!! Form::text('addStudentToDiscipline', $addStudentToDiscipline ?? '', ['class' => 'form-control'])
-                    !!}
+                    {!! Form::label('addStudentToCareer', 'Acronimo Turma', ['class' => 'control-label mt-2']) !!}
+                    {!! Form::text('addStudentToCareer', $addStudentToCareer ?? '', ['class' => 'form-control']) !!}
+                    {!! Form::label('addStudentToCareerTwo', 'Acronimo Turma 2 (Opcional)', ['class' => 'control-label mt-2']) !!}
+                    {!! Form::text('addStudentToCareerTwo', $addStudentToCareerTwo ?? '', ['class' => 'form-control']) !!}
+                    {!! Form::label('addStudentToCareerThree', 'Acronimo Turma 3 (Opcional)', ['class' => 'control-label mt-2']) !!}
+                    {!! Form::text('addStudentToCareerThree', $addStudentToCareerThree ?? '', ['class' => 'form-control']) !!}
                     <small id="emailHelp" class="form-text text-muted">
                         Envia informacão de uma lista de <strong>alunos</strong> através de um fichero excel
                     </small>
@@ -117,7 +120,7 @@
                     data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
                     Adicionar Professor
                 </button>
-                <span class="float-right"><a class="btn btn-info" href="admin/discipline">Editar Professor</a></span>
+                <span class="float-right"><a class="btn btn-info" href="admin/discipline">Ver Professores</a></span>
             </h2>
         </div>
 
@@ -160,7 +163,7 @@
                     data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
                     Adicionar Horarios
                 </button>
-                <span class="float-right"><a class="btn btn-info" href="admin/discipline">Editar Horarios</a></span>
+                <span class="float-right"><a class="btn btn-info" href="admin/discipline">Ver Horarios</a></span>
             </h2>
         </div>
 
@@ -203,7 +206,7 @@
                     data-target="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
                     Adicionar Aluno à Turma
                 </button>
-                <span class="float-right"><a class="btn btn-info" href="admin/discipline">Editar Aluno na
+                <span class="float-right"><a class="btn btn-info" href="admin/discipline">Ver Alunos na
                         Turma</a></span>
             </h2>
         </div>
@@ -236,8 +239,8 @@
                     data-target="#collapseSix" aria-expanded="true" aria-controls="collapseSix">
                     Adicionar Administrador
                 </button>
-                <span class="float-right"><a class="btn btn-info" href="admin/discipline">Editar
-                        Administrador</a></span>
+                <span class="float-right"><a class="btn btn-info" href="admin/discipline">Ver
+                        Administradores</a></span>
             </h2>
         </div>
 

@@ -22,3 +22,7 @@ Route::get('/admin', function () {
 });
 
 Route::resource('/admin/discipline', 'disciplineController');
+
+Route::resource('/admin/student', 'StudentController');
+
+Route::post('/admin/student/findStudent', 'StudentController@findStudent')->name('student.findStudent');

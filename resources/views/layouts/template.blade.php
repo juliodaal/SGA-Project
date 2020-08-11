@@ -34,7 +34,7 @@
                 </div>
             @endif
             <div class="container">
-                <div>
+                <div class="my-4">
                     <h1>@yield('title')</h1>
                 </div>
                 <div>

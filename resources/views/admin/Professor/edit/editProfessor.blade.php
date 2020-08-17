@@ -1,6 +1,6 @@
 @extends('layouts.template')
 
-@section('title', 'Editar '.$student->name)
+@section('title', 'Editar '.$professor->name)
 
 @section('content')
 
@@ -31,7 +31,7 @@
 
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
-  Apagar Estudante
+  Apagar Professor
 </button>
 
 <!-- Modal -->
@@ -39,40 +39,41 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Apagar Estudante?</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Apagar Professor?</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        Tem a certeza de querer apagar o <strong>Estudante</strong>?
+        Tem a certeza de querer apagar o <strong>Professor</strong>?
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
-        {!! Form::open(['action' => ['StudentController@destroy',$student->id],'method' => 'DELETE']) !!}
+        {!! Form::open(['action' => ['ProfessorController@destroy',$professor->id],'method' => 'DELETE']) !!}
         {!! Form::hidden('hidden', $hidden ?? '',['class' => 'form-control']) !!}
-        {!! Form::submit('Apagar Estudante', ['class' => 'btn btn-danger']) !!}
+        {!! Form::submit('Apagar Professor', ['class' => 'btn btn-danger']) !!}
         {!! Form::close() !!}
       </div>
     </div>
   </div>
 </div>
 <div class="form-group">
-    {!! Form::open(['action' => ['StudentController@update',$student->id],'method' => 'put']) !!}
+    {!! Form::open(['action' => ['ProfessorController@update',$professor->id],'method' => 'put']) !!}
         {!! Form::label('name', 'Nome Completo', ['class' => 'control-label mt-2']) !!}
-        {!! Form::text('name', $name ?? $student->name, ['class' => 'form-control']) !!}
-        {!! Form::label('numberStudent', 'Numero Estudante', ['class' => 'control-label mt-2']) !!}
-        {!! Form::number('numberStudent', $numberStudent ?? $student->number_student, ['class' => 'form-control']) !!}
-        {!! Form::label('email', 'Email Estudante', ['class' => 'control-label mt-2']) !!}
-        {!! Form::email('email', $email ?? $student->email, ['class' => 'form-control']) !!}
+        {!! Form::text('name', $name ?? $professor->name, ['class' => 'form-control']) !!}
+        {!! Form::label('numberProfessor', 'Numero Professor', ['class' => 'control-label mt-2']) !!}
+        {!! Form::number('numberProfessor', $numberProfessor ?? $professor->number_professor, ['class' => 'form-control']) !!}
+        {!! Form::label('email', 'Email Professor', ['class' => 'control-label mt-2']) !!}
+        {!! Form::email('email', $email ?? $professor->email, ['class' => 'form-control']) !!}
         {!! Form::label('cardId', 'Id Cartão', ['class' => 'control-label mt-2']) !!}
-        {!! Form::text('cardId', $cardId ?? $student->card_id, ['class' => 'form-control']) !!}
-        {!! Form::label('studentCareer', 'Acronimo Turma', ['class' => 'control-label mt-2']) !!}
-        {!! Form::text('studentCareer', $studentCareer ?? $student->acronym_career, ['class' => 'form-control']) !!}
-        {!! Form::label('studentCareerTwo', 'Acronimo Turma 2 (Opcional)', ['class' => 'control-label mt-2']) !!}
-        {!! Form::text('studentCareerTwo', $studentCareerTwo ?? $student->acronym_career_two, ['class' => 'form-control']) !!}
-        {!! Form::label('studentCareerThree', 'Acronimo Turma 3 (Opcional)', ['class' => 'control-label mt-2']) !!}
-        {!! Form::text('studentCareerThree', $studentCareerThree ?? $student->acronym_career_three, ['class' => 'form-control']) !!}
+        {!! Form::text('cardId', $cardId ?? $professor->card_id, ['class' => 'form-control']) !!}
+        {!! Form::label('professorCareer', 'Acronimo Turma', ['class' => 'control-label mt-2']) !!}
+        {!! Form::text('
+        ', $professorCareer ?? $professor->acronym_career, ['class' => 'form-control']) !!}
+        {!! Form::label('professorCareerTwo', 'Acronimo Turma 2 (Opcional)', ['class' => 'control-label mt-2']) !!}
+        {!! Form::text('professorCareerTwo', $professorCareerTwo ?? $professor->acronym_career_two, ['class' => 'form-control']) !!}
+        {!! Form::label('professorCareerThree', 'Acronimo Turma 3 (Opcional)', ['class' => 'control-label mt-2']) !!}
+        {!! Form::text('professorCareerThree', $professorCareerThree ?? $professor->acronym_career_three, ['class' => 'form-control']) !!}
         {!! Form::submit('Editar', ['class' => 'btn btn-primary mt-2']) !!}
         {!! Form::reset('Limpar campos', ['class' => 'btn btn-warning mt-2']) !!}
     {!! Form::close() !!}

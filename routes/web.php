@@ -26,3 +26,11 @@ Route::resource('/admin/discipline', 'disciplineController');
 Route::resource('/admin/student', 'StudentController');
 
 Route::post('/admin/student/findStudent', 'StudentController@findStudent')->name('student.findStudent');
+
+Route::resource('/admin/professor', 'ProfessorController');
+
+Route::post('/admin/professor/findProfessor', 'ProfessorController@findProfessor')->name('professor.findProfessor');
+
+Route::resource('/admin/program', 'ProgramController');
+
+Route::post('/admin/program/findProgram', 'ProgramController@findProgram')->name('program.findProgram');

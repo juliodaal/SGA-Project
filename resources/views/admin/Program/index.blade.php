@@ -1,6 +1,6 @@
 @extends('layouts.template')
 
-@section('title', 'Pesquisar Estudante')
+@section('title', 'Pesquisar Programa')
 
 @section('content')
 @isset($successfully)
@@ -29,21 +29,13 @@
 @endisset
 <div class="form-group">
     <small id="emailHelp" class="form-text text-muted">
-        Pesquisa um <strong>Estudante</strong> através um dos seguintes inputs
+        Pesquisa um <strong>Programa</strong> através um dos seguintes inputs
     </small>
-    {!! Form::open(['url' => '/admin/student/findStudent/','method' => 'post']) !!}
-        {!! Form::label('name', 'Nome Completo', ['class' => 'control-label mt-2']) !!}
-        {!! Form::text('name', $name ?? '', ['class' => 'form-control']) !!}
-        {!! Form::label('numberStudent', 'Numero Estudante', ['class' => 'control-label mt-2']) !!}
-        {!! Form::number('numberStudent', $numberStudent ?? '', ['class' => 'form-control']) !!}
-        {!! Form::label('email', 'Email Estudante', ['class' => 'control-label mt-2']) !!}
-        {!! Form::email('email', $email ?? '', ['class' => 'form-control']) !!}
-        {!! Form::label('cardId', 'Id Cartão', ['class' => 'control-label mt-2']) !!}
-        {!! Form::text('cardId', $cardId ?? '', ['class' => 'form-control']) !!}
-        {!! Form::label('StudentCareer', 'Acronimo Turma', ['class' => 'control-label mt-2']) !!}
-        {!! Form::text('StudentCareer', $StudentCareer ?? '', ['class' => 'form-control']) !!}
+    {!! Form::open(['url' => '/admin/program/findProgram/','method' => 'post']) !!}
+        {!! Form::label('acronym', 'Acronimo Turma', ['class' => 'control-label mt-2']) !!}
+        {!! Form::text('acronym', $acronym ?? '', ['class' => 'form-control']) !!}
         {!! Form::submit('Pesquisar', ['class' => 'btn btn-primary mt-2']) !!}
-        {!! Form::reset('Limpar campos', ['class' => 'btn btn-warning mt-2']) !!}
+        {!! Form::reset('Limpar campo', ['class' => 'btn btn-warning mt-2']) !!}
     {!! Form::close() !!}
 </div>
 @endsection

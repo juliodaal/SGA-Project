@@ -6,6 +6,7 @@ use App\Program;
 use App\Career;
 use App\Discipline;
 use App\Professor;
+use App\Student;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProgramRequest;
 
@@ -32,20 +33,57 @@ class ProgramController extends Controller
             $career = Career::where('acronym_career', '=', $request->acronymCareer)->first();
             $discipline = Discipline::where('acronym_discipline', '=', $request->acronymDiscipline)->first();
             $professor = Professor::where('number_professor', '=', $request->numberProfessor)->first();
-
+            $student = Student::where('group', '=', $request->groupStudents)->first();
+            $careerProfessor = Professor::where('acronym_career', '=', $request->acronymCareer)->where('number_professor', '=', $request->numberProfessor)->first();
+            $careerProfessorTwo = Professor::where('acronym_career_two', '=', $request->acronymCareer)->where('number_professor', '=', $request->numberProfessor)->first();
+            $careerProfessorThree = Professor::where('acronym_career_three', '=', $request->acronymCareer)->where('number_professor', '=', $request->numberProfessor)->first();
+            $disciplineProfessor = Professor::where('professor_discipline', '=', $request->acronymDiscipline)->where('number_professor', '=', $request->numberProfessor)->first();
+            $disciplineProfessorTwo = Professor::where('professor_discipline_two', '=', $request->acronymDiscipline)->where('number_professor', '=', $request->numberProfessor)->first();
+            $disciplineProfessorThree = Professor::where('professor_discipline_three', '=', $request->acronymDiscipline)->where('number_professor', '=', $request->numberProfessor)->first();
+            $validateHourProgram = Program::where('date_to_class', '=',$request->date)
+                ->where('start_class', '>=',$request->startTime)
+                ->where('start_class', '<=',$request->endTime)
+                ->where('end_class', '>=',$request->startTime)
+                ->where('end_class', '<=',$request->endTime)
+                ->where('number_professor', '>=',$request->numberProfessor)->first();
 
             $program = new Program;
             if(!is_null($career)){
                 if(!is_null($discipline)){
                     if(!is_null($professor)){
-                        $program->acronym_career = strtoupper($request->acronymCareer);
-                        $program->acronym_discipline = strtoupper($request->acronymDiscipline);
-                        $program->number_professor = $request->numberProfessor;
-                        $program->date_to_class = $request->date;
-                        $program->start_class = $request->startTime;
-                        $program->end_class = $request->endTime;
-                        $program->classroom_number = $request->classRoom;
-                        $program->save();
+                        if(!is_null($student)){
+                            if(!is_null($careerProfessor) || !is_null($careerProfessorTwo) || !is_null($careerProfessorThree)){
+                                if(!is_null($disciplineProfessor) || !is_null($disciplineProfessorTwo) || !is_null($disciplineProfessorThree)){
+                                    if(is_null($validateHourProgram)){
+                                        $program->acronym_career = strtoupper($request->acronymCareer);
+                                        $program->acronym_discipline = strtoupper($request->acronymDiscipline);
+                                        $program->number_professor = $request->numberProfessor;
+                                        $program->date_to_class = $request->date;
+                                        $program->start_class = $request->startTime;
+                                        $program->end_class = $request->endTime;
+                                        $program->classroom_number = $request->classRoom;
+                                        $program->group_from_students = $request->groupStudents;
+                                        $program->save();
+                                    } else {
+                                        return view('admin.index', [
+                                            'error' => 'Erro: Professor já esta associado a um Programa o dia ' . $request->date . ' Comenco Aula ' . $request->startTime . ' Fim Aula ' . $request->endTime
+                                        ]);
+                                    }
+                                } else {
+                                    return view('admin.index', [
+                                        'error' => 'Disciplina não Associada ao Professor'
+                                    ]);
+                                }
+                            } else {
+                                return view('admin.index', [
+                                    'error' => 'Curso não Associado ao Professor'
+                                ]);
+                            } 
+                        } else {
+                            return view('admin.index', [
+                                'error' => 'Grupo de Estudantes ' . $request->groupStudent . ' não existe'
+                            ]);
+                        }
                     } else {
                         return view('admin.index', [
                             'error' => 'Numero de Professor ' . strtoupper($request->numberProfessor) . ' não existe'

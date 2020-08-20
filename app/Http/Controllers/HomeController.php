@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\User;
+use App\Program;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -26,17 +27,27 @@ class HomeController extends Controller
     public function index()
     { 
         $type = $this->verifyTypeUser();
-        $x = [['discipinaName' => ['curso 1','curso 2']],['discipinaName2' => ['curso 3','curso 4']]];
-        dd($x[0]);
         switch ($type) {
             case 1:
                     return view('Users.Home',[
-                        'breadcrumbs' => ['Cursos'],
-                        'disciplines' => ['discipinaName' => ['curso 1','curso 2']]
+                        'breadcrumbs' => ['Cursos']
+                        // 'disciplines' => ['discipinaName' => ['curso 1','curso 2']]
                     ]);       
                 break;
             case 2:
-                    return view('Users.Home');
+                    $professor = User::join('professors', 'users.id', '=', 'professors.id_professor_from_users')
+                    ->where('email', '=', session()->get('email'))
+                    ->select('number_professor')
+                    ->first();
+                    $disciplines = Program::where('number_professor','=', $professor->number_professor)
+                    ->groupBy('acronym_career','acronym_discipline','group_from_students')
+                    ->select('acronym_career','acronym_discipline','group_from_students')
+                    ->orderBy('acronym_discipline')
+                    ->get();
+                    return view('Users.Home',[
+                        'breadcrumbs' => ['Disciplinas'],
+                        'disciplines' => $disciplines
+                    ]);
                 break;
             case 3:
                     return view('Admin.index');

@@ -55,6 +55,16 @@ class StudentController extends Controller
                         $student->acronym_career = strtoupper($request->studentCareer);
                         $student->acronym_career_two = strtoupper($request->studentCareerTwo);
                         $student->acronym_career_three = strtoupper($request->studentCareerThree);
+                        $i = 0;
+                        $limitStudents = 36;
+                        do {
+                            $numStudents = Student::where('students.group', '=', $i)
+                            ->get();
+                            if(count($numStudents) >= $limitStudents){
+                                $i++;
+                            }
+                        } while (count($numStudents) >= $limitStudents);
+                        $student->group = $i;
                         
                         $student->save();
                     } else {
@@ -73,6 +83,11 @@ class StudentController extends Controller
                 ]);
             }
         } catch (\Exception $e) {
+            if(isset($user)){
+                $user->delete();
+            } else if(isset($student)){
+                $student->delete();
+            }
             if (strpos($e, 'Duplicate') !== false) {
                 return view('admin.index', [
                     'error' => 'Este estudante já existe'

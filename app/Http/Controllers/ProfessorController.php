@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Professor;
 use App\User;
 use App\Career;
+use App\Discipline;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProfessorRequest;
 use App\Http\Requests\ProfessorRequestEdit;
@@ -36,28 +37,51 @@ class ProfessorController extends Controller
             $career = Career::where('acronym_career', '=', $request->professorCareer)->first();
             $careerTwo = Career::where('acronym_career', '=', $request->professorCareerTwo)->first();
             $careerThree = Career::where('acronym_career', '=', $request->professorCareerThree)->first();
+            $discipline = Discipline::where('acronym_discipline', '=', $request->professorDiscipline)->first();
+            $disciplineTwo = Discipline::where('acronym_discipline', '=', $request->professorDisciplineTwo)->first();
+            $disciplineThree = Discipline::where('acronym_discipline', '=', $request->professorDisciplineThree)->first();
             if(!is_null($career)){
                 if(is_null($request->professorCareerTwo) || !is_null($careerTwo)){
                     if(is_null($request->professorCareerThree) || !is_null($careerThree)){
-                        $user = new User;
+                        if(!is_null($discipline)){
+                            if(is_null($request->professorDisciplineTwo) || !is_null($disciplineTwo)){
+                                if(is_null($request->professorDisciplineThree) || !is_null($disciplineThree)){
+                                    $user = new User;
 
-                        $user->name = $request->name .' '. $request->lastName;
-                        $user->email = $request->email;
-                        $pass = Str::random(9);
-                        $user->password = Hash::make($pass);
-                        $user->type_user_from_type_users = 2;
-                        $user->card_id = $request->cardId;
-                        
-                        $user->save();
-                        $professor = new Professor;
-                        
-                        $professor->number_professor = $request->numberProfessor;
-                        $professor->id_professor_from_users = $user->id;
-                        $professor->acronym_career = strtoupper($request->professorCareer);
-                        $professor->acronym_career_two = strtoupper($request->professorCareerTwo);
-                        $professor->acronym_career_three = strtoupper($request->professorCareerThree);
-                        
-                        $professor->save();
+                                    $user->name = $request->name .' '. $request->lastName;
+                                    $user->email = $request->email;
+                                    $pass = Str::random(9);
+                                    $user->password = Hash::make($pass);
+                                    $user->type_user_from_type_users = 2;
+                                    $user->card_id = $request->cardId;
+                                    
+                                    $user->save();
+                                    $professor = new Professor;
+                                    
+                                    $professor->number_professor = $request->numberProfessor;
+                                    $professor->id_professor_from_users = $user->id;
+                                    $professor->acronym_career = strtoupper($request->professorCareer);
+                                    $professor->acronym_career_two = strtoupper($request->professorCareerTwo);
+                                    $professor->acronym_career_three = strtoupper($request->professorCareerThree);
+                                    $professor->professor_discipline = strtoupper($request->professorDiscipline);
+                                    $professor->professor_discipline_two = strtoupper($request->professorDisciplineTwo);
+                                    $professor->professor_discipline_three = strtoupper($request->professorDisciplineThree);
+                                    $professor->save();
+                                } else {
+                                    return view('admin.index', [
+                                        'error' => 'Disciplina ' . strtoupper($request->professorDisciplineThree) . ' não existe'
+                                    ]);
+                                }
+                            } else {
+                                return view('admin.index', [
+                                    'error' => 'Disciplina ' . strtoupper($request->professorDisciplineTwo) . ' não existe'
+                                ]);
+                            }
+                        } else {
+                            return view('admin.index', [
+                                'error' => 'Disciplina ' . strtoupper($request->professorDiscipline) . ' não existe'
+                            ]);
+                        }
                     } else {
                         return view('admin.index', [
                             'error' => 'Curso ' . strtoupper($request->professorCareerThree) . ' não existe'
@@ -74,6 +98,11 @@ class ProfessorController extends Controller
                 ]);
             }   
         } catch (\Exception $e) {
+            if(isset($user)){
+                $user->delete();
+            } else if(isset($professor)){
+                $professor->delete();
+            }
             if (strpos($e, 'Duplicate') !== false) {
                 return view('admin.index', [
                     'error' => 'Este Professor já existe'
@@ -150,6 +179,9 @@ class ProfessorController extends Controller
             $professor->acronym_career = strtoupper($request->professorCareer);
             $professor->acronym_career_two = strtoupper($request->professorCareerTwo);
             $professor->acronym_career_three = strtoupper($request->professorCareerThree);
+            $professor->professor_discipline = strtoupper($request->professorDiscipline);
+            $professor->professor_discipline_two = strtoupper($request->professorDisciplineTwo);
+            $professor->professor_discipline_three = strtoupper($request->professorDisciplineThree);
             $professor->save();
             $user->save();
         

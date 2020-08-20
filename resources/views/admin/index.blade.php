@@ -160,12 +160,18 @@
                     {!! Form::email('email', $email ?? '', ['class' => 'form-control']) !!}
                     {!! Form::label('cardId', 'Id Cartão', ['class' => 'control-label mt-2']) !!}
                     {!! Form::text('cardId', $cardId ?? '', ['class' => 'form-control']) !!}
-                    {!! Form::label('professorCareer', 'Acronimo Turma', ['class' => 'control-label mt-2']) !!}
+                    {!! Form::label('professorCareer', 'Acronimo Curso', ['class' => 'control-label mt-2']) !!}
                     {!! Form::text('professorCareer', $professorCareer ?? '', ['class' => 'form-control']) !!}
-                    {!! Form::label('professorCareerTwo', 'Acronimo Turma 2 (Opcional)', ['class' => 'control-label mt-2']) !!}
+                    {!! Form::label('professorCareerTwo', 'Acronimo Curso 2 (Opcional)', ['class' => 'control-label mt-2']) !!}
                     {!! Form::text('professorCareerTwo', $professorCareerTwo ?? '', ['class' => 'form-control']) !!}
-                    {!! Form::label('professorCareerThree', 'Acronimo Turma 3 (Opcional)', ['class' => 'control-label mt-2']) !!}
+                    {!! Form::label('professorCareerThree', 'Acronimo Curso 3 (Opcional)', ['class' => 'control-label mt-2']) !!}
                     {!! Form::text('professorCareerThree', $professorCareerThree ?? '', ['class' => 'form-control']) !!}
+                    {!! Form::label('professorDiscipline', 'Acronimo Disciplina', ['class' => 'control-label mt-2']) !!}
+                    {!! Form::text('professorDiscipline', $professorDiscipline ?? '', ['class' => 'form-control']) !!}
+                    {!! Form::label('professorDisciplineTwo', 'Acronimo Disciplina 2 (Opcional)', ['class' => 'control-label mt-2']) !!}
+                    {!! Form::text('professorDisciplineTwo', $professorDisciplineTwo ?? '', ['class' => 'form-control']) !!}
+                    {!! Form::label('professorDisciplineThree', 'Acronimo Disciplina 3 (Opcional)', ['class' => 'control-label mt-2']) !!}
+                    {!! Form::text('professorDisciplineThree', $professorDisciplineThree ?? '', ['class' => 'form-control']) !!}
                     <small id="emailHelp" class="form-text text-muted">
                         Envia informacão de uma lista de <strong>professores</strong> através de um fichero excel
                     </small>
@@ -207,6 +213,8 @@
                     {!! Form::time('endTime', $endTime ?? '', ['class' => 'form-control']) !!}
                     {!! Form::label('classRoom', 'Numero de Sala', ['class' => 'control-label mt-2']) !!}
                     {!! Form::text('classRoom', $classRoom ?? '', ['class' => 'form-control']) !!}
+                    {!! Form::label('groupStudents', 'Grupo de Estudante', ['class' => 'control-label mt-2']) !!}
+                    {!! Form::number('groupStudents', $groupStudents ?? '', ['class' => 'form-control']) !!}
                     <small id="emailHelp" class="form-text text-muted">
                         Envia informacão de uma lista de <strong>Horarios</strong> através de um fichero excel
                     </small>

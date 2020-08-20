@@ -18,14 +18,19 @@
 </nav>
 @isset($disciplines)
 <ul class="list-group list-group-flush">
-  @foreach($disciplines as $discipline)
-    <li class="list-group-item">{{ $discipline }}</li>
-    <ul class="list-group list-group-flush">
-      @foreach($discipline->cursos as $curso)
-        <li class="list-group-item">{{ $curso }}</li>
-      @endforeach
-    </ul>
-  @endforeach
+  @for ($i = 0; $i < count($disciplines); $i++)
+      @if($i == 0 )
+        <li class="list-group-item active">{{ $disciplines[$i]->acronym_discipline }}</li>
+        <li class="list-group-item"><a href="{{$disciplines[$i]->acronym_career}}/{{$disciplines[$i]->acronym_discipline}}/{{$disciplines[$i]->group_from_students}}">{{ $disciplines[$i]->acronym_career }} - Grupo {{ $disciplines[$i]->group_from_students }}</a></li>
+      @else 
+      @if($disciplines[$i]->acronym_discipline == $disciplines[$i - 1]->acronym_discipline)
+        <li class="list-group-item"><a href="{{$disciplines[$i]->acronym_career}}/{{$disciplines[$i]->acronym_discipline}}/{{$disciplines[$i]->group_from_students}}">{{ $disciplines[$i]->acronym_career }} - Grupo {{ $disciplines[$i]->group_from_students }}</a></li>
+      @else
+        <li class="list-group-item active">{{ $disciplines[$i]->acronym_discipline }}</li>
+        <li class="list-group-item"><a href="{{$disciplines[$i]->acronym_career}}/{{$disciplines[$i]->acronym_discipline}}/{{$disciplines[$i]->group_from_students}}">{{ $disciplines[$i]->acronym_career }} - Grupo {{ $disciplines[$i]->group_from_students }}</a></li>
+      @endif
+    @endif
+  @endfor
 </ul>
 @endisset
 

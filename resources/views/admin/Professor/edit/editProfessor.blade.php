@@ -68,12 +68,17 @@
         {!! Form::label('cardId', 'Id Cartão', ['class' => 'control-label mt-2']) !!}
         {!! Form::text('cardId', $cardId ?? $professor->card_id, ['class' => 'form-control']) !!}
         {!! Form::label('professorCareer', 'Acronimo Turma', ['class' => 'control-label mt-2']) !!}
-        {!! Form::text('
-        ', $professorCareer ?? $professor->acronym_career, ['class' => 'form-control']) !!}
+        {!! Form::text('professorCareer', $professorCareer ?? $professor->acronym_career, ['class' => 'form-control']) !!}
         {!! Form::label('professorCareerTwo', 'Acronimo Turma 2 (Opcional)', ['class' => 'control-label mt-2']) !!}
         {!! Form::text('professorCareerTwo', $professorCareerTwo ?? $professor->acronym_career_two, ['class' => 'form-control']) !!}
         {!! Form::label('professorCareerThree', 'Acronimo Turma 3 (Opcional)', ['class' => 'control-label mt-2']) !!}
         {!! Form::text('professorCareerThree', $professorCareerThree ?? $professor->acronym_career_three, ['class' => 'form-control']) !!}
+        {!! Form::label('professorDiscipline', 'Acronimo Disciplina', ['class' => 'control-label mt-2']) !!}
+        {!! Form::text('professorDiscipline', $professorDiscipline ?? $professor->professor_discipline, ['class' => 'form-control']) !!}
+        {!! Form::label('professorDisciplineTwo', 'Acronimo Disciplina 2 (Opcional)', ['class' => 'control-label mt-2']) !!}
+        {!! Form::text('professorDisciplineTwo', $professorDisciplineTwo ?? $professor->professor_discipline_two, ['class' => 'form-control']) !!}
+        {!! Form::label('professorDisciplineThree', 'Acronimo Disciplina 3 (Opcional)', ['class' => 'control-label mt-2']) !!}
+        {!! Form::text('professorDisciplineThree', $professorDisciplineThree ?? $professor->professor_discipline_three, ['class' => 'form-control']) !!}
         {!! Form::submit('Editar', ['class' => 'btn btn-primary mt-2']) !!}
         {!! Form::reset('Limpar campos', ['class' => 'btn btn-warning mt-2']) !!}
     {!! Form::close() !!}

@@ -15,9 +15,16 @@ class disciplineController extends Controller
      */
     public function index()
     {
-        $disciplines = Discipline::all();
-
-        return view('admin.discipline.editDiscipline.index', compact('disciplines'));
+        try {
+            $disciplines = Discipline::all();
+        } catch (\Exception $e) {
+            if(strpos($e, 'Unknown database') !== false) {
+                return view('admin.index', [
+                    'error' => 'Erro na ligação à base de dados'
+                ]);
+            }
+        }
+        return view('admin.Discipline.editDiscipline.index', compact('disciplines'));
     }
 
     /**
@@ -28,9 +35,8 @@ class disciplineController extends Controller
     public function create(CreateDisciplinesRequest $request)
     {
         try {
-
             $discipline = new Discipline;
-            $discipline->acronym_discipline = $request->acronym;
+            $discipline->acronym_discipline = strtoupper($request->acronym) ;
             $discipline->name = $request->name;
             $discipline->save();
 
@@ -38,6 +44,10 @@ class disciplineController extends Controller
             if (strpos($e, 'Duplicate') !== false) {
                 return view('admin.index', [
                     'error' => 'Esta disciplina já existe'
+                ]);
+            } else if(strpos($e, 'Unknown database') !== false) {
+                return view('admin.index', [
+                    'error' => 'Erro na ligação à base de dados'
                 ]);
             }
         }
@@ -76,8 +86,16 @@ class disciplineController extends Controller
      */
     public function edit($id)
     {
+        try {
         $discipline = Discipline::findOrFail($id);
-        return view('admin.discipline.editDiscipline.edit.editDiscipline', compact('discipline'));
+        } catch (\Exception $e) {
+            if(strpos($e, 'Unknown database') !== false) {
+                return view('admin.Discipline.index', [
+                    'error' => 'Erro na ligação à base de dados'
+                ]);
+            }
+        }
+        return view('admin.Discipline.editDiscipline.edit.editDiscipline', compact('discipline'));
     }
 
     /**
@@ -92,17 +110,23 @@ class disciplineController extends Controller
         try{
 
         $discipline = Discipline::findOrFail($id);
-        $discipline->acronym_discipline = $request->acronym;
+        $discipline->acronym_discipline = strtoupper($request->acronym);
         $discipline->name = $request->name;
         $discipline->save();
 
         } catch (\Exception $e) {
-            return view('admin.discipline.editDiscipline.index', [
-                'error' => 'Erro ao alterar a disciplina',
-                'disciplines' => $disciplines = Discipline::all()
-            ]);
+            if(strpos($e, 'Unknown database') !== false) {
+                return view('admin.Discipline.editDiscipline.index', [
+                    'error' => 'Erro na ligação à base de dados'
+                ]);
+            } else {
+                return view('admin.Discipline.editDiscipline.index', [
+                    'error' => 'Erro ao alterar a disciplina',
+                    'disciplines' => $disciplines = Discipline::all()
+                ]);
+            }
         }
-        return view('admin.discipline.editDiscipline.index', [
+        return view('admin.Discipline.editDiscipline.index', [
             'successfully' => 'Disciplina alterada com sucesso',
             'disciplines' => $disciplines = Discipline::all()
         ]);
@@ -122,13 +146,19 @@ class disciplineController extends Controller
             $discipline->delete();
             
         } catch (\Exception $e) {
-            return view('admin.discipline.editDiscipline.index', [
-                'error' => 'Erro ao apagar a disciplina',
-                'disciplines' => $disciplines = Discipline::all()
-            ]);
+            if(strpos($e, 'Unknown database') !== false) {
+                return view('admin.Discipline.editDiscipline.index', [
+                    'error' => 'Erro na ligação à base de dados'
+                ]);
+            } else {
+                return view('admin.Discipline.editDiscipline.index', [
+                    'error' => 'Erro ao apagar a disciplina',
+                    'disciplines' => $disciplines = Discipline::all()
+                ]);
+            }
         }
 
-        return view('admin.discipline.editDiscipline.index', [
+        return view('admin.Discipline.editDiscipline.index', [
             'successfully' => 'Disciplina apagada com sucesso',
             'disciplines' => $disciplines = Discipline::all()
         ]);

@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('layouts.app')
 
 @section('title', 'Lista Disciplinas')
 
@@ -19,10 +19,11 @@
         </button>
     </div>
 @endisset
-
+@isset($disciplines)
 <ul class="list-group list-group-flush">
     @foreach($disciplines as $discipline)
   <li class="list-group-item bg-transparent">{{ $discipline->acronym_discipline }} - {{ $discipline->name }}<a class="float-right" href="/admin/discipline/{{ $discipline->id }}/edit">Edit</a></li>
     @endforeach
 </ul>
+@endisset
 @endsection

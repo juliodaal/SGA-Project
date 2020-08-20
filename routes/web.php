@@ -21,7 +21,7 @@ Route::get('/admin', function () {
     return view('admin.index');
 });
 
-Route::resource('/admin/discipline', 'disciplineController');
+Route::resource('/admin/discipline', 'DisciplineController');
 
 Route::resource('/admin/student', 'StudentController');
 
@@ -34,3 +34,11 @@ Route::post('/admin/professor/findProfessor', 'ProfessorController@findProfessor
 Route::resource('/admin/program', 'ProgramController');
 
 Route::post('/admin/program/findProgram', 'ProgramController@findProgram')->name('program.findProgram');
+
+Route::resource('/admin/administrator', 'AdministratorController');
+
+Route::resource('/admin/career', 'CareerController');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Professor;
 use App\User;
+use App\Career;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProfessorRequest;
 use App\Http\Requests\ProfessorRequestEdit;
@@ -30,32 +31,56 @@ class ProfessorController extends Controller
      */
     public function create(ProfessorRequest $request)
     {
+        
         try {
+            $career = Career::where('acronym_career', '=', $request->professorCareer)->first();
+            $careerTwo = Career::where('acronym_career', '=', $request->professorCareerTwo)->first();
+            $careerThree = Career::where('acronym_career', '=', $request->professorCareerThree)->first();
+            if(!is_null($career)){
+                if(is_null($request->professorCareerTwo) || !is_null($careerTwo)){
+                    if(is_null($request->professorCareerThree) || !is_null($careerThree)){
+                        $user = new User;
 
-            $user = new User;
-
-            $user->name = $request->name .' '. $request->lastName;
-            $user->email = $request->email;
-            $pass = Str::random(9);
-            $user->password = Hash::make($pass);
-            $user->type_user_from_type_users = 2;
-            $user->card_id = $request->cardId;
-            
-            $user->save();
-            $professor = new Professor;
-            
-            $professor->number_professor = $request->numberProfessor;
-            $professor->id_professor_from_users = $user->id;
-            $professor->acronym_career = $request->professorCareer;
-            $professor->acronym_career_two = $request->professorCareerTwo;
-            $professor->acronym_career_three = $request->professorCareerThree;
-            
-            $professor->save();
-
+                        $user->name = $request->name .' '. $request->lastName;
+                        $user->email = $request->email;
+                        $pass = Str::random(9);
+                        $user->password = Hash::make($pass);
+                        $user->type_user_from_type_users = 2;
+                        $user->card_id = $request->cardId;
+                        
+                        $user->save();
+                        $professor = new Professor;
+                        
+                        $professor->number_professor = $request->numberProfessor;
+                        $professor->id_professor_from_users = $user->id;
+                        $professor->acronym_career = strtoupper($request->professorCareer);
+                        $professor->acronym_career_two = strtoupper($request->professorCareerTwo);
+                        $professor->acronym_career_three = strtoupper($request->professorCareerThree);
+                        
+                        $professor->save();
+                    } else {
+                        return view('admin.index', [
+                            'error' => 'Curso ' . strtoupper($request->professorCareerThree) . ' não existe'
+                        ]);
+                    }
+                } else {
+                    return view('admin.index', [
+                        'error' => 'Curso ' . strtoupper($request->professorCareerTwo) . ' não existe'
+                    ]);
+                }
+            } else {
+                return view('admin.index', [
+                    'error' => 'Curso ' . strtoupper($request->professorCareer) . ' não existe'
+                ]);
+            }   
         } catch (\Exception $e) {
             if (strpos($e, 'Duplicate') !== false) {
                 return view('admin.index', [
                     'error' => 'Este Professor já existe'
+                ]);
+            } else if(strpos($e, 'Unknown database') !== false) {
+                return view('admin.index', [
+                    'error' => 'Erro na ligação à base de dados'
                 ]);
             } else {
                 return view('admin.index', [
@@ -98,8 +123,8 @@ class ProfessorController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findOrFail($id);
-        $professor = User::join('professors', 'users.id', '=', 'professors.id_professor_from_users')->where('users.id', '=', $user->id)->first();
+        $professor = Professor::findOrFail($id);
+        $professor = User::join('professors', 'users.id', '=', 'professors.id_professor_from_users')->where('professors.id', '=', $id)->first();
         return view('admin.Professor.edit.editProfessor', compact('professor'));
     }
 
@@ -122,17 +147,23 @@ class ProfessorController extends Controller
             $professor->number_professor = $request->numberProfessor;
             $user->email = $request->email;
             $user->card_id = $request->cardId;
-            $professor->acronym_career = $request->professorCareer;
-            $professor->acronym_career_two = $request->professorCareerTwo;
-            $professor->acronym_career_three = $request->professorCareerThree;
+            $professor->acronym_career = strtoupper($request->professorCareer);
+            $professor->acronym_career_two = strtoupper($request->professorCareerTwo);
+            $professor->acronym_career_three = strtoupper($request->professorCareerThree);
             $professor->save();
             $user->save();
         
             } catch (\Exception $e) {
-                return view('admin.Professor.edit.editProfessor', [
-                    'error' => 'Erro ao alterar o Professor',
-                    'professor' => $professor = User::join('professors', 'users.id', '=', 'professors.id_professor_from_users')->where('professors.id', '=', $id)->first()
-                ]);
+                if(strpos($e, 'Unknown database') !== false) {
+                    return view('admin.Professor.edit.editProfessor', [
+                        'error' => 'Erro na ligação à base de dados'
+                    ]);
+                } else {
+                    return view('admin.Professor.edit.editProfessor', [
+                        'error' => 'Erro ao alterar o Professor',
+                        'professor' => $professor = User::join('professors', 'users.id', '=', 'professors.id_professor_from_users')->where('professors.id', '=', $id)->first()
+                    ]);
+                }
             }
             return view('admin.Professor.edit.editProfessor', [
                 'successfully' => 'Professor alterado com sucesso',
@@ -155,10 +186,16 @@ class ProfessorController extends Controller
             $user->delete();
             
         } catch (\Exception $e) {
-            return view('admin.Professor.index', [
-                'error' => 'Erro ao apagar ao Professor',
-                'professor' => $professor = User::join('professors', 'users.id', '=', 'professors.id_professor_from_users')->where('professors.id', '=', $id)->first()
-            ]);
+            if(strpos($e, 'Unknown database') !== false) {
+                return view('admin.Professor.index', [
+                    'error' => 'Erro na ligação à base de dados'
+                ]);
+            } else {
+                return view('admin.Professor.index', [
+                    'error' => 'Erro ao apagar ao Professor',
+                    'professor' => $professor = User::join('professors', 'users.id', '=', 'professors.id_professor_from_users')->where('professors.id', '=', $id)->first()
+                ]);
+            }
         }
 
         return view('admin.Professor.index', [
@@ -178,13 +215,22 @@ class ProfessorController extends Controller
                 $professors = User::join('professors', 'users.id', '=', 'professors.id_professor_from_users')->where('card_id', '=', $request->cardId)->get();
             } else if($request->name){
                 $professors = User::join('professors', 'users.id', '=', 'professors.id_professor_from_users')->where('name', 'like', '%' . $request->name . '%')->get();
+                if($request->name == '*'){
+                    $professors = User::join('professors', 'users.id', '=', 'professors.id_professor_from_users')->get();
+                }
             } else if($request->professorCareer){
                 $professors = Professor::join('users', 'professors.id_professor_from_users', '=', 'users.id')->where('acronym_career', '=', $request->professorCareer)->get();
             } 
         } catch (\Exception $e) {
-            return view('admin.Professor.index', [
-                'error' => 'Erro ao encontra o Professor'
-            ]);
+            if(strpos($e, 'Unknown database') !== false) {
+                return view('admin.Professor.index', [
+                    'error' => 'Erro na ligação à base de dados'
+                ]);
+            } else {
+                return view('admin.Professor.index', [
+                    'error' => 'Erro ao encontra o Professor'
+                ]);
+            }
         }
         if($professors){
             foreach ($professors as $professor) {        

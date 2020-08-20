@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Program;
+use App\Career;
+use App\Discipline;
+use App\Professor;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProgramRequest;
 
@@ -26,22 +29,47 @@ class ProgramController extends Controller
     public function create(ProgramRequest $request)
     {
         try {
+            $career = Career::where('acronym_career', '=', $request->acronymCareer)->first();
+            $discipline = Discipline::where('acronym_discipline', '=', $request->acronymDiscipline)->first();
+            $professor = Professor::where('number_professor', '=', $request->numberProfessor)->first();
+
 
             $program = new Program;
-
-            $program->acronym_career = $request->acronymCareer;
-            $program->acronym_discipline = $request->acronymDiscipline;
-            $program->number_professor = $request->numberProfessor;
-            $program->date_to_class = $request->date;
-            $program->start_class = $request->startTime;
-            $program->end_class = $request->endTime;
-            $program->classroom_number = $request->classRoom;
-            $program->save();
+            if(!is_null($career)){
+                if(!is_null($discipline)){
+                    if(!is_null($professor)){
+                        $program->acronym_career = strtoupper($request->acronymCareer);
+                        $program->acronym_discipline = strtoupper($request->acronymDiscipline);
+                        $program->number_professor = $request->numberProfessor;
+                        $program->date_to_class = $request->date;
+                        $program->start_class = $request->startTime;
+                        $program->end_class = $request->endTime;
+                        $program->classroom_number = $request->classRoom;
+                        $program->save();
+                    } else {
+                        return view('admin.index', [
+                            'error' => 'Numero de Professor ' . strtoupper($request->numberProfessor) . ' não existe'
+                        ]);  
+                    }
+                } else {
+                    return view('admin.index', [
+                        'error' => 'Disciplina ' . strtoupper($request->acronymDiscipline) . ' não existe'
+                    ]);    
+                }
+            } else {
+                return view('admin.index', [
+                    'error' => 'Curso ' . strtoupper($request->acronymCareer) . ' não existe'
+                ]);
+            }
 
         } catch (\Exception $e) {
             if (strpos($e, 'Duplicate') !== false) {
                 return view('admin.index', [
                     'error' => 'Este Programa já existe'
+                ]);
+            } if(strpos($e, 'Unknown database') !== false) {
+                return view('admin.index', [
+                    'error' => 'Erro na ligação à base de dados'
                 ]);
             } else {
                 return view('admin.index', [
@@ -99,8 +127,8 @@ class ProgramController extends Controller
     {
         try{
             $program = Program::findOrFail($id);
-            $program->acronym_career = $request->acronym;
-            $program->acronym_discipline = $request->acronymDiscipline;
+            $program->acronym_career = strtoupper($request->acronym);
+            $program->acronym_discipline = strtoupper($request->acronymDiscipline);
             $program->number_professor = $request->numberProfessor;
             $program->date_to_class = $request->date;
             $program->start_class = $request->startClass;
@@ -109,11 +137,16 @@ class ProgramController extends Controller
             $program->save();
         
             } catch (\Exception $e) {
-                return view('admin.Program.edit.editProgram', [
-                    // 'error' => 'Erro ao alterar o Programa',
-                    'error' => $e,
-                    'program' => $program
-                ]);
+                if(strpos($e, 'Unknown database') !== false) {
+                    return view('admin.Program.edit.editProgram', [
+                        'error' => 'Erro na ligação à base de dados'
+                    ]);
+                } else {
+                    return view('admin.Program.edit.editProgram', [
+                        'error' => $e,
+                        'program' => $program
+                    ]);
+                }
             }
             return view('admin.Program.edit.editProgram', [
                 'successfully' => 'Programa alterado com sucesso',
@@ -134,9 +167,15 @@ class ProgramController extends Controller
             $program->delete();
             
         } catch (\Exception $e) {
-            return view('admin.Program.index', [
-                'error' => 'Erro ao apagar o Programa',
-            ]);
+            if(strpos($e, 'Unknown database') !== false) {
+                return view('admin.Program.index', [
+                    'error' => 'Erro na ligação à base de dados'
+                ]);
+            } else {
+                return view('admin.Program.index', [
+                    'error' => 'Erro ao apagar o Programa',
+                ]);
+            }
         }
 
         return view('admin.Program.index', [

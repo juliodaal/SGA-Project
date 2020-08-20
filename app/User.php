@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Professor');
     }
+
+    public function administrator()
+    {
+        return $this->hasOne('App\Administrator');
+    }
 }

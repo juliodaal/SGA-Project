@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Student;
+use App\Career;
 use Illuminate\Http\Request;
 use App\Http\Requests\StudentsRequest;
 use App\Http\Requests\StudentsRequestEdit;
@@ -30,36 +31,55 @@ class StudentController extends Controller
     public function create(StudentsRequest $request)
     {
         try {
+            $career = Career::where('acronym_career', '=', $request->studentCareer)->first();
+            $careerTwo = Career::where('acronym_career', '=', $request->studentCareerTwo)->first();
+            $careerThree = Career::where('acronym_career', '=', $request->studentCareerThree)->first();
+            if(!is_null($career)){
+                if(is_null($request->studentCareerTwo) || !is_null($careerTwo)){
+                    if(is_null($request->studentCareerThree) || !is_null($careerThree)){
+                        $user = new User;
 
-            $user = new User;
+                        $user->name = $request->name .' '. $request->lastName;
+                        $user->email = $request->email;
+                        $pass = Str::random(9);
+                        $user->password = Hash::make($pass);
+                        $user->type_user_from_type_users = 1;
+                        $user->card_id = $request->cardId;
+                        
+                        $user->save();
 
-            $user->name = $request->name .' '. $request->lastName;
-            $user->email = $request->email;
-            $pass = Str::random(9);
-            $user->password = Hash::make($pass);
-            $user->type_user_from_type_users = 1;
-            $user->card_id = $request->cardId;
-            
-            $user->save();
-            $student = new Student;
-            
-            $student->number_student = $request->numberStudent;
-            $student->id_student_from_users = $user->id;
-            $student->acronym_career = $request->studentCareer;
-            $student->acronym_career_two = $request->studentCareerTwo;
-            $student->acronym_career_three = $request->studentCareerThree;
-            
-            $student->save();
-
+                        $student = new Student;
+                        
+                        $student->number_student = $request->numberStudent;
+                        $student->id_student_from_users = $user->id;
+                        $student->acronym_career = strtoupper($request->studentCareer);
+                        $student->acronym_career_two = strtoupper($request->studentCareerTwo);
+                        $student->acronym_career_three = strtoupper($request->studentCareerThree);
+                        
+                        $student->save();
+                    } else {
+                        return view('admin.index', [
+                            'error' => 'Curso ' . strtoupper($request->studentCareerThree) . ' não existe'
+                        ]);
+                    }
+                } else {
+                    return view('admin.index', [
+                        'error' => 'Curso ' . strtoupper($request->studentCareerTwo) . ' não existe'
+                    ]);
+                }
+            } else {
+                return view('admin.index', [
+                    'error' => 'Curso ' . strtoupper($request->studentCareer) . ' não existe'
+                ]);
+            }
         } catch (\Exception $e) {
-            if($user){
-                $user->delete();
-            } if($student){
-                $student->delete();
-            } 
             if (strpos($e, 'Duplicate') !== false) {
                 return view('admin.index', [
                     'error' => 'Este estudante já existe'
+                ]);
+            } else if(strpos($e, 'Unknown database') !== false) {
+                return view('admin.index', [
+                    'error' => 'Erro na ligação à base de dados'
                 ]);
             } else {
                 return view('admin.index', [
@@ -102,6 +122,7 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
+        $student = Student::findOrFail($student->id);
         $student = User::join('students', 'users.id', '=', 'students.id_student_from_users')->where('students.id', '=', $student->id)->first();
         return view('admin.Student.edit.editStudent', compact('student'));
     }
@@ -125,17 +146,23 @@ class StudentController extends Controller
         $student->number_student = $request->numberStudent;
         $user->email = $request->email;
         $user->card_id = $request->cardId;
-        $student->acronym_career = $request->studentCareer;
-        $student->acronym_career_two = $request->studentCareerTwo;
-        $student->acronym_career_three = $request->studentCareerThree;
+        $student->acronym_career = strtoupper($request->studentCareer);
+        $student->acronym_career_two = strtoupper($request->studentCareerTwo);
+        $student->acronym_career_three = strtoupper($request->studentCareerThree);
         $student->save();
         $user->save();
     
         } catch (\Exception $e) {
-            return view('admin.Student.edit.editStudent', [
-                'error' => 'Erro ao alterar o Estudante',
-                'student' => $student = User::join('students', 'users.id', '=', 'students.id_student_from_users')->where('students.id', '=', $id)->first()
-            ]);
+            if(strpos($e, 'Unknown database') !== false) {
+                return view('admin.Student.edit.editStudent', [
+                    'error' => 'Erro na ligação à base de dados'
+                ]);
+            } else {
+                return view('admin.Student.edit.editStudent', [
+                    'error' => 'Erro ao alterar o Estudante',
+                    'student' => $student = User::join('students', 'users.id', '=', 'students.id_student_from_users')->where('students.id', '=', $id)->first()
+                ]);
+            }
         }
         return view('admin.Student.edit.editStudent', [
             'successfully' => 'Estudante alterado com sucesso',
@@ -158,10 +185,16 @@ class StudentController extends Controller
             $user->delete();
             
         } catch (\Exception $e) {
-            return view('admin.Student.index', [
-                'error' => 'Erro ao apagar a Estudante',
-                'student' => $student = User::join('students', 'users.id', '=', 'students.id_student_from_users')->where('students.id', '=', $id)->first()
-            ]);
+            if(strpos($e, 'Unknown database') !== false) {
+                return view('admin.Student.index', [
+                    'error' => 'Erro na ligação à base de dados'
+                ]);
+            } else {
+                return view('admin.Student.index', [
+                    'error' => 'Erro ao apagar a Estudante',
+                    'student' => $student = User::join('students', 'users.id', '=', 'students.id_student_from_users')->where('students.id', '=', $id)->first()
+                ]);
+            }
         }
 
         return view('admin.Student.index', [
@@ -187,14 +220,24 @@ class StudentController extends Controller
                 $students = User::join('students', 'users.id', '=', 'students.id_student_from_users')->where('card_id', '=', $request->cardId)->get();
             } else if($request->name){
                 $students = User::join('students', 'users.id', '=', 'students.id_student_from_users')->where('name', 'like', '%' . $request->name . '%')->get();
+                if($request->name == '*'){
+                    $students = User::join('students', 'users.id', '=', 'students.id_student_from_users')->get();
+                }
             } else if($request->StudentCareer){
                 $students = Student::join('users', 'students.id_student_from_users', '=', 'users.id')->where('acronym_career', '=', $request->StudentCareer)->get();
             } 
         } catch (\Exception $e) {
-            return view('admin.Student.index', [
-                'error' => 'Erro ao encontra o Estudante'
-            ]);
+            if(strpos($e, 'Unknown database') !== false) {
+                return view('admin.Student.index', [
+                    'error' => 'Erro na ligação à base de dados'
+                ]);
+            } else {
+                return view('admin.Student.index', [
+                    'error' => 'Erro ao encontra o Estudante'
+                ]);
+            }
         }
+        
         if($students){
             foreach ($students as $student) {        
                 $student->password = 'No access';

@@ -14,7 +14,7 @@ class AddCardIdToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('card_id');
+            $table->string('card_id')->unique();
         });
     }
 

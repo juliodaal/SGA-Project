@@ -14,4 +14,8 @@ class Career extends Model
     {
         return $this->belongsToMany('App\Discipline');
     }
+    public function educationalPlan()
+    {
+        return $this->hasMany('App\EducationalPlan');
+    }
 }

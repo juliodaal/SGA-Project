@@ -18,4 +18,8 @@ class Student extends Model
     {
         return $this->hasMany('App\Program');
     }
+    public function inscription()
+    {
+        return $this->hasMany('App\Inscription');
+    }
 }

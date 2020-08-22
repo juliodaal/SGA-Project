@@ -75,7 +75,7 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
             <div class="card-body">
                 <div class="form-group">
-                    {!! Form::open(['action' => 'DisciplineController@create','method' => 'get']) !!}
+                    {!! Form::open(['action' => 'DisciplineController@store','method' => 'post','files' => true]) !!}
                         {!! Form::label('acronym', 'Acronimo', ['class' => 'control-label mt-2']) !!}
                         {!! Form::text('acronym', $acronym ?? '', ['class' => 'form-control']) !!}
                         {!! Form::label('name', 'Nome Disciplina', ['class' => 'control-label mt-2']) !!}
@@ -253,6 +253,40 @@
                     {!! Form::text('cardId', $cardId ?? '', ['class' => 'form-control']) !!}
                     <small id="emailHelp" class="form-text text-muted">
                         Envia informacão de uma lista de <strong>professores</strong> através de um fichero excel
+                    </small>
+                    {!! Form::label('document', 'Enviar através de um documento', ['class' => 'control-label mt-2']) !!}
+                    {!! Form::file('document', ['class' => 'form-control-file']) !!}
+                    {!! Form::submit('Enviar', ['class' => 'btn btn-primary mt-2']) !!}
+                    {!! Form::reset('Limpar campos', ['class' => 'btn btn-warning mt-2']) !!}
+                {!! Form::close() !!}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingSeven">
+            <h2 class="mb-0">
+                <button class="btn btn-link text-left text-decoration-none" type="button" data-toggle="collapse"
+                    data-target="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
+                    Adicionar Disciplina ao Curso
+                </button>
+                <span class="float-right"><a class="btn btn-info" href="/admin/plan">Ver
+                        Planos Educação</a></span>
+            </h2>
+        </div>
+
+        <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-parent="#accordionExample">
+            <div class="card-body">
+                <div class="form-group">
+                {!! Form::open(['action' => 'EducationalPlanController@create','method' => 'get']) !!}
+                    {!! Form::label('acronymCareer', 'Acronimo Curso', ['class' => 'control-label mt-2']) !!}
+                    {!! Form::text('acronymCareer', $acronymCareer ?? '', ['class' => 'form-control']) !!}
+                    {!! Form::label('acronymDiscipline', 'Acronimo da Disciplina a Associar', ['class' => 'control-label mt-2']) !!}
+                    {!! Form::text('acronymDiscipline', $acronymDiscipline ?? '', ['class' => 'form-control']) !!}
+                    {!! Form::label('semester', 'Semestre', ['class' => 'control-label mt-2']) !!}
+                    {!! Form::number('semester', $semester ?? '', ['class' => 'form-control']) !!}
+                    <small id="emailHelp" class="form-text text-muted">
+                        Envia informacão de uma lista de <strong>Planos de Educação</strong> através de um fichero excel
                     </small>
                     {!! Form::label('document', 'Enviar através de um documento', ['class' => 'control-label mt-2']) !!}
                     {!! Form::file('document', ['class' => 'form-control-file']) !!}

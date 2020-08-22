@@ -32,28 +32,9 @@ class disciplineController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(CreateDisciplinesRequest $request)
+    public function create()
     {
-        try {
-            $discipline = new Discipline;
-            $discipline->acronym_discipline = strtoupper($request->acronym) ;
-            $discipline->name = $request->name;
-            $discipline->save();
-
-        } catch (\Exception $e) {
-            if (strpos($e, 'Duplicate') !== false) {
-                return view('admin.index', [
-                    'error' => 'Esta disciplina já existe'
-                ]);
-            } else if(strpos($e, 'Unknown database') !== false) {
-                return view('admin.index', [
-                    'error' => 'Erro na ligação à base de dados'
-                ]);
-            }
-        }
-        return view('admin.index', [
-            'successfully' => 'Disciplina adicionada com sucesso'
-        ]);
+        //
     }
 
     /**
@@ -64,7 +45,41 @@ class disciplineController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $nameFile = $request->file('document')->getClientOriginalName();
+        if(isset($nameFile)){
+            if(substr($nameFile, -4) == 'xlsx'){
+                $request->file('document')->move('excel_files',$nameFile);          
+
+                return redirect()->action('FileAdminDataController@discipline');
+            } else {
+                return view('admin.index', [
+                    'error' => 'Ficheiro no tipo Excel'
+                ]);
+            }
+        } else {
+            $this->validate($request, ['acronym'=>'required','name'=>'required']);
+            try {
+    
+                $discipline = new Discipline;
+                $discipline->acronym_discipline = strtoupper($request->acronym) ;
+                $discipline->name = $request->name;
+                $discipline->save();
+    
+            } catch (\Exception $e) {
+                if (strpos($e, 'Duplicate') !== false) {
+                    return view('admin.index', [
+                        'error' => 'Esta disciplina já existe'
+                    ]);
+                } else if(strpos($e, 'Unknown database') !== false) {
+                    return view('admin.index', [
+                        'error' => 'Erro na ligação à base de dados'
+                    ]);
+                }
+            }
+            return view('admin.index', [
+                'successfully' => 'Disciplina adicionada com sucesso'
+            ]);   
+        }
     }
 
     /**

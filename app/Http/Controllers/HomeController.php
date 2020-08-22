@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Program;
+use App\Student;
+use App\EducationalPlan;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -29,9 +31,19 @@ class HomeController extends Controller
         $type = $this->verifyTypeUser();
         switch ($type) {
             case 1:
+                $student = User::join('students', 'users.id', '=', 'students.id_student_from_users')
+                ->where('email', '=', session()->get('email'))
+                ->select('number_student')
+                ->first();
+
+                $inscriptions = Student::join('inscriptions', 'students.number_student', '=','inscriptions.number_student_from_students')
+                ->where('number_student_from_students', '=', $student->number_student)
+                ->select('acronym_career','acronym_discipline_from_disciplines')
+                ->get();
                     return view('Users.Home',[
-                        'breadcrumbs' => ['Cursos']
-                        // 'disciplines' => ['discipinaName' => ['curso 1','curso 2']]
+                        'breadcrumbs' => ['Cursos'],
+                        'cursos' => $inscriptions,
+                        'group' => session()->get('group')
                     ]);       
                 break;
             case 2:
@@ -60,6 +72,13 @@ class HomeController extends Controller
     public function verifyTypeUser()
     {
         $user = Auth::user();
+        if($user->type_user_from_type_users == 1){
+            $group = User::join('students', 'users.id', '=', 'students.id_student_from_users')
+            ->where('email', '=', $user->email)
+            ->select('group')
+            ->first(); 
+            session(['group' => $group->group]);
+        }
         session(['id' => $user->id]);
         session(['name' => $user->name]);
         session(['email' => $user->email]);
@@ -67,6 +86,17 @@ class HomeController extends Controller
         session(['card_id' => $user->card_id]);
         session()->regenerate();
         return session()->get('type_user');
+    }
+    public function estudentsGroup($career,$discipline,$group){
         
+        $students = User::join('students','users.id','=','students.id_student_from_users')
+        ->join('inscriptions','students.number_student','=','inscriptions.number_student_from_students')
+        ->where('acronym_career','=',$career)
+        ->where('acronym_discipline_from_disciplines','=',$discipline)
+        ->where('students.group','=',$group)
+        ->select('name','number_student')
+        ->get();
+
+        return view('Users.GroupStudents.index',compact('students'));
     }
 }

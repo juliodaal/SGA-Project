@@ -56,7 +56,7 @@ class StudentController extends Controller
                         $student->acronym_career_two = strtoupper($request->studentCareerTwo);
                         $student->acronym_career_three = strtoupper($request->studentCareerThree);
                         $i = 0;
-                        $limitStudents = 36;
+                        $limitStudents = 30;
                         do {
                             $numStudents = Student::where('students.group', '=', $i)
                             ->get();

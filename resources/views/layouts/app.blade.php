@@ -27,7 +27,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/home') }}">
+                <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'SGA') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -38,9 +38,21 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         @auth
-                            <a class="navbar-brand text-muted font-weight-light" style="font-size:18px;" href="{{ url('/home/careers') }}">
+                            <a class="navbar-brand text-muted font-weight-light" style="font-size:18px;" href="{{ url('/home') }}">
+                                Home
+                            </a>
+                        @if(session()->get('type_user') == 1)
+                            <a class="navbar-brand text-muted font-weight-light" style="font-size:18px;" href="{{ url('/home') }}">
                                 Cursos
                             </a>
+                            <a class="navbar-brand text-muted font-weight-light" style="font-size:18px;" href="{{ url('/home/inscriptions') }}">
+                                Inscrições
+                            </a>
+                        @else
+                            <a class="navbar-brand text-muted font-weight-light" style="font-size:18px;" href="{{ url('/home') }}">
+                                Disciplinas
+                            </a>
+                        @endif
                         @endauth
                     </ul>
 

@@ -39,6 +39,16 @@ Route::resource('/admin/administrator', 'AdministratorController');
 
 Route::resource('/admin/career', 'CareerController');
 
+Route::resource('/admin/plan', 'EducationalPlanController');
+
+Route::post('/admin/plan/findPlan', 'EducationalPlanController@findPlan')->name('plan.findPlan');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/home/{career}/{discipline}/{group}', 'HomeController@estudentsGroup')->name('home.estudentsGroup');
+
+Route::resource('/home/inscriptions', 'InscriptionController');
+
+Route::get('/admin/file/discipline', 'FileAdminDataController@discipline');

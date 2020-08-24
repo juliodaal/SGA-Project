@@ -24,7 +24,7 @@ class ProfessorRequestEdit extends FormRequest
     public function rules()
     {
         return [
-            'name'=>'required','numberProfessor'=>'required','email'=>'required','cardId'=>'required','professorCareer'=>'required'
+            'name'=>'required','numberProfessor'=>'required','email'=>'required','cardId'=>'required','studentCareer'=>'required'
         ];
     }
 }

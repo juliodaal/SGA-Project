@@ -3,7 +3,15 @@
 @section('title', 'Editar '.$career->acronym_career)
 
 @section('content')
-
+@if(session()->has('error'))
+    <div class="alert alert-warning alert-dismissible fade show rounded border border-warning" role="alert">
+        <strong>{{ session()->get('error') }}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {!! session()->forget('error') !!}
+@endif
 @if($errors->isNotEmpty())
         <div class="alert alert-warning alert-dismissible fade show rounded border border-warning" role="alert">
             <strong>Campos vazios</strong>

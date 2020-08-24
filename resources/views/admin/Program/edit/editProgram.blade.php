@@ -59,20 +59,22 @@
 </div>
 <div class="form-group">
     {!! Form::open(['action' => ['ProgramController@update',$program->id],'method' => 'put']) !!}
-        {!! Form::label('acronym', 'Acronimo', ['class' => 'control-label mt-2']) !!}
-        {!! Form::text('acronym', $acronym ?? $program->acronym_career, ['class' => 'form-control']) !!}
+        {!! Form::label('acronymCareer', 'Acronimo', ['class' => 'control-label mt-2']) !!}
+        {!! Form::text('acronymCareer', $acronymCareer ?? $program->acronym_career, ['class' => 'form-control']) !!}
         {!! Form::label('acronymDiscipline', 'Acronimo Disciplina', ['class' => 'control-label mt-2']) !!}
         {!! Form::text('acronymDiscipline', $acronymDiscipline ?? $program->acronym_discipline, ['class' => 'form-control']) !!}
         {!! Form::label('numberProfessor', 'Numero Professor', ['class' => 'control-label mt-2']) !!}
         {!! Form::number('numberProfessor', $numberProfessor ?? $program->number_professor, ['class' => 'form-control']) !!}
         {!! Form::label('date', 'Data', ['class' => 'control-label mt-2']) !!}
         {!! Form::date('date', $date ?? $program->date_to_class, ['class' => 'form-control']) !!}
-        {!! Form::label('startClass', 'Començo Aula', ['class' => 'control-label mt-2']) !!}
-        {!! Form::time('startClass', $startClass ?? $program->start_class, ['class' => 'form-control']) !!}
+        {!! Form::label('startTime', 'Començo Aula', ['class' => 'control-label mt-2']) !!}
+        {!! Form::time('startTime', $startTime ?? $program->start_class, ['class' => 'form-control']) !!}
         {!! Form::label('endClass', 'Fim Aula', ['class' => 'control-label mt-2']) !!}
         {!! Form::time('endClass', $endClass ?? $program->end_class, ['class' => 'form-control']) !!}
-        {!! Form::label('classroomNumber', 'Numero Aula', ['class' => 'control-label mt-2']) !!}
-        {!! Form::text('classroomNumber', $classroomNumber ?? $program->classroom_number, ['class' => 'form-control']) !!}
+        {!! Form::label('classRoom', 'Numero Aula', ['class' => 'control-label mt-2']) !!}
+        {!! Form::text('classRoom', $classRoom ?? $program->classroom_number, ['class' => 'form-control']) !!}
+        {!! Form::label('groupStudents', 'Numero do Grupo de Estudantes', ['class' => 'control-label mt-2']) !!}
+        {!! Form::number('groupStudents', $groupStudents ?? $program->group_from_students, ['class' => 'form-control']) !!}
         {!! Form::submit('Editar', ['class' => 'btn btn-primary mt-2']) !!}
         {!! Form::reset('Limpar campos', ['class' => 'btn btn-warning mt-2']) !!}
     {!! Form::close() !!}

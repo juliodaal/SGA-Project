@@ -24,7 +24,14 @@ class ProgramRequest extends FormRequest
     public function rules()
     {
         return [
-            'acronymCareer'=>'required','acronymDiscipline'=>'required','numberProfessor'=>'required','date'=>'required','startTime'=>'required','endTime'=>'required','classRoom'=>'required','groupStudents'=>'required'
+                'acronymCareer'=>'required',
+                'acronymDiscipline'=>'required',
+                'numberProfessor'=>'required',
+                'date'=>'required',
+                'startTime'=>'required',
+                'endTime'=>'required',
+                'classRoom'=>'required',
+                'groupStudents'=>'required'
         ];
     }
 }

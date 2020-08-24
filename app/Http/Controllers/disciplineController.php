@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Discipline;
 use Illuminate\Http\Request;
+use App\Http\Controllers\FileAdminDataController;
 use App\Http\Requests\CreateDisciplinesRequest;
 
 class disciplineController extends Controller
@@ -16,15 +17,11 @@ class disciplineController extends Controller
     public function index()
     {
         try {
-            $disciplines = Discipline::all();
+            $disciplines = Discipline::orderBy('acronym_discipline')->get();
         } catch (\Exception $e) {
-            if(strpos($e, 'Unknown database') !== false) {
-                return view('admin.index', [
-                    'error' => 'Erro na ligação à base de dados'
-                ]);
-            }
+            return FileAdminDataController::reportError('/admin',$e);
         }
-        return view('admin.Discipline.editDiscipline.index', compact('disciplines'));
+        return view('admin.Discipline.index', compact('disciplines'));
     }
 
     /**
@@ -45,40 +42,21 @@ class disciplineController extends Controller
      */
     public function store(Request $request)
     {
-        $nameFile = $request->file('document')->getClientOriginalName();
-        if(isset($nameFile)){
-            if(substr($nameFile, -4) == 'xlsx'){
-                $request->file('document')->move('excel_files',$nameFile);          
-
-                return redirect()->action('FileAdminDataController@discipline');
-            } else {
-                return view('admin.index', [
-                    'error' => 'Ficheiro no tipo Excel'
-                ]);
-            }
+        if(!is_null($request->document)){
+            return FileAdminDataController::validateFile($request,'document','xlsx','excel_files','FileAdminDataController@discipline','/admin');
         } else {
             $this->validate($request, ['acronym'=>'required','name'=>'required']);
             try {
-    
-                $discipline = new Discipline;
-                $discipline->acronym_discipline = strtoupper($request->acronym) ;
-                $discipline->name = $request->name;
-                $discipline->save();
-    
+                $msg = '"'. $request->acronym . '" ou "' . $request->name . '"';
+                Discipline::create([
+                    'acronym_discipline'=>strtoupper($request->acronym),
+                    'name'=>$request->name
+                ]);
             } catch (\Exception $e) {
-                if (strpos($e, 'Duplicate') !== false) {
-                    return view('admin.index', [
-                        'error' => 'Esta disciplina já existe'
-                    ]);
-                } else if(strpos($e, 'Unknown database') !== false) {
-                    return view('admin.index', [
-                        'error' => 'Erro na ligação à base de dados'
-                    ]);
-                }
+                if(!isset($msg)){ $msg = null; }
+                return FileAdminDataController::reportError('/admin',$e,$msg);
             }
-            return view('admin.index', [
-                'successfully' => 'Disciplina adicionada com sucesso'
-            ]);   
+            return redirect('/admin')->with('successfully', 'Disciplina adicionada com sucesso');  
         }
     }
 
@@ -104,13 +82,9 @@ class disciplineController extends Controller
         try {
         $discipline = Discipline::findOrFail($id);
         } catch (\Exception $e) {
-            if(strpos($e, 'Unknown database') !== false) {
-                return view('admin.Discipline.index', [
-                    'error' => 'Erro na ligação à base de dados'
-                ]);
-            }
+            return FileAdminDataController::reportError('/admin/discipline',$e);
         }
-        return view('admin.Discipline.editDiscipline.edit.editDiscipline', compact('discipline'));
+        return view('admin.Discipline.edit.editDiscipline', compact('discipline'));
     }
 
     /**
@@ -123,28 +97,15 @@ class disciplineController extends Controller
     public function update(CreateDisciplinesRequest $request,$id)
     {   
         try{
-
         $discipline = Discipline::findOrFail($id);
-        $discipline->acronym_discipline = strtoupper($request->acronym);
-        $discipline->name = $request->name;
-        $discipline->save();
-
-        } catch (\Exception $e) {
-            if(strpos($e, 'Unknown database') !== false) {
-                return view('admin.Discipline.editDiscipline.index', [
-                    'error' => 'Erro na ligação à base de dados'
-                ]);
-            } else {
-                return view('admin.Discipline.editDiscipline.index', [
-                    'error' => 'Erro ao alterar a disciplina',
-                    'disciplines' => $disciplines = Discipline::all()
-                ]);
-            }
-        }
-        return view('admin.Discipline.editDiscipline.index', [
-            'successfully' => 'Disciplina alterada com sucesso',
-            'disciplines' => $disciplines = Discipline::all()
+        $discipline::where('id', $id)->update([
+            'acronym_discipline' => strtoupper($request->acronym),
+            'name' => $request->name
         ]);
+        } catch (\Exception $e) {
+            return FileAdminDataController::reportError('/admin/discipline/' . $id . '/edit',$e);
+        }
+        return redirect('/admin/discipline')->with('successfully', 'Disciplinas alterada com sucesso'); 
     }
 
     /**
@@ -156,26 +117,10 @@ class disciplineController extends Controller
     public function destroy($id)
     {
         try {
-            
-            $discipline = Discipline::findOrFail($id);
-            $discipline->delete();
-            
+            Discipline::findOrFail($id)->delete();
         } catch (\Exception $e) {
-            if(strpos($e, 'Unknown database') !== false) {
-                return view('admin.Discipline.editDiscipline.index', [
-                    'error' => 'Erro na ligação à base de dados'
-                ]);
-            } else {
-                return view('admin.Discipline.editDiscipline.index', [
-                    'error' => 'Erro ao apagar a disciplina',
-                    'disciplines' => $disciplines = Discipline::all()
-                ]);
-            }
+            return FileAdminDataController::reportError('/admin/discipline/' . $id . '/edit',$e);
         }
-
-        return view('admin.Discipline.editDiscipline.index', [
-            'successfully' => 'Disciplina apagada com sucesso',
-            'disciplines' => $disciplines = Discipline::all()
-        ]);
+        return redirect('/admin/discipline')->with('successfully', 'Disciplinas apagada com sucesso'); 
     }
 }

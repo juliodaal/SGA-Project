@@ -8,6 +8,7 @@ use App\Professor;
 use App\Program;
 use Illuminate\Http\Request;
 use App\Http\Requests\CareerRequest;
+use App\Http\Controllers\FileAdminDataController;
 
 class CareerController extends Controller
 {
@@ -19,15 +20,10 @@ class CareerController extends Controller
     public function index()
     {
         try {
-            $careers = Career::all();
+            $careers = Career::orderBy('acronym_career')->get();
         } catch (\Exception $e) {
-            if(strpos($e, 'Unknown database') !== false) {
-                return view('admin.index', [
-                    'error' => 'Erro na ligação à base de dados'
-                ]);
-            }
+            return FileAdminDataController::reportError('/admin',$e);
         }
-
         return view('admin.Career.index', compact('careers'));
     }
 
@@ -36,29 +32,9 @@ class CareerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(CareerRequest $request)
+    public function create()
     {
-        try {
-
-            $career = new Career;
-            $career->acronym_career = strtoupper($request->acronym) ;
-            $career->name = $request->name;
-            $career->save();
-
-        } catch (\Exception $e) {
-            if (strpos($e, 'Duplicate') !== false) {
-                return view('admin.index', [
-                    'error' => 'Este curso já existe'
-                ]);
-            } else if(strpos($e, 'Unknown database') !== false) {
-                return view('admin.index', [
-                    'error' => 'Erro na ligação à base de dados'
-                ]);
-            }
-        }
-        return view('admin.index', [
-            'successfully' => 'Curso adicionado com sucesso'
-        ]);
+        //
     }
 
     /**
@@ -69,7 +45,22 @@ class CareerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if(!is_null($request->document)){
+            return FileAdminDataController::validateFile($request,'document','xlsx','excel_files','FileAdminDataController@career','/admin');
+        } else {
+            try {
+                $this->validate($request, ['acronym'=>'required','name'=>'required']);
+                $msg = '"'. strtoupper($request->acronym) . '" ou "' . $request->name . '"';
+                Career::create([
+                    'acronym_career'=>strtoupper($request->acronym),
+                    'name'=>$request->name
+                ]);
+            } catch (\Exception $e) {
+                if(!isset($msg)){ $msg = null; }
+                return FileAdminDataController::reportError('/admin',$e,$msg);
+            }
+            return redirect('/admin')->with('successfully', 'Curso adicionado com sucesso');  
+        }
     }
 
     /**
@@ -94,11 +85,7 @@ class CareerController extends Controller
         try {
             $career = Career::findOrFail($id);
         } catch (\Exception $e) {
-            if(strpos($e, 'Unknown database') !== false) {
-                return view('admin.Career.index', [
-                    'error' => 'Erro na ligação à base de dados'
-                ]);
-            }
+            return FileAdminDataController::reportError('/admin/career',$e);
         }
         return view('admin.Career.edit.editCareer', compact('career'));
     }
@@ -113,43 +100,22 @@ class CareerController extends Controller
     public function update(CareerRequest $request,$id)
     {
             try{
-
-            $career = Career::findOrFail($id);
-            $students = Student::where('acronym_career', '=', $career->acronym_career)->get();
-            $professors = Professor::where('acronym_career', '=', $career->acronym_career)->get();
-            $programs = Program::where('acronym_career', '=', $career->acronym_career)->get();
-            $career->acronym_career = strtoupper($request->acronym);
-            $career->name = $request->name;
-            $career->save();
-            foreach ($students as $student) {
-                $student->acronym_career = strtoupper($request->acronym);
-                $student->save();
-            }
-            foreach ($professors as $professor) {
-                $professor->acronym_career = strtoupper($request->acronym);
-                $professor->save();
-            }
-            foreach ($programs as $program) {
-                $program->acronym_career = strtoupper($request->acronym);
-                $program->save();
-            }
-    
+                $career = Career::findOrFail($id);
+                    $students = Student::where('acronym_career', '=', $career->acronym_career)->get();
+                    $professors = Professor::where('acronym_career', '=', $career->acronym_career)->get();
+                    $programs = Program::where('acronym_career', '=', $career->acronym_career)->get();
+                $career::where('id', $id)->update([
+                    'acronym_career' => strtoupper($request->acronym),
+                    'name' => $request->name
+                ]);
+                $this->updateData($students,'acronym_career',strtoupper($request->acronym));
+                $this->updateData($professors,'acronym_career',strtoupper($request->acronym));
+                $this->updateData($programs,'acronym_career',strtoupper($request->acronym));
+        
             } catch (\Exception $e) {
-                if(strpos($e, 'Unknown database') !== false) {
-                    return view('admin.Career.edit.editCareer', [
-                        'error' => 'Erro na ligação à base de dados'
-                    ]);
-                } else {
-                    return view('admin.Career.edit.editCareer', [
-                        'error' => 'Erro ao alterar o Curso',
-                        'career' => Career::findOrFail($id)
-                    ]);
-                }
+                return FileAdminDataController::reportError('/admin/career/' . $id . '/edit',$e);
             }
-            return view('admin.Career.index', [
-                'successfully' => 'Curso alterado com sucesso',
-                'careers' => Career::all()
-            ]);
+            return redirect('/admin/career')->with('successfully', 'Curso alterado com sucesso'); 
     }
 
     /**
@@ -161,26 +127,17 @@ class CareerController extends Controller
     public function destroy($id)
     {
         try {
-            
-            $career = Career::findOrFail($id);
-            $career->delete();
-            
+            Career::findOrFail($id)->delete();
         } catch (\Exception $e) {
-            if(strpos($e, 'Unknown database') !== false) {
-                return view('admin.Career.edit.index', [
-                    'error' => 'Erro na ligação à base de dados'
-                ]);
-            } else {
-                return view('admin.Career.edit.index', [
-                    'error' => 'Erro ao apagar o Curso',
-                    'career' => Career::findOrFail($id)
-                ]);
-            }
+            return FileAdminDataController::reportError('/admin/career/' . $id . '/edit',$e);
         }
+        return redirect('/admin/career')->with('successfully', 'Curso apagado com sucesso'); 
+    }
 
-        return view('admin.Career.index', [
-            'successfully' => 'Curso apagado com sucesso',
-            'careers' => Career::all()
-        ]);
+    public function updateData($listDatas,$column,$attr){
+        foreach ($listDatas as $listData) {
+            $listData->column = attr;
+            $listData->save();
+        }
     }
 }

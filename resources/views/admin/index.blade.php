@@ -12,6 +12,15 @@
         </button>
     </div>
 @endisset
+@if(session()->has('error'))
+    <div class="alert alert-warning alert-dismissible fade show rounded border border-warning" role="alert">
+        <strong>{{ session()->get('error') }}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {!! session()->forget('error') !!}
+@endif
 @if($errors->isNotEmpty())
         <div class="alert alert-warning alert-dismissible fade show rounded border border-warning" role="alert">
             <strong>Campos vazios</strong>
@@ -19,6 +28,15 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
+@endif
+@if(session()->has('successfully'))
+    <div class="alert alert-success alert-dismissible fade show rounded border border-success" role="alert">
+        <strong>{{ session()->get('successfully') }}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {!! session()->forget('successfully') !!}
 @endif
 @isset($successfully)
     <div class="alert alert-success alert-dismissible fade show rounded border border-success" role="alert">
@@ -44,7 +62,7 @@
         <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
             <div class="card-body">
                 <div class="form-group">
-                    {!! Form::open(['action' => 'CareerController@create','method' => 'get']) !!}
+                    {!! Form::open(['action' => 'CareerController@store','method' => 'post','files' => true]) !!}
                         {!! Form::label('acronym', 'Acronimo', ['class' => 'control-label mt-2']) !!}
                         {!! Form::text('acronym', $acronym ?? '', ['class' => 'form-control']) !!}
                         {!! Form::label('name', 'Nome Disciplina', ['class' => 'control-label mt-2']) !!}
@@ -103,10 +121,10 @@
             </h2>
         </div>
 
-        <div id="collapseThree" class="collapse show" aria-labelledby="headingThree" data-parent="#accordionExample">
+        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
             <div class="card-body">
                 <div class="form-group">
-                {!! Form::open(['action' => 'StudentController@create','method' => 'get']) !!}
+                {!! Form::open(['action' => 'StudentController@store','method' => 'post','files' => true]) !!}
                     {!! Form::label('name', 'Nome', ['class' => 'control-label mt-2']) !!}
                     {!! Form::text('name', $name ?? '', ['class' => 'form-control']) !!}
                     {!! Form::label('lastName', 'Ultimo Nome', ['class' => 'control-label mt-2']) !!}
@@ -149,7 +167,7 @@
         <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
             <div class="card-body">
                 <div class="form-group">
-                {!! Form::open(['action' => 'ProfessorController@create','method' => 'get']) !!}
+                {!! Form::open(['action' => 'ProfessorController@store','method' => 'post','files' => true]) !!}
                     {!! Form::label('name', 'Nome', ['class' => 'control-label mt-2']) !!}
                     {!! Form::text('name', $name ?? '', ['class' => 'form-control']) !!}
                     {!! Form::label('lastName', 'Ultimo Nome', ['class' => 'control-label mt-2']) !!}
@@ -160,12 +178,12 @@
                     {!! Form::email('email', $email ?? '', ['class' => 'form-control']) !!}
                     {!! Form::label('cardId', 'Id Cartão', ['class' => 'control-label mt-2']) !!}
                     {!! Form::text('cardId', $cardId ?? '', ['class' => 'form-control']) !!}
-                    {!! Form::label('professorCareer', 'Acronimo Curso', ['class' => 'control-label mt-2']) !!}
-                    {!! Form::text('professorCareer', $professorCareer ?? '', ['class' => 'form-control']) !!}
-                    {!! Form::label('professorCareerTwo', 'Acronimo Curso 2 (Opcional)', ['class' => 'control-label mt-2']) !!}
-                    {!! Form::text('professorCareerTwo', $professorCareerTwo ?? '', ['class' => 'form-control']) !!}
-                    {!! Form::label('professorCareerThree', 'Acronimo Curso 3 (Opcional)', ['class' => 'control-label mt-2']) !!}
-                    {!! Form::text('professorCareerThree', $professorCareerThree ?? '', ['class' => 'form-control']) !!}
+                    {!! Form::label('studentCareer', 'Acronimo Curso', ['class' => 'control-label mt-2']) !!}
+                    {!! Form::text('studentCareer', $studentCareer ?? '', ['class' => 'form-control']) !!}
+                    {!! Form::label('studentCareerTwo', 'Acronimo Curso 2 (Opcional)', ['class' => 'control-label mt-2']) !!}
+                    {!! Form::text('studentCareerTwo', $studentCareerTwo ?? '', ['class' => 'form-control']) !!}
+                    {!! Form::label('studentCareerThree', 'Acronimo Curso 3 (Opcional)', ['class' => 'control-label mt-2']) !!}
+                    {!! Form::text('studentCareerThree', $studentCareerThree ?? '', ['class' => 'form-control']) !!}
                     {!! Form::label('professorDiscipline', 'Acronimo Disciplina', ['class' => 'control-label mt-2']) !!}
                     {!! Form::text('professorDiscipline', $professorDiscipline ?? '', ['class' => 'form-control']) !!}
                     {!! Form::label('professorDisciplineTwo', 'Acronimo Disciplina 2 (Opcional)', ['class' => 'control-label mt-2']) !!}
@@ -198,7 +216,7 @@
         <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionExample">
             <div class="card-body">
                 <div class="form-group">
-                {!! Form::open(['action' => 'ProgramController@create','method' => 'get']) !!}
+                {!! Form::open(['action' => 'ProgramController@store','method' => 'post','files' => true]) !!}
                     {!! Form::label('acronymCareer', 'Acronimo Turma', ['class' => 'control-label mt-2']) !!}
                     {!! Form::text('acronymCareer', $acronymCareer ?? '', ['class' => 'form-control']) !!}
                     {!! Form::label('acronymDiscipline', 'Acronimo Disciplina', ['class' => 'control-label mt-2']) !!}
@@ -242,7 +260,7 @@
         <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordionExample">
             <div class="card-body">
                 <div class="form-group">
-                {!! Form::open(['action' => 'AdministratorController@create','method' => 'get']) !!}
+                {!! Form::open(['action' => 'AdministratorController@store','method' => 'post','files' => true]) !!}
                     {!! Form::label('name', 'Nome', ['class' => 'control-label mt-2']) !!}
                     {!! Form::text('name', $name ?? '', ['class' => 'form-control']) !!}
                     {!! Form::label('lastName', 'Ultimo Nome', ['class' => 'control-label mt-2']) !!}
@@ -278,7 +296,7 @@
         <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-parent="#accordionExample">
             <div class="card-body">
                 <div class="form-group">
-                {!! Form::open(['action' => 'EducationalPlanController@create','method' => 'get']) !!}
+                {!! Form::open(['action' => 'EducationalPlanController@store','method' => 'post','files' => true]) !!}
                     {!! Form::label('acronymCareer', 'Acronimo Curso', ['class' => 'control-label mt-2']) !!}
                     {!! Form::text('acronymCareer', $acronymCareer ?? '', ['class' => 'form-control']) !!}
                     {!! Form::label('acronymDiscipline', 'Acronimo da Disciplina a Associar', ['class' => 'control-label mt-2']) !!}

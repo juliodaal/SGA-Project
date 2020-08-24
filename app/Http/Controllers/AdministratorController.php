@@ -7,6 +7,8 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Http\Controllers\FileAdminDataController;
+use Exception;
 
 class AdministratorController extends Controller
 {
@@ -20,11 +22,7 @@ class AdministratorController extends Controller
         try { 
             $administrators = User::where('type_user_from_type_users', '=', 3)->get();
         } catch (\Exception $e) {
-            if(strpos($e, 'Unknown database') !== false) {
-                return view('admin.index', [
-                    'error' => 'Erro na ligação à base de dados'
-                ]);
-            }
+            return FileAdminDataController::reportError('/admin',$e);
         }
         return view('admin.Administrator.index',compact('administrators'));
     }
@@ -34,39 +32,9 @@ class AdministratorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create()
     {
-        try {
-
-            $administrator = new User;
-
-            $administrator->name = $request->name .' '. $request->lastName;
-            $administrator->email = $request->email;
-            $pass = Str::random(9);
-            $administrator->password = Hash::make($pass);
-            $administrator->type_user_from_type_users = 3;
-            $administrator->card_id = $request->cardId;
-            
-            $administrator->save();
-
-        } catch (\Exception $e) {
-            if (strpos($e, 'Duplicate') !== false) {
-                return view('admin.index', [
-                    'error' => 'Este Administador já existe'
-                ]);
-            } else if(strpos($e, 'Unknown database') !== false) {
-                return view('admin.index', [
-                    'error' => 'Erro na ligação à base de dados'
-                ]);
-            } else {
-                return view('admin.index', [
-                    'error' => $e
-                ]);
-            }
-        }
-        return view('admin.index', [
-            'successfully' => 'Administrador adicionado com sucesso ' . $pass
-        ]);
+        //
     }
 
     /**
@@ -77,7 +45,31 @@ class AdministratorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if(!is_null($request->document)){
+            return FileAdminDataController::validateFile($request,'document','xlsx','excel_files','FileAdminDataController@administrator','/admin');
+        } else {
+            $this->validate($request, [
+                'name'=>'required',
+                'lastName'=>'required',
+                'email'=>'required',
+                'cardId'=>'required'
+            ]);
+            try {
+                $msg = '"'. $request->email . ' ou ' . '"' .$request->cardId. '"';
+                $pass = Str::random(9);
+                User::create([
+                    'name'=> $request->name .' '. $request->lastName,
+                    'email'=> $request->email,
+                    'password'=> Hash::make($pass),
+                    'type_user_from_type_users'=> 3,
+                    'card_id'=> $request->cardId
+                ]);
+            } catch (\Exception $e) {
+                if(!isset($msg)){ $msg = null; }
+                return FileAdminDataController::reportError('/admin',$e,$msg);
+            }
+            return redirect('/admin')->with('successfully', 'Administrador adicionado com sucesso');  
+        }
     }
 
     /**
@@ -102,11 +94,7 @@ class AdministratorController extends Controller
         try {
             $administrator = User::findOrFail($id);
         } catch (\Exception $e) {
-            if(strpos($e, 'Unknown database') !== false) {
-                return view('admin.Administrator.index', [
-                    'error' => 'Erro na ligação à base de dados'
-                ]);
-            }
+            return FileAdminDataController::reportError('/admin/discipline',$e);
         }
         return view('admin.Administrator.edit.editAdministrator', \compact('administrator'));
     }
@@ -121,27 +109,21 @@ class AdministratorController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            $this->validate($request, [
+                'name'=>'required',
+                'email'=>'required',
+                'cardId'=>'required'
+            ]);
             $administrator = User::findOrFail($id);
-            $administrator->name = $request->name;
-            $administrator->email = $request->email;
-            $administrator->card_id = $request->cardId;
-            $administrator->save();
+            $administrator::where('id', $id)->update([
+                'name'=> $request->name,
+                'email'=> $request->email,
+                'card_id'=> $request->cardId
+            ]);
         } catch (\Exception $e) {
-            if(strpos($e, 'Unknown database') !== false) {
-                return view('admin.Administrator.edit.editAdministrator', [
-                    'error' => 'Erro na ligação à base de dados'
-                ]);
-            } else {
-                return view('admin.Administrator.edit.editAdministrator', [
-                    'error' => 'Erro ao alterar o Administrador',
-                    'administrator' => $administrator = User::findOrFail($id)
-                ]);
-            }
+            return FileAdminDataController::reportError('/admin/administrator/' . $id . '/edit',$e);
         }
-        return view('admin.Administrator.edit.editAdministrator', [
-            'successfully' => 'Administrador alterado com sucesso',
-            'administrator' => $administrator = User::findOrFail($id)
-        ]);
+        return redirect('/admin/administrator')->with('successfully', 'Adminitrador alterado com sucesso'); 
     }
 
     /**
@@ -152,27 +134,11 @@ class AdministratorController extends Controller
      */
     public function destroy($id)
     {
-        $administrator = User::findOrFail($id);
         try {
-            $administrator = User::findOrFail($id);
-            $administrator->delete();
-            
+            $administrator = User::findOrFail($id)->delete();
         } catch (\Exception $e) {
-            if(strpos($e, 'Unknown database') !== false) {
-                return view('admin.Administrator.index', [
-                    'error' => 'Erro na ligação à base de dados'
-                ]);
-            } else {
-                return view('admin.Administrator.index', [
-                    'error' => 'Erro ao apagar ao Administrador',
-                    'administrators' => User::where('type_user_from_type_users', '=', 3)->get()
-                ]);
-            }
+            return FileAdminDataController::reportError('/admin/administrator',$e);
         }
-
-        return view('admin.Administrator.index', [
-            'successfully' => 'Administrador foi apagado com sucesso',
-            'administrators' => User::where('type_user_from_type_users', '=', 3)->get()
-        ]);
+        return redirect('/admin/administrator')->with('successfully', 'Administrador apagado com sucesso'); 
     }
 }

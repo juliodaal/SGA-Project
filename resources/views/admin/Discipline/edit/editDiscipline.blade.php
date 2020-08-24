@@ -3,7 +3,6 @@
 @section('title', 'Editar '.$discipline->acronym_discipline)
 
 @section('content')
-
 @if($errors->isNotEmpty())
         <div class="alert alert-warning alert-dismissible fade show rounded border border-warning" role="alert">
             <strong>Campos vazios</strong>
@@ -12,7 +11,15 @@
             </button>
         </div>
 @endif
-
+@if(session()->has('error'))
+    <div class="alert alert-warning alert-dismissible fade show rounded border border-warning" role="alert">
+        <strong>{{ session()->get('error') }}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {!! session()->forget('error') !!}
+@endif
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
   Apagar Disciplina
@@ -33,7 +40,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
-        {!! Form::open(['action' => ['disciplineController@destroy',$discipline->id],'method' => 'DELETE']) !!}
+        {!! Form::open(['action' => ['DisciplineController@destroy',$discipline->id],'method' => 'DELETE']) !!}
         {!! Form::hidden('hidden', $hidden ?? '',['class' => 'form-control']) !!}
         {!! Form::submit('Apagar Disciplina', ['class' => 'btn btn-danger']) !!}
         {!! Form::close() !!}
@@ -42,7 +49,7 @@
   </div>
 </div>
 <div class="form-group">
-    {!! Form::open(['action' => ['disciplineController@update',$discipline->id],'method' => 'put']) !!}
+    {!! Form::open(['action' => ['DisciplineController@update',$discipline->id],'method' => 'put']) !!}
         {!! Form::label('acronym', 'Acronimo', ['class' => 'control-label mt-2']) !!}
         {!! Form::text('acronym', $acronym ?? $discipline->acronym_discipline , ['class' => 'form-control']) !!}
         {!! Form::label('name', 'Nome Disciplina', ['class' => 'control-label mt-2']) !!}

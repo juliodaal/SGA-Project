@@ -3,6 +3,24 @@
 @section('title', 'Home')
 
 @section('content')
+@if(session()->has('error'))
+    <div class="alert alert-warning alert-dismissible fade show rounded border border-warning" role="alert">
+        <strong>{{ session()->get('error') }}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {!! session()->forget('error') !!}
+@endif
+@if(session()->has('successfully'))
+    <div class="alert alert-success alert-dismissible fade show rounded border border-success" role="alert">
+        <strong>{{ session()->get('successfully') }}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {!! session()->forget('successfully') !!}
+@endif
 <nav aria-label="breadcrumb">
   @isset($breadcrumbs)
     <ol class="breadcrumb">
@@ -40,25 +58,26 @@
 @endif
 @else
 @if(session()->get('type_user') == 1)
-@if(!($cursos->isEmpty()))
+@if(count($cursos))
   <ul class="list-group list-group-flush">
     @for ($i = 0; $i < count($cursos); $i++)
         @if($i == 0 )
-          <li class="list-group-item active">{{ $cursos[$i]->acronym_career }}</li>
-          <li class="list-group-item"><a href="home/{{$cursos[$i]->acronym_career}}/{{$cursos[$i]->acronym_discipline_from_disciplines}}/{{$group}}">{{ $cursos[$i]->acronym_discipline_from_disciplines }}</a></li>
+          <li class="list-group-item active">{{ $cursos[$i]->acronym_career_from_careers }}</li>
+          <li class="list-group-item"><a href="home/{{$cursos[$i]->acronym_career_from_careers}}/{{$cursos[$i]->acronym_discipline_from_disciplines}}/{{$group}}">{{ $cursos[$i]->acronym_discipline_from_disciplines }}</a></li>
         @else 
-          @if($cursos[$i]->acronym_career == $cursos[$i - 1]->acronym_career)
-            <li class="list-group-item"><a href="home/{{$cursos[$i]->acronym_career}}/{{$cursos[$i]->acronym_discipline_from_disciplines}}/{{$group}}">{{ $cursos[$i]->acronym_discipline_from_disciplines }}</a></li>
+          @if($cursos[$i]->acronym_career_from_careers == $cursos[$i - 1]->acronym_career_from_careers)
+            <li class="list-group-item"><a href="home/{{$cursos[$i]->acronym_career_from_careers}}/{{$cursos[$i]->acronym_discipline_from_disciplines}}/{{$group}}">{{ $cursos[$i]->acronym_discipline_from_disciplines }}</a></li>
           @else
-            <li class="list-group-item active">{{ $cursos[$i]->acronym_career }}</li>
-            <li class="list-group-item"><a href="home/{{$cursos[$i]->acronym_career}}/{{$cursos[$i]->acronym_discipline_from_disciplines}}/{{$group}}">{{ $cursos[$i]->acronym_discipline_from_disciplines }}</a></li>
+            <li class="list-group-item active">{{ $cursos[$i]->acronym_career_from_careers }}</li>
+            <li class="list-group-item"><a href="home/{{$cursos[$i]->acronym_career_from_careers}}/{{$cursos[$i]->acronym_discipline_from_disciplines}}/{{$group}}">{{ $cursos[$i]->acronym_discipline_from_disciplines }}</a></li>
           @endif
         @endif
     @endfor
   </ul>
 @else
 <div class="jumbotron text-center">
-    <h1 class="display-4">Não há disciplinas registadas nos teus cursos...</h1>
+    <h1 class="display-4">Não há disciplinas registadas nos teus cursos :(</h1>
+    <p>Faz click em <a href="{{ url('/home/inscriptions') }}">Inscrições</a> para inscrever tuas disciplinas</p>
 </div>
 @endif
 @endif

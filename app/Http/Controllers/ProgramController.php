@@ -9,6 +9,8 @@ use App\Professor;
 use App\Student;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProgramRequest;
+use App\Http\Controllers\FileAdminDataController;
+use Exception;
 
 class ProgramController extends Controller
 {
@@ -27,97 +29,9 @@ class ProgramController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(ProgramRequest $request)
+    public function create()
     {
-        try {
-            $career = Career::where('acronym_career', '=', $request->acronymCareer)->first();
-            $discipline = Discipline::where('acronym_discipline', '=', $request->acronymDiscipline)->first();
-            $professor = Professor::where('number_professor', '=', $request->numberProfessor)->first();
-            $student = Student::where('group', '=', $request->groupStudents)->first();
-            $careerProfessor = Professor::where('acronym_career', '=', $request->acronymCareer)->where('number_professor', '=', $request->numberProfessor)->first();
-            $careerProfessorTwo = Professor::where('acronym_career_two', '=', $request->acronymCareer)->where('number_professor', '=', $request->numberProfessor)->first();
-            $careerProfessorThree = Professor::where('acronym_career_three', '=', $request->acronymCareer)->where('number_professor', '=', $request->numberProfessor)->first();
-            $disciplineProfessor = Professor::where('professor_discipline', '=', $request->acronymDiscipline)->where('number_professor', '=', $request->numberProfessor)->first();
-            $disciplineProfessorTwo = Professor::where('professor_discipline_two', '=', $request->acronymDiscipline)->where('number_professor', '=', $request->numberProfessor)->first();
-            $disciplineProfessorThree = Professor::where('professor_discipline_three', '=', $request->acronymDiscipline)->where('number_professor', '=', $request->numberProfessor)->first();
-            $validateHourProgram = Program::where('date_to_class', '=',$request->date)
-                ->where('start_class', '>=',$request->startTime)
-                ->where('start_class', '<=',$request->endTime)
-                ->where('end_class', '>=',$request->startTime)
-                ->where('end_class', '<=',$request->endTime)
-                ->where('number_professor', '>=',$request->numberProfessor)->first();
-
-            $program = new Program;
-            if(!is_null($career)){
-                if(!is_null($discipline)){
-                    if(!is_null($professor)){
-                        if(!is_null($student)){
-                            if(!is_null($careerProfessor) || !is_null($careerProfessorTwo) || !is_null($careerProfessorThree)){
-                                if(!is_null($disciplineProfessor) || !is_null($disciplineProfessorTwo) || !is_null($disciplineProfessorThree)){
-                                    if(is_null($validateHourProgram)){
-                                        $program->acronym_career = strtoupper($request->acronymCareer);
-                                        $program->acronym_discipline = strtoupper($request->acronymDiscipline);
-                                        $program->number_professor = $request->numberProfessor;
-                                        $program->date_to_class = $request->date;
-                                        $program->start_class = $request->startTime;
-                                        $program->end_class = $request->endTime;
-                                        $program->classroom_number = $request->classRoom;
-                                        $program->group_from_students = $request->groupStudents;
-                                        $program->save();
-                                    } else {
-                                        return view('admin.index', [
-                                            'error' => 'Erro: Professor já esta associado a um Programa o dia ' . $request->date . ' Comenco Aula ' . $request->startTime . ' Fim Aula ' . $request->endTime
-                                        ]);
-                                    }
-                                } else {
-                                    return view('admin.index', [
-                                        'error' => 'Disciplina não Associada ao Professor'
-                                    ]);
-                                }
-                            } else {
-                                return view('admin.index', [
-                                    'error' => 'Curso não Associado ao Professor'
-                                ]);
-                            } 
-                        } else {
-                            return view('admin.index', [
-                                'error' => 'Grupo de Estudantes ' . $request->groupStudent . ' não existe'
-                            ]);
-                        }
-                    } else {
-                        return view('admin.index', [
-                            'error' => 'Numero de Professor ' . strtoupper($request->numberProfessor) . ' não existe'
-                        ]);  
-                    }
-                } else {
-                    return view('admin.index', [
-                        'error' => 'Disciplina ' . strtoupper($request->acronymDiscipline) . ' não existe'
-                    ]);    
-                }
-            } else {
-                return view('admin.index', [
-                    'error' => 'Curso ' . strtoupper($request->acronymCareer) . ' não existe'
-                ]);
-            }
-
-        } catch (\Exception $e) {
-            if (strpos($e, 'Duplicate') !== false) {
-                return view('admin.index', [
-                    'error' => 'Este Programa já existe'
-                ]);
-            } if(strpos($e, 'Unknown database') !== false) {
-                return view('admin.index', [
-                    'error' => 'Erro na ligação à base de dados'
-                ]);
-            } else {
-                return view('admin.index', [
-                    'error' => $e
-                ]);
-            }
-        }
-        return view('admin.index', [
-            'successfully' => 'Programa adicionado com sucesso '
-        ]);
+        //
     }
 
     /**
@@ -128,7 +42,43 @@ class ProgramController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if(!is_null($request->document)){
+            return FileAdminDataController::validateFile($request,'document','xlsx','excel_files','FileAdminDataController@program','/admin');
+        } else {
+            try {
+                $this->validate($request, [
+                    'acronymCareer'=>'required',
+                    'acronymDiscipline'=>'required',
+                    'numberProfessor'=>'required',
+                    'date'=>'required',
+                    'startTime'=>'required',
+                    'endTime'=>'required',
+                    'classRoom'=>'required',
+                    'groupStudents'=>'required'
+                ]);
+
+                $msg = '"'. $request->name .  ' ' . $request->lastName . '" - "' . $request->email . '" - "' . $request->numberProfessor . '"';
+                $validateProgram = FileAdminDataController::validateProgram($request);
+                if($validateProgram === true){
+                    Program::create([
+                        'acronym_career' => strtoupper($request->acronymCareer),
+                        'acronym_discipline' => strtoupper($request->acronymDiscipline),
+                        'number_professor' => $request->numberProfessor,
+                        'date_to_class' => $request->date,
+                        'start_class' => $request->startTime,
+                        'end_class' => $request->endTime,
+                        'classroom_number' => $request->classRoom,
+                        'group_from_students' => $request->groupStudents
+                    ]);
+                } else {
+                    throw new Exception($validateProgram);
+                }
+            } catch (\Exception $e) {
+                if(!isset($msg)){ $msg = null; }
+                return FileAdminDataController::reportError('/admin',$e,$msg);
+            }
+            return redirect('/admin')->with('successfully', 'Programa adicionado com sucesso ');  
+        }
     }
 
     /**
@@ -150,7 +100,11 @@ class ProgramController extends Controller
      */
     public function edit($id)
     {
-        $program = Program::findOrFail($id);
+        try {
+            $program = Program::findOrFail($id);
+        } catch (\Exception $e) {
+            return FileAdminDataController::reportError('/admin/program',$e);
+        }
         return view('admin.Program.edit.editProgram', compact('program'));
     }
 
@@ -165,31 +119,25 @@ class ProgramController extends Controller
     {
         try{
             $program = Program::findOrFail($id);
-            $program->acronym_career = strtoupper($request->acronym);
-            $program->acronym_discipline = strtoupper($request->acronymDiscipline);
-            $program->number_professor = $request->numberProfessor;
-            $program->date_to_class = $request->date;
-            $program->start_class = $request->startClass;
-            $program->end_class = $request->endClass;
-            $program->classroom_number = $request->classroomNumber;
-            $program->save();
-        
-            } catch (\Exception $e) {
-                if(strpos($e, 'Unknown database') !== false) {
-                    return view('admin.Program.edit.editProgram', [
-                        'error' => 'Erro na ligação à base de dados'
-                    ]);
-                } else {
-                    return view('admin.Program.edit.editProgram', [
-                        'error' => $e,
-                        'program' => $program
-                    ]);
-                }
-            }
-            return view('admin.Program.edit.editProgram', [
-                'successfully' => 'Programa alterado com sucesso',
-                'program' => $program
+            $validateProgram = FileAdminDataController::validateProgram($request);
+            if($validateProgram === true){
+                $program::where('id', $id)->update([
+                    'acronym_career' => strtoupper($request->acronymCareer),
+                    'acronym_discipline' => strtoupper($request->acronymDiscipline),
+                    'number_professor' => $request->numberProfessor,
+                    'date_to_class' => $request->date,
+                    'start_class' => $request->startTime,
+                    'end_class' => $request->endTime,
+                    'classroom_number' => $request->classRoom,
+                    'group_from_students' => $request->groupStudents
                 ]);
+            } else {
+                throw new Exception('Verifique os dados inseridos, não foi possível modificar este programa');
+            }
+            } catch (\Exception $e) {
+                return FileAdminDataController::reportError('/admin/program',$e);
+            }
+            return redirect('/admin/program')->with('successfully', 'Programa alterado com sucesso');
     }
 
     /**
@@ -201,24 +149,11 @@ class ProgramController extends Controller
     public function destroy($id)
     {
         try {
-            $program = Program::findOrFail($id);
-            $program->delete();
-            
+            $program = Program::findOrFail($id)->delete();
         } catch (\Exception $e) {
-            if(strpos($e, 'Unknown database') !== false) {
-                return view('admin.Program.index', [
-                    'error' => 'Erro na ligação à base de dados'
-                ]);
-            } else {
-                return view('admin.Program.index', [
-                    'error' => 'Erro ao apagar o Programa',
-                ]);
-            }
+            return FileAdminDataController::reportError('/admin/program',$e);
         }
-
-        return view('admin.Program.index', [
-            'successfully' => 'Programa foi apagado com sucesso',
-        ]);
+        return redirect('/admin/program')->with('successfully', 'Programa foi apagado com sucesso'); 
     }
     
     public function findProgram(Request $request)
@@ -226,12 +161,27 @@ class ProgramController extends Controller
         $programs = null;
         try {    
             if($request->acronym){
-                $programs = Program::where('acronym_career', '=', $request->acronym)->get();
-            } 
+                $programs = Program::join('professors','programs.number_professor','=','professors.number_professor')
+                ->join('users','users.id','=','professors.id_professor_from_users')
+                ->where('programs.acronym_career', '=', $request->acronym)
+                ->select(
+                    'programs.id',
+                    'programs.acronym_career',
+                    'programs.acronym_discipline',
+                    'date_to_class',
+                    'start_class',
+                    'end_class',
+                    'classroom_number',
+                    'group_from_students',
+                    'name'
+                    )
+                ->get();
+            }  else {
+                throw new Exception('Erro ao encontra o Programa');
+            }
         } catch (\Exception $e) {
-            return view('admin.Program.index', [
-                'error' => 'Erro ao encontra o Professor'
-            ]);
+            return FileAdminDataController::reportError('/admin/program',$e);
+
         }
         return view('admin.Program.programsList', compact('programs'));
     }

@@ -52,3 +52,15 @@ Route::get('/home/{career}/{discipline}/{group}', 'HomeController@estudentsGroup
 Route::resource('/home/inscriptions', 'InscriptionController');
 
 Route::get('/admin/file/discipline', 'FileAdminDataController@discipline');
+
+Route::get('/admin/file/career', 'FileAdminDataController@career');
+
+Route::get('/admin/file/student', 'FileAdminDataController@student');
+
+Route::get('/admin/file/professor', 'FileAdminDataController@professor');
+
+Route::get('/admin/file/program', 'FileAdminDataController@program');
+
+Route::get('/admin/file/administrator', 'FileAdminDataController@administrator');
+
+Route::get('/admin/file/educationalPlan', 'FileAdminDataController@educationalPlan');

@@ -6,6 +6,9 @@ use App\EducationalPlan;
 use App\Career;
 use App\Discipline;
 use Illuminate\Http\Request;
+use App\Http\Controllers\FileAdminDataController;
+use Exception;
+
 
 class EducationalPlanController extends Controller
 {
@@ -26,38 +29,7 @@ class EducationalPlanController extends Controller
      */
     public function create(Request $request)
     {
-        try {
-            $career = Career::where('acronym_career', '=', $request->acronymCareer)->first();
-            $discipline = Discipline::where('acronym_discipline', '=', $request->acronymDiscipline)->first();
-            if(!is_null($career) && !is_null($discipline)){
-                $educationalPlan = new EducationalPlan;
-                $educationalPlan->acronym_career_from_careers = strtoupper($request->acronymCareer);
-                $educationalPlan->acronym_discipline_from_disciplines = strtoupper($request->acronymDiscipline);
-                $educationalPlan->semester = strtoupper($request->semester);
-
-                $educationalPlan->save();
-            } else {
-                return view('admin.index', [
-                    'error' => 'Este curso ou disciplina não existem'
-                ]);
-            }
-        } catch (\Exception $e) {
-            if(isset($educationalPlan)){
-                $educationalPlan->delete();
-            }
-            if (strpos($e, 'Duplicate') !== false) {
-                return view('admin.index', [
-                    'error' => 'Este Plano de Educação já existe'
-                ]);
-            } else if(strpos($e, 'Unknown database') !== false) {
-                return view('admin.index', [
-                    'error' => 'Erro na ligação à base de dados'
-                ]);
-            }
-        }
-        return view('admin.index', [
-            'successfully' => 'Curso adicionado com sucesso'
-        ]);
+        //
     }
 
     /**
@@ -68,7 +40,34 @@ class EducationalPlanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if(!is_null($request->document)){
+            return FileAdminDataController::validateFile($request,'document','xlsx','excel_files','FileAdminDataController@educationalPlan','/admin');
+        } else {
+            try {
+                $this->validate($request, [
+                    'acronymCareer'=>'required',
+                    'acronymDiscipline'=>'required',
+                    'semester'=>'required',
+                ]);
+                $msg = '"'. $request->acronymCareer . '" - "' . $request->acronymDiscipline . '"';
+                $career = Career::where('acronym_career', '=', $request->acronymCareer)->first();
+                $discipline = Discipline::where('acronym_discipline', '=', $request->acronymDiscipline)->first();
+                
+                if(!is_null($career) && !is_null($discipline)){
+                    EducationalPlan::create([
+                        'acronym_career_from_careers' => strtoupper($request->acronymCareer),
+                        'acronym_discipline_from_disciplines' => strtoupper($request->acronymDiscipline),
+                        'semester' => strtoupper($request->semester)
+                    ]);
+                } else {
+                    throw new Exception('Este curso ou disciplina não existem');
+                }
+            } catch (\Exception $e){
+                if(!isset($msg)){ $msg = null; }
+                return FileAdminDataController::reportError('/admin',$e,$msg);
+            }
+            return redirect('/admin')->with('successfully', 'Curso adicionado com sucesso '); 
+        }
     }
 
     /**
@@ -90,7 +89,11 @@ class EducationalPlanController extends Controller
      */
     public function edit($id)
     {
-        $plan = EducationalPlan::findOrFail($id);
+        try {
+            $plan = EducationalPlan::findOrFail($id);
+        } catch (\Exception $e) {
+            return FileAdminDataController::reportError('/admin/plan',$e);
+        }
         return view('admin.EducationalPlan.edit.editEducationalPlan', compact('plan'));
     }
 
@@ -115,45 +118,29 @@ class EducationalPlanController extends Controller
     public function destroy($id)
     {
         try {
-            $plan = EducationalPlan::findOrFail($id);
-            $plan->delete();
-            
-        } catch (\Exception $e) {
-            if(strpos($e, 'Unknown database') !== false) {
-                return view('admin.EducationalPlan.index', [
-                    'error' => 'Erro na ligação à base de dados'
-                ]);
+            if(EducationalPlan::findOrFail($id)->delete()){
+                return redirect('/admin/plan')->with('successfully', 'O Plano de Educação foi apagado com sucesso'); 
             } else {
-                return view('admin.EducationalPlan.index', [
-                    'error' => 'Erro ao apagar o Plano de Educação',
-                    'plan' => EducationalPlan::findOrFail($id)
-                ]);
+                throw new Exception('Erro na ligação à base de dados');
             }
+        } catch (\Exception $e) {
+            return FileAdminDataController::reportError('/admin/plan',$e);
         }
-
-        return view('admin.EducationalPlan.index', [
-            'successfully' => 'Plano de Educação foi apagado com sucesso',
-        ]);
     }
     public function findPlan(Request $request)
     {
+        $plans = null;
         try {    
             if($request->acronymCareer){
                 $plans = EducationalPlan::where('acronym_career_from_careers', '=', $request->acronymCareer)->get();
                 if($request->acronymCareer == '*'){
                     $plans = EducationalPlan::all();
                 }
+            } else {
+                throw new Exception('Erro ao encontra o Plano de Educação');
             }
         } catch (\Exception $e) {
-            if(strpos($e, 'Unknown database') !== false) {
-                return view('admin.EducationalPlan.index', [
-                    'error' => 'Erro na ligação à base de dados'
-                ]);
-            } else {
-                return view('admin.EducationalPlan.index', [
-                    'error' => 'Erro ao encontra o Plano de Educação'
-                ]);
-            }
+            return FileAdminDataController::reportError('/admin/plan',$e);
         }
         return view('admin.EducationalPlan.educationaPlanList', compact('plans'));
     }

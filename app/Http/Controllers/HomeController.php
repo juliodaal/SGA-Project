@@ -38,7 +38,8 @@ class HomeController extends Controller
 
                 $inscriptions = Student::join('inscriptions', 'students.number_student', '=','inscriptions.number_student_from_students')
                 ->where('number_student_from_students', '=', $student->number_student)
-                ->select('acronym_career','acronym_discipline_from_disciplines')
+                ->select('acronym_discipline_from_disciplines','acronym_career_from_careers')
+                ->orderBy('acronym_career_from_careers')
                 ->get();
                     return view('Users.Home',[
                         'breadcrumbs' => ['Cursos'],
@@ -88,15 +89,21 @@ class HomeController extends Controller
         return session()->get('type_user');
     }
     public function estudentsGroup($career,$discipline,$group){
-        
         $students = User::join('students','users.id','=','students.id_student_from_users')
         ->join('inscriptions','students.number_student','=','inscriptions.number_student_from_students')
-        ->where('acronym_career','=',$career)
+        ->where('acronym_career_from_careers','=',$career)
         ->where('acronym_discipline_from_disciplines','=',$discipline)
-        ->where('students.group','=',$group)
-        ->select('name','number_student')
+        ->where('group','=',$group)
         ->get();
 
-        return view('Users.GroupStudents.index',compact('students'));
+        $programs = Program::where('acronym_career','=',$career)
+        ->where('acronym_discipline','=',$discipline)
+        ->where('group_from_students','=',$group)
+        ->select('date_to_class','start_class','end_class')
+        ->get();
+        return view('Users.GroupStudents.index', [
+            'students' => $students,
+            'programs' => $programs
+        ]);
     }
 }

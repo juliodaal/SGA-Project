@@ -103,7 +103,48 @@ class HomeController extends Controller
         ->get();
         return view('Users.GroupStudents.index', [
             'students' => $students,
-            'programs' => $programs
+            'programs' => $programs,
+            'career' => $career,
+            'discipline' => $discipline,
+            'group' => $group
+        ]);
+    }
+
+    public function date($career,$discipline,$group,$date,$startTime,$endTime){
+        $validatedStudents = [];
+        $students = User::join('students','users.id','=','students.id_student_from_users')
+        ->join('inscriptions','students.number_student','=','inscriptions.number_student_from_students')
+        ->where('acronym_career_from_careers','=',$career)
+        ->where('acronym_discipline_from_disciplines','=',$discipline)
+        ->where('group','=',$group)
+        ->get();
+
+        $programs = Program::where('acronym_career','=',$career)
+        ->where('acronym_discipline','=',$discipline)
+        ->where('group_from_students','=',$group)
+        ->select('date_to_class','start_class','end_class')
+        ->get();
+ 
+        $assisStudents = Student::join('assistances','students.number_student','=','assistances.number_student')
+        ->join('programs','assistances.date_to_class','=','programs.date_to_class')
+        ->where('programs.acronym_career','=',$career)
+        ->where('programs.acronym_discipline','=',$discipline)
+        ->where('programs.group_from_students','=',$group)
+        ->where('assistances.entry','=',0)
+        ->where('assistances.endtime','<=','programs.end_class')
+        ->where('assistances.date_to_class','=',$date)
+        // ->groupBy('assistances.startTime','assistances.endtime')
+        ->get();
+        return view('Users.GroupStudents.index', [
+            'students' => $students,
+            'programs' => $programs,
+            'assisStudents' => $assisStudents,
+            'career' => $career,
+            'discipline' => $discipline,
+            'group' => $group,
+            'date' => $date,
+            'startTime' => $startTime,
+            'endTime' => $endTime
         ]);
     }
 }

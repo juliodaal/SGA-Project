@@ -10,7 +10,7 @@
     @isset($programs)
         <ul class="list-group list-group-flush">
         @foreach($programs as $program)
-            <li class="list-group-item bg-transparent text-center"><a href="#" class="text-light">{{ $program->date_to_class }} - {{ $program->start_class }} - {{ $program->end_class }}</a></li>
+            <li class="list-group-item bg-transparent text-center"><a href="/home/{{$career}}/{{$discipline}}/{{$group}}/{{$program->date_to_class}}/{{$program->start_class}}/{{$program->end_class}}/date" class="text-light">{{ $program->date_to_class }} - {{ $program->start_class }} - {{ $program->end_class }}</a></li>
         @endforeach
         </ul>
     @endisset
@@ -20,8 +20,34 @@
 <ul class="list-group list-group-flush">
     @foreach($students as $student)
         <li class="list-group-item col-sm-12 my-1 mx-auto shadow-sm float-left d-flex justify-content-between align-items-center">
-            <a href="">{{ $student->name }} - {{ $student->number_student }}</a>
-            <input type="checkbox" aria-label="Student Assistance">
+            <a href="">
+            {{ $student->name }} - 
+            {{ $student->number_student }}
+            @isset($assisStudents)
+            {{ $date }} - 
+            {{ $startTime }} - 
+            {{ $endTime }}
+            @endisset
+            </a>
+            @isset($assisStudents)
+            @if(count($assisStudents))
+            {{ $flag = false }}
+                @foreach($assisStudents as $assisStudent)
+                    @if($student->number_student == $assisStudent->number_student)
+                        <input type="checkbox" aria-label="Student Assistance" checked>
+                        <?php $flag = true ?>
+                    @else
+                        @if ($loop->last)
+                            @if($flag == false)
+                                <input type="checkbox" aria-label="Student Assistance"> 
+                            @endif
+                        @endif   
+                    @endif
+                @endforeach
+            @else
+                <input type="checkbox" aria-label="Student Assistance">
+            @endif($assisStudents)
+            @endisset
         </li>
     @endforeach
 </ul>

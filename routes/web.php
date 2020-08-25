@@ -49,6 +49,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/home/{career}/{discipline}/{group}', 'HomeController@estudentsGroup')->name('home.estudentsGroup');
 
+Route::get('/home/{career}/{discipline}/{group}/{date}/{startTime}/{endTime}/date', 'HomeController@date')->name('home.date');
+
 Route::resource('/home/inscriptions', 'InscriptionController');
 
 Route::get('/admin/file/discipline', 'FileAdminDataController@discipline');
@@ -64,3 +66,5 @@ Route::get('/admin/file/program', 'FileAdminDataController@program');
 Route::get('/admin/file/administrator', 'FileAdminDataController@administrator');
 
 Route::get('/admin/file/educationalPlan', 'FileAdminDataController@educationalPlan');
+
+Route::get('/assistance', 'AssistanceController@assistance');

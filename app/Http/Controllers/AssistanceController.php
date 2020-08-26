@@ -11,6 +11,12 @@ use Exception;
 
 class AssistanceController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function assistance(){
         try {
             $numberStudent = 412541254;

@@ -26,9 +26,9 @@
     <ol class="breadcrumb">
       @foreach($breadcrumbs as $breadcrumb)
           @if ($loop->last)
-              <li class="breadcrumb-item active" aria-current="page">{{ $breadcrumb }}</li>
+              <li class="breadcrumb-item active text-primary" aria-current="page">{{ $breadcrumb }}</li>
           @else
-              <li class="breadcrumb-item"><a href="#">{{ $breadcrumb }}</a></li>
+              <li class="breadcrumb-item">{{ $breadcrumb }}</li>
           @endif
       @endforeach
     </ol>
@@ -39,14 +39,14 @@
 <ul class="list-group list-group-flush">
   @for ($i = 0; $i < count($disciplines); $i++)
       @if($i == 0 )
-        <li class="list-group-item active">{{ $disciplines[$i]->acronym_discipline }}</li>
-        <li class="list-group-item"><a href="home/{{$disciplines[$i]->acronym_career}}/{{$disciplines[$i]->acronym_discipline}}/{{$disciplines[$i]->group_from_students}}">{{ $disciplines[$i]->acronym_career }} - Grupo {{ $disciplines[$i]->group_from_students }}</a></li>
+        <li class="list-group-item rounded bg-transparent text-dark font-weight-bold">{{ $disciplines[$i]->acronym_discipline }}</li>
+        <li class="list-group-item bg-transparent pl-4 d-flex justify-content-between">{{ $disciplines[$i]->acronym_career }} - Grupo {{ $disciplines[$i]->group_from_students }}<a href="home/{{$disciplines[$i]->acronym_career}}/{{$disciplines[$i]->acronym_discipline}}/{{$disciplines[$i]->group_from_students}}">Ver</a></li>
       @else 
       @if($disciplines[$i]->acronym_discipline == $disciplines[$i - 1]->acronym_discipline)
-        <li class="list-group-item"><a href="home/{{$disciplines[$i]->acronym_career}}/{{$disciplines[$i]->acronym_discipline}}/{{$disciplines[$i]->group_from_students}}">{{ $disciplines[$i]->acronym_career }} - Grupo {{ $disciplines[$i]->group_from_students }}</a></li>
+        <li class="list-group-item bg-transparent pl-4 d-flex justify-content-between">{{ $disciplines[$i]->acronym_career }} - Grupo {{ $disciplines[$i]->group_from_students }}<a href="home/{{$disciplines[$i]->acronym_career}}/{{$disciplines[$i]->acronym_discipline}}/{{$disciplines[$i]->group_from_students}}">Ver</a></li>
       @else
-        <li class="list-group-item active">{{ $disciplines[$i]->acronym_discipline }}</li>
-        <li class="list-group-item"><a href="home/{{$disciplines[$i]->acronym_career}}/{{$disciplines[$i]->acronym_discipline}}/{{$disciplines[$i]->group_from_students}}">{{ $disciplines[$i]->acronym_career }} - Grupo {{ $disciplines[$i]->group_from_students }}</a></li>
+        <li class="list-group-item rounded bg-transparent text-dark font-weight-bold">{{ $disciplines[$i]->acronym_discipline }}</li>
+        <li class="list-group-item bg-transparent pl-4 d-flex justify-content-between">{{ $disciplines[$i]->acronym_career }} - Grupo {{ $disciplines[$i]->group_from_students }}<a href="home/{{$disciplines[$i]->acronym_career}}/{{$disciplines[$i]->acronym_discipline}}/{{$disciplines[$i]->group_from_students}}">Ver</a></li>
       @endif
     @endif
   @endfor
@@ -62,14 +62,14 @@
   <ul class="list-group list-group-flush">
     @for ($i = 0; $i < count($cursos); $i++)
         @if($i == 0 )
-          <li class="list-group-item active">{{ $cursos[$i]->acronym_career_from_careers }}</li>
-          <li class="list-group-item"><a href="home/{{$cursos[$i]->acronym_career_from_careers}}/{{$cursos[$i]->acronym_discipline_from_disciplines}}/{{$group}}">{{ $cursos[$i]->acronym_discipline_from_disciplines }}</a></li>
+          <li class="list-group-item rounded bg-transparent text-dark font-weight-bold">{{ $cursos[$i]->acronym_career_from_careers }}</li>
+          <li class="list-group-item bg-transparent pl-4 d-flex justify-content-between">{{ $cursos[$i]->acronym_discipline_from_disciplines }}<a href="home/{{$cursos[$i]->acronym_career_from_careers}}/{{$cursos[$i]->acronym_discipline_from_disciplines}}/{{$group}}">Ver</a></li>
         @else 
           @if($cursos[$i]->acronym_career_from_careers == $cursos[$i - 1]->acronym_career_from_careers)
-            <li class="list-group-item"><a href="home/{{$cursos[$i]->acronym_career_from_careers}}/{{$cursos[$i]->acronym_discipline_from_disciplines}}/{{$group}}">{{ $cursos[$i]->acronym_discipline_from_disciplines }}</a></li>
+            <li class="list-group-item bg-transparent pl-4 d-flex justify-content-between">{{ $cursos[$i]->acronym_discipline_from_disciplines }}<a href="home/{{$cursos[$i]->acronym_career_from_careers}}/{{$cursos[$i]->acronym_discipline_from_disciplines}}/{{$group}}">Ver</a></li>
           @else
-            <li class="list-group-item active">{{ $cursos[$i]->acronym_career_from_careers }}</li>
-            <li class="list-group-item"><a href="home/{{$cursos[$i]->acronym_career_from_careers}}/{{$cursos[$i]->acronym_discipline_from_disciplines}}/{{$group}}">{{ $cursos[$i]->acronym_discipline_from_disciplines }}</a></li>
+            <li class="list-group-item rounded bg-transparent text-dark font-weight-bold">{{ $cursos[$i]->acronym_career_from_careers }}</li>
+            <li class="list-group-item bg-transparent pl-4 d-flex justify-content-between">{{ $cursos[$i]->acronym_discipline_from_disciplines }}<a href="home/{{$cursos[$i]->acronym_career_from_careers}}/{{$cursos[$i]->acronym_discipline_from_disciplines}}/{{$group}}">Ver</a></li>
           @endif
         @endif
     @endfor

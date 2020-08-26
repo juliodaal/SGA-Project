@@ -252,7 +252,7 @@
                     data-target="#collapseSix" aria-expanded="true" aria-controls="collapseSix">
                     Adicionar Administrador
                 </button>
-                <span class="float-right"><a class="btn btn-info" href="/admin/administrator">Ver
+                <span class="float-right"><a class="btn btn-info" href="/admin/administrator/administrator">Ver
                         Administradores</a></span>
             </h2>
         </div>

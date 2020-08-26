@@ -12,6 +12,11 @@ use Exception;
 
 class AdministratorController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('admin');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -19,12 +24,7 @@ class AdministratorController extends Controller
      */
     public function index()
     {
-        try { 
-            $administrators = User::where('type_user_from_type_users', '=', 3)->get();
-        } catch (\Exception $e) {
-            return FileAdminDataController::reportError('/admin',$e);
-        }
-        return view('admin.Administrator.index',compact('administrators'));
+        return view('admin.index');
     }
 
     /**
@@ -68,7 +68,7 @@ class AdministratorController extends Controller
                 if(!isset($msg)){ $msg = null; }
                 return FileAdminDataController::reportError('/admin',$e,$msg);
             }
-            return redirect('/admin')->with('successfully', 'Administrador adicionado com sucesso');  
+            return redirect('/admin')->with('successfully', 'Administrador adicionado com sucesso ' . $pass);  
         }
     }
 
@@ -78,9 +78,14 @@ class AdministratorController extends Controller
      * @param  \App\Administrator  $administrator
      * @return \Illuminate\Http\Response
      */
-    public function show(Administrator $administrator)
+    public function show()
     {
-        //
+        try { 
+            $administrators = User::where('type_user_from_type_users', '=', 3)->get();
+        } catch (\Exception $e) {
+            return FileAdminDataController::reportError('/admin',$e);
+        }
+        return view('admin.Administrator.index',compact('administrators'));
     }
 
     /**

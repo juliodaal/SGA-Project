@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Program;
 use App\Student;
+use App\Assistance;
 use App\EducationalPlan;
 use Illuminate\Support\Facades\Auth;
 
@@ -42,7 +43,7 @@ class HomeController extends Controller
                 ->orderBy('acronym_career_from_careers')
                 ->get();
                     return view('Users.Home',[
-                        'breadcrumbs' => ['Cursos'],
+                        'breadcrumbs' => ['Disciplinas'],
                         'cursos' => $inscriptions,
                         'group' => session()->get('group')
                     ]);       
@@ -89,21 +90,11 @@ class HomeController extends Controller
         return session()->get('type_user');
     }
     public function estudentsGroup($career,$discipline,$group){
-        $students = User::join('students','users.id','=','students.id_student_from_users')
-        ->join('inscriptions','students.number_student','=','inscriptions.number_student_from_students')
-        ->where('acronym_career_from_careers','=',$career)
-        ->where('acronym_discipline_from_disciplines','=',$discipline)
-        ->where('group','=',$group)
-        ->get();
-
-        $programs = Program::where('acronym_career','=',$career)
-        ->where('acronym_discipline','=',$discipline)
-        ->where('group_from_students','=',$group)
-        ->select('date_to_class','start_class','end_class')
-        ->get();
+        $data = $this->getStudentAndAssitance($career,$discipline,$group);
         return view('Users.GroupStudents.index', [
-            'students' => $students,
-            'programs' => $programs,
+            'breadcrumbs' => ['Disciplinas','Turma'],
+            'students' => $data->students,
+            'programs' => $data->programs,
             'career' => $career,
             'discipline' => $discipline,
             'group' => $group
@@ -111,19 +102,8 @@ class HomeController extends Controller
     }
 
     public function date($career,$discipline,$group,$date,$startTime,$endTime){
-        $validatedStudents = [];
-        $students = User::join('students','users.id','=','students.id_student_from_users')
-        ->join('inscriptions','students.number_student','=','inscriptions.number_student_from_students')
-        ->where('acronym_career_from_careers','=',$career)
-        ->where('acronym_discipline_from_disciplines','=',$discipline)
-        ->where('group','=',$group)
-        ->get();
 
-        $programs = Program::where('acronym_career','=',$career)
-        ->where('acronym_discipline','=',$discipline)
-        ->where('group_from_students','=',$group)
-        ->select('date_to_class','start_class','end_class')
-        ->get();
+        $data = $this->getStudentAndAssitance($career,$discipline,$group);
  
         $assisStudents = Student::join('assistances','students.number_student','=','assistances.number_student')
         ->join('programs','assistances.date_to_class','=','programs.date_to_class')
@@ -133,11 +113,11 @@ class HomeController extends Controller
         ->where('assistances.entry','=',0)
         ->where('assistances.endtime','<=','programs.end_class')
         ->where('assistances.date_to_class','=',$date)
-        // ->groupBy('assistances.startTime','assistances.endtime')
         ->get();
         return view('Users.GroupStudents.index', [
-            'students' => $students,
-            'programs' => $programs,
+            'breadcrumbs' => ['Disciplinas','Turma'],
+            'students' => $data->students,
+            'programs' => $data->programs,
             'assisStudents' => $assisStudents,
             'career' => $career,
             'discipline' => $discipline,
@@ -146,5 +126,34 @@ class HomeController extends Controller
             'startTime' => $startTime,
             'endTime' => $endTime
         ]);
+    }
+
+    public function dateList($numberStudent,$date){
+        $assistances = Assistance::where('number_student',$numberStudent)
+        ->where('date_to_class',$date)
+        ->get();
+        return view('Users.GroupStudents.assistance', [
+            'assistances' => $assistances,
+            'breadcrumbs' => ['Disciplinas','Turma','Aluno']
+        ]);
+    }
+
+    public function getStudentAndAssitance($career,$discipline,$group){
+        $students = User::join('students','users.id','=','students.id_student_from_users')
+        ->join('inscriptions','students.number_student','=','inscriptions.number_student_from_students')
+        ->where('acronym_career_from_careers','=',$career)
+        ->where('acronym_discipline_from_disciplines','=',$discipline)
+        ->where('group','=',$group)
+        ->get();
+
+        $programs = Program::where('acronym_career','=',$career)
+        ->where('acronym_discipline','=',$discipline)
+        ->where('group_from_students','=',$group)
+        ->select('date_to_class','start_class','end_class')
+        ->get();
+        
+        $obj = (object) ['students'=>$students,'programs'=>$programs];
+        return $obj;
+
     }
 }

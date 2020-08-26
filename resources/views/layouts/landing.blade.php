@@ -22,7 +22,6 @@
     <!-- Styles -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-    
     <style>
     ::-webkit-scrollbar {
     width: 10px;
@@ -35,6 +34,20 @@
     ::-webkit-scrollbar-thumb {
     background: #212529;
     border-radius: 3px;
+    }
+    .header{
+        height: 100vh; 
+        clip-path: circle(200% at 50% -242%);
+    }
+
+    @media screen and (max-width: 1350px){
+        .header{
+            clip-path: none;
+            display: flex;
+            justify-content: center;
+            align-items:center;
+            margin-bottom: 16px;
+        }
     }
     </style>
 </head>
@@ -95,13 +108,7 @@
             </div>
         </nav>
 
-        <main class="container my-4">
-        
-                @if(session()->get('type_user') === 3)
-                    <div>
-                        <h1 class="display-4 text-center">@yield('title')</h1>
-                    </div>
-                @endif
+        <main class="container-fluid p-0">
                 <div>
                     @yield('content')
                 </div>

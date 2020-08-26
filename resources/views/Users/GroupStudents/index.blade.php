@@ -16,42 +16,66 @@
     @endisset
     </nav>
 </div>
-<button type="button" class="btn btn-primary" id="button-dates">Calendário</button>
-<ul class="list-group list-group-flush">
+<nav aria-label="breadcrumb">
+  @isset($breadcrumbs)
+    <ol class="breadcrumb">
+      @foreach($breadcrumbs as $breadcrumb)
+          @if ($loop->last)
+              <li class="breadcrumb-item active text-primary" aria-current="page">{{ $breadcrumb }}</li>
+          @else
+              <li class="breadcrumb-item">{{ $breadcrumb }}</li>
+          @endif
+      @endforeach
+    </ol>
+  @endisset
+</nav>
+<button type="button" class="btn btn-primary mb-4" id="button-dates">Calendário</button>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Nome Estudante</th>
+      <th scope="col">Número Estudante</th>
+      <th scope="col">Data</th>
+      <th scope="col">Començo Aula</th>
+      <th scope="col">Fim Aula</th>
+      <th scope="col">Assistiu?</th>
+      <th scope="col">Ver Aluno</th>
+    </tr>
+  </thead>
+  <tbody>
     @foreach($students as $student)
-        <li class="list-group-item col-sm-12 my-1 mx-auto shadow-sm float-left d-flex justify-content-between align-items-center">
-            <a href="">
-            {{ $student->name }} - 
-            {{ $student->number_student }}
+        <tr>
+            <td>{{ $student->name }}</td>
+            <td>{{ $student->number_student }}</td>
             @isset($assisStudents)
-            {{ $date }} - 
-            {{ $startTime }} - 
-            {{ $endTime }}
-            @endisset
-            </a>
-            @isset($assisStudents)
+            <td>{{ $date }}</td>
+            <td>{{ $startTime }}</td>
+            <td>{{ $endTime }}</td>
             @if(count($assisStudents))
             {{ $flag = false }}
                 @foreach($assisStudents as $assisStudent)
                     @if($student->number_student == $assisStudent->number_student)
-                        <input type="checkbox" aria-label="Student Assistance" checked>
+                        <td><input type="checkbox" aria-label="Student Assistance" checked></td>
                         <?php $flag = true ?>
                     @else
                         @if ($loop->last)
                             @if($flag == false)
-                                <input type="checkbox" aria-label="Student Assistance"> 
+                                <td><input type="checkbox" aria-label="Student Assistance"></td> 
                             @endif
                         @endif   
                     @endif
                 @endforeach
+            @endif
+            @if($assisStudents)
+            <td><a href="/home/{{ $student->number_student }}/{{ $date }}/list/date">Ver</a></td>
             @else
-                <input type="checkbox" aria-label="Student Assistance">
-            @endif($assisStudents)
+            <td><a href="#">Ver</a></td>
+            @endif
             @endisset
-        </li>
+        </tr>
     @endforeach
-</ul>
-
+  </tbody>
+</table>
 <script>
     const buttonDates = document.getElementById('button-dates')
     const containerDates = document.getElementById('container-dates')

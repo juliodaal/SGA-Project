@@ -20,6 +20,11 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class FileAdminDataController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('admin');
+    }
+
     public function discipline(Request $nameFile){
         $data = $this->configSheet('/excel_files/' . $nameFile['nameFile']);
 

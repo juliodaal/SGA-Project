@@ -6,6 +6,7 @@ use App\User;
 use App\Student;
 use App\Career;
 use App\Http\Controllers\FileAdminDataController;
+use App\Http\Controllers\EmailController;
 use App\Http\Requests\StudentsRequest;
 use App\Http\Requests\StudentsRequestEdit;
 use Illuminate\Http\Request;
@@ -91,6 +92,9 @@ class StudentController extends Controller
                         'acronym_career_three' => strtoupper($request->studentCareerThree),
                         'group' => $i
                     ]);
+                    $mail = new EmailController($request->name,$request->email,$pass);
+                    $resultSendEmail = $mail->sendEmail();
+                    if($resultSendEmail !== true){ throw new Exception('Erro no envio do Email com a Senha para o Utilizador'); }    
                 } else {
                     throw new Exception('Curso não existe');
                 }
@@ -101,7 +105,7 @@ class StudentController extends Controller
                 if(!isset($msg)){ $msg = null; }
                 return FileAdminDataController::reportError('/admin',$e,$msg);
             }
-            return redirect('/admin')->with('successfully', 'Estudante adicionado com sucesso ' . $pass);  
+            return redirect('/admin')->with('successfully', 'Estudante adicionado com sucesso ');  
         }
     }
 

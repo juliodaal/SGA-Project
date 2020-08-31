@@ -26,4 +26,9 @@ class Professor extends Model
     {
         return $this->hasMany('App\Program');
     }
+
+    public function discipline()
+    {
+        return $this->hasMany('App\Discipline');
+    }
 }

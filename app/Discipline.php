@@ -21,4 +21,8 @@ class Discipline extends Model
     {
         return $this->hasMany('App\Inscription');
     }
+    public function professor()
+    {
+        return $this->belongsTo('App\Professor');
+    }
 }

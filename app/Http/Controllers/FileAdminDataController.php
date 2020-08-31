@@ -11,11 +11,13 @@ use App\Program;
 use App\Discipline;
 use App\Administrator;
 use App\EducationalPlan;
+use App\Http\Controllers\EmailController;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+
 
 
 class FileAdminDataController extends Controller
@@ -112,32 +114,44 @@ class FileAdminDataController extends Controller
                 } else if(!$acronym) {
                     throw new Exception('Acronimo Curso vazio',204);
                 }  else {
-                    $pass = Str::random(9);
-                    $user = User::create([
-                        'name' => $name,
-                        'email' => $email,
-                        'password' => Hash::make($pass),
-                        'type_user_from_type_users' => 1,
-                        'card_id' => $cardId
-                    ]);
-                    
-                    $j = 0;
-                    $limitStudents = 30;
-                    do {
-                        $numStudents = Student::where('students.group', '=', $j)->get();
-                        if(count($numStudents) >= $limitStudents){
-                            $j++;
-                        }
-                    } while (count($numStudents) >= $limitStudents);
 
-                    $student = Student::create([
-                        'number_student' => $numberStudent,
-                        'id_student_from_users' => $user->id,
-                        'acronym_career' => strtoupper($acronym),
-                        'acronym_career_two' => strtoupper($acronymTwo),
-                        'acronym_career_three' => strtoupper($acronymThree),
-                        'group' => $j
-                    ]);
+                $arrayCareers = ['studentCareer'=>$acronym,'studentCareerTwo'=>$acronymTwo,'studentCareerThree'=> $acronymThree];
+                $request = new Request($arrayCareers);
+                $validateCareer = $this->validateCareers($request);
+                
+                    if($validateCareer){
+                        $pass = Str::random(9);
+                        $user = User::create([
+                            'name' => $name,
+                            'email' => $email,
+                            'password' => Hash::make($pass),
+                            'type_user_from_type_users' => 1,
+                            'card_id' => $cardId
+                        ]);
+                        
+                        $j = 0;
+                        $limitStudents = 30;
+                        do {
+                            $numStudents = Student::where('students.group', '=', $j)->get();
+                            if(count($numStudents) >= $limitStudents){
+                                $j++;
+                            }
+                        } while (count($numStudents) >= $limitStudents);
+
+                        $student = Student::create([
+                            'number_student' => $numberStudent,
+                            'id_student_from_users' => $user->id,
+                            'acronym_career' => strtoupper($acronym),
+                            'acronym_career_two' => strtoupper($acronymTwo),
+                            'acronym_career_three' => strtoupper($acronymThree),
+                            'group' => $j
+                        ]);
+                        $mail = new EmailController($name,$email,$pass);
+                        $resultSendEmail = $mail->sendEmail();
+                        if($resultSendEmail !== true){ throw new Exception('Erro no envio do Email com a Senha para o Utilizador'); }    
+                    } else {
+                        throw new Exception('Verifique os cursos, há um que não existe.');
+                    }
                 }
             }
         } catch (\Exception $e) {
@@ -188,26 +202,47 @@ class FileAdminDataController extends Controller
                 } else if(!$acronymDiscipline) {
                     throw new Exception('Acronimo Disciplina vazio',204);
                 }  else {
-                    $pass = Str::random(9);
-                    $user = User::create([
-                        'name' => $name,
-                        'email' => $email,
-                        'password' => Hash::make($pass),
-                        'type_user_from_type_users' => 2,
-                        'card_id' => $cardId
-                    ]);
-                    $professor = Professor::create([
-                        'number_professor' => $numberProfessor,
-                        'id_professor_from_users' => $user->id,
-                        'acronym_career' => strtoupper($acronym),
-                        'acronym_career_two' => strtoupper($acronymTwo),
-                        'acronym_career_three' => strtoupper($acronymThree),
-                        'professor_discipline' => strtoupper($acronymDiscipline),
-                        'professor_discipline_two' => strtoupper($acronymDisciplineTwo),
-                        'professor_discipline_three' => strtoupper($acronymDisciplineThree)
-                    ]);
+
+                    $arrayCareers = ['studentCareer'=>$acronym,'studentCareerTwo'=>$acronymTwo,'studentCareerThree'=> $acronymThree];
+                    $arrayDisciplines = ['professorDiscipline'=>$acronymDiscipline,'professorDisciplineTwo'=>$acronymDisciplineTwo,'professorDisciplineThree'=>$acronymDisciplineThree];
+                    
+                    $requestCareers = new Request($arrayCareers);
+                    $requestDisciplines = new Request($arrayDisciplines);
+                    
+                    $validateCareer = $this->validateCareers($requestCareers);
+                    $validateDiscipline = $this->validateDiscipline($requestDisciplines);
+
+                    if($validateCareer === true && $validateDiscipline === true){
+                        $pass = Str::random(9);
+                        $user = User::create([
+                            'name' => $name,
+                            'email' => $email,
+                            'password' => Hash::make($pass),
+                            'type_user_from_type_users' => 2,
+                            'card_id' => $cardId
+                        ]);
+                        $professor = Professor::create([
+                            'number_professor' => $numberProfessor,
+                            'id_professor_from_users' => $user->id,
+                            'acronym_career' => strtoupper($acronym),
+                            'acronym_career_two' => strtoupper($acronymTwo),
+                            'acronym_career_three' => strtoupper($acronymThree),
+                            'professor_discipline' => strtoupper($acronymDiscipline),
+                            'professor_discipline_two' => strtoupper($acronymDisciplineTwo),
+                            'professor_discipline_three' => strtoupper($acronymDisciplineThree)
+                        ]);
+                    } else {
+                        if($validateCareer !== true){
+                            throw new Exception('Curso não existe');
+                        } else if($validateDiscipline !== true){
+                            throw new Exception('Disciplina não existe');
+                        }
+                    } 
                 }
             }
+            $mail = new EmailController($name,$email,$pass);
+            $resultSendEmail = $mail->sendEmail();
+            if($resultSendEmail !== true){ throw new Exception('Erro no envio do Email com a Senha para o Utilizador'); }    
         } catch (\Exception $e) {
             if(isset($user)){ $user->delete(); }
             if(isset($professor)){ $professor->delete(); }
@@ -251,16 +286,27 @@ class FileAdminDataController extends Controller
                 } else if(!$group && $group != 0) {
                     throw new Exception('Número Grupo vazio',204);
                 } else {
-                    Program::create([
-                        'acronym_career' => $acronym,
-                        'acronym_discipline' => $acronymDiscipline,
-                        'number_professor' => $numberProfessor,
-                        'date_to_class' => $date,
-                        'start_class' => $startTime,
-                        'end_class' => $endTime,
-                        'classroom_number' => $classRoom,
-                        'group_from_students' => $group
-                    ]);
+                    
+                    $array = ['acronymCareer'=>$acronym,'acronymDiscipline'=>$acronymDiscipline,'numberProfessor'=>$numberProfessor,'groupStudents'=>$group,'date'=>$date,'startTime'=>$startTime,'endTime'=>$endTime];
+                    
+                    $request = new Request($array);
+
+                    $validateProgram = $this->validateProgram($request);
+
+                    if($validateProgram === true){
+                        Program::create([
+                            'acronym_career' => $acronym,
+                            'acronym_discipline' => $acronymDiscipline,
+                            'number_professor' => $numberProfessor,
+                            'date_to_class' => $date,
+                            'start_class' => $startTime,
+                            'end_class' => $endTime,
+                            'classroom_number' => $classRoom,
+                            'group_from_students' => $group
+                        ]);
+                    } else {
+                        throw new Exception($validateProgram);
+                    }
                 }
             }
         } catch (\Exception $e) {
@@ -311,6 +357,9 @@ class FileAdminDataController extends Controller
                     ]);
                 }
             }
+            $mail = new EmailController($name,$email,$pass);
+            $resultSendEmail = $mail->sendEmail();
+            if($resultSendEmail !== true){ throw new Exception('Erro no envio do Email com a Senha para o Utilizador'); } 
         } catch (\Exception $e) {
             return $this->reportError('/admin',$e,$msg);
         }
@@ -336,11 +385,20 @@ class FileAdminDataController extends Controller
                 } else if(!$semester) {
                     throw new Exception('Acronimo Semestre vazio',204);
                 } else {
-                    EducationalPlan::create([
-                        'acronym_career_from_careers' => strtoupper($acronym),
-                        'acronym_discipline_from_disciplines' => strtoupper($acronymDiscipline),
-                        'semester' => $semester
-                    ]);
+                    
+                    $msg = '"'. $request->acronymCareer . '" - "' . $request->acronymDiscipline . '"';
+                    $career = Career::where('acronym_career', '=', $acronym)->first();
+                    $discipline = Discipline::where('acronym_discipline', '=', $acronymDiscipline)->first();
+                
+                    if(!is_null($career) && !is_null($discipline)){
+                        EducationalPlan::create([
+                            'acronym_career_from_careers' => strtoupper($acronym),
+                            'acronym_discipline_from_disciplines' => strtoupper($acronymDiscipline),
+                            'semester' => $semester
+                        ]);   
+                    } else {
+                        throw new Exception('Este curso ou disciplina não existem');
+                    }
                 }
             }
         } catch (\Exception $e) {
@@ -444,12 +502,14 @@ class FileAdminDataController extends Controller
                     ->where('end_class', '<=',$request->endTime)
                     ->where('number_professor', '>=',$request->numberProfessor)
                     ->first();
-            if(!is_null($career) && !is_null($discipline) && !is_null($professor) && !is_null($student) && is_null($validateHourProgram)){
-                if(!is_null($careerProfessor) || !is_null($careerProfessorTwo) || !is_null($careerProfessorThree)){
-                    if(!is_null($disciplineProfessor) || !is_null($disciplineProfessorTwo) || !is_null($disciplineProfessorThree)){
-                        return true;
-                    } else { throw new Exception('Disciplina não Associada ao Professor'); }
-                } else { throw new Exception('Curso não Associado ao Professor'); } 
+            if(!is_null($career) && !is_null($discipline) && !is_null($professor) && !is_null($student)){
+                if(is_null($validateHourProgram)){
+                    if(!is_null($careerProfessor) || !is_null($careerProfessorTwo) || !is_null($careerProfessorThree)){
+                        if(!is_null($disciplineProfessor) || !is_null($disciplineProfessorTwo) || !is_null($disciplineProfessorThree)){
+                            return true;
+                        } else { throw new Exception('Disciplina não Associada ao Professor'); }
+                    } else { throw new Exception('Curso não Associado ao Professor'); } 
+                } else { throw new Exception('Um programa já existe para o professor a mesma hora'); }
             } else { throw new Exception('Dados não existentes'); }
         } catch (\Exception $e) {
             return $e->getMessage();

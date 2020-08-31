@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ProfessorRequest;
 use App\Http\Requests\ProfessorRequestEdit;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\EmailController;
 use Illuminate\Support\Str;
 use Exception;
 
@@ -85,6 +86,9 @@ class ProfessorController extends Controller
                         'professor_discipline_two' => strtoupper($request->professorDisciplineTwo),
                         'professor_discipline_three' => strtoupper($request->professorDisciplineThree)
                     ]);
+                    $mail = new EmailController($request->name,$request->email,$pass);
+                    $resultSendEmail = $mail->sendEmail();
+                    if($resultSendEmail !== true){ throw new Exception('Erro no envio do Email com a Senha para o Utilizador'); }    
                 } else {
                     if($validateCareer !== true){
                         throw new Exception('Curso não existe');
@@ -98,7 +102,7 @@ class ProfessorController extends Controller
                 if(!isset($msg)){ $msg = null; }
                 return FileAdminDataController::reportError('/admin',$e,$msg);
             }
-            return redirect('/admin')->with('successfully', 'Professor adicionado com sucesso ' . $pass);  
+            return redirect('/admin')->with('successfully', 'Professor adicionado com sucesso ');  
         }
     }
 

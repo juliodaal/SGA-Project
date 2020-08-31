@@ -24,32 +24,23 @@ class InscriptionController extends Controller
     public function index()
     {
         try {
-            $student = User::join('students','users.id','=','students.id_student_from_users')
-            ->where('email','=',session()->get('email'))
-            ->select('number_student')
-            ->first();
             $plans = [];
-            $planOne = EducationalPlan::join('students', 'educational_plans.acronym_career_from_careers', '=', 'students.acronym_career') 
-            ->join('disciplines','educational_plans.acronym_discipline_from_disciplines', '=','disciplines.acronym_discipline')
-            ->where('number_student','=',$student->number_student)
-            ->select('acronym_discipline_from_disciplines','acronym_career_from_careers','name')
-            ->get();
-            $planTwo = EducationalPlan::join('students', 'educational_plans.acronym_career_from_careers', '=', 'students.acronym_career_two')
-            ->join('disciplines','educational_plans.acronym_discipline_from_disciplines', '=','disciplines.acronym_discipline')
-            ->where('number_student','=',$student->number_student)
-            ->select('acronym_discipline_from_disciplines','acronym_career_from_careers','name')
-            ->get();
-            $planThree = EducationalPlan::join('students', 'educational_plans.acronym_career_from_careers', '=', 'students.acronym_career_three')
-            ->join('disciplines','educational_plans.acronym_discipline_from_disciplines', '=','disciplines.acronym_discipline')
-            ->where('number_student','=',$student->number_student)
-            ->select('acronym_discipline_from_disciplines','acronym_career_from_careers','name')
-            ->get();
+            
+            $student = User::join('students','users.id','=','students.id_student_from_users')->where('email','=',session()->get('email'))->select('number_student')->first();
+            
+            $planOne = EducationalPlan::join('students', 'educational_plans.acronym_career_from_careers', '=', 'students.acronym_career') ->join('disciplines','educational_plans.acronym_discipline_from_disciplines', '=','disciplines.acronym_discipline')->where('number_student','=',$student->number_student)->select('acronym_discipline_from_disciplines','acronym_career_from_careers','name')->get();
+            $planTwo = EducationalPlan::join('students', 'educational_plans.acronym_career_from_careers', '=', 'students.acronym_career_two')->join('disciplines','educational_plans.acronym_discipline_from_disciplines', '=','disciplines.acronym_discipline')->where('number_student','=',$student->number_student)->select('acronym_discipline_from_disciplines','acronym_career_from_careers','name')->get();
+            $planThree = EducationalPlan::join('students', 'educational_plans.acronym_career_from_careers', '=', 'students.acronym_career_three')->join('disciplines','educational_plans.acronym_discipline_from_disciplines', '=','disciplines.acronym_discipline')->where('number_student','=',$student->number_student)->select('acronym_discipline_from_disciplines','acronym_career_from_careers','name')->get();
+            
             foreach ($planOne as $planOnes){ array_push($plans,$planOnes); }   
             foreach ($planTwo as $planTwos) { array_push($plans,$planTwos); }
             foreach ($planThree as $planThrees) { array_push($plans,$planThrees);}
+            
             $inscriptions = Inscription::where('number_student_from_students', '=', $student->number_student)->get();
+            
             $x = true;
             $disciplines = [];
+            
             foreach ($plans as $plan) {
                 foreach ($inscriptions as $inscription) {
                     if($plan->acronym_discipline_from_disciplines == $inscription->acronym_discipline_from_disciplines){

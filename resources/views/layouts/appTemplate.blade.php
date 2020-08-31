@@ -21,8 +21,12 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <!-- <link rel="stylesheet" href="{{ asset('css/styles.css') }}"> -->
+    
     <style>
+    body{
+        background-color:#e9ecef;
+    }
     ::-webkit-scrollbar {
     width: 10px;
     }
@@ -107,12 +111,9 @@
                 </div>
             </div>
         </nav>
-
-        <main class="container-fluid p-0">
-                <div>
-                    @yield('content')
-                </div>
-        </main>
+    
+        @yield('allContent')
+    
     </div>
 </body>
 </html>

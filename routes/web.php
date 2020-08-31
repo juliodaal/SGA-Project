@@ -30,6 +30,12 @@ Route::resource('/admin/career', 'CareerController');
 Route::resource('/admin/plan', 'EducationalPlanController');
 Route::post('/admin/plan/findPlan', 'EducationalPlanController@findPlan')->name('plan.findPlan');
 
+// Mail
+Route::get('/mail/password','EmailController@sendEmail')->name('mail.password.sendEmail');
+
+// Generate Password
+Route::get('/admin/generate/password', 'PasswordController@generatePassword')->name('password.generatePassword');
+
 // Admin File Controllers
 Route::get('/admin/file/discipline', 'FileAdminDataController@discipline');
 Route::get('/admin/file/career', 'FileAdminDataController@career');
@@ -48,4 +54,6 @@ Route::get('/home/{career}/{discipline}/{group}', 'HomeController@estudentsGroup
 Route::get('/home/{career}/{discipline}/{group}/{date}/{startTime}/{endTime}/date', 'HomeController@date')->name('home.date');
 Route::get('/home/{student}/{date}/list/date', 'HomeController@dateList');
 Route::resource('/home/inscriptions', 'InscriptionController');
+
+
 

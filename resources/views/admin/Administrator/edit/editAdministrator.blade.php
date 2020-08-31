@@ -70,4 +70,8 @@
     {!! Form::close() !!}
 </div>
 
+<a class="btn btn-info" href="/admin/generate/password?id={{$administrator->id}}&type={{$administrator->type_user_from_type_users}}">
+  Gerar Senha
+</a>
+
 @endsection

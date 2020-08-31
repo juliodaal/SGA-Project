@@ -1,14 +1,14 @@
-@extends('layouts.landing')
+@extends('landing.landing')
 
 @section('title', 'Landing Page')
 
 @section('content')
 <header class="bg-light header">
     <div class="jumbotron container bg-transparent">
-        <h1 class="display-4 ">Welcome to {{ config('app.name', 'SGA') }}</h1>
-        <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+        <h1 class="display-4 ">Bienvenido a {{ config('app.name', 'SGA') }}</h1>
+        <p class="lead">Este es un proyecto Universitario. Ayuda a administar la asistencia de los estudiantes en una una Universidad o Escuela.</p>
         <hr class="my-4">
-        <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+        <p>Prosiona en <strong>Login</strong> para iniciar sesion en tu cuenta.</p>
         <a class="btn btn-primary btn-lg" href="/login" role="button">Login</a>
     </div>
 </header>
@@ -17,8 +17,8 @@
     <div class="card shadow ">
         <img src="{{ asset( 'image/1.PNG') }}" class="card-img-top" alt="...">
         <div class="card-body">
-        <h5 class="card-title">Card title that wraps to a new line</h5>
-        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+        <h5 class="card-title">Disciplinas</h5>
+        <p class="card-text">Puedes inscribirte y ver todas las disciplinas a las cuales te encuentas asosiado, como profesor o estudiante, en tu Universidad o Escuela.</p>
         </div>
     </div>
     <div class="card p-3 shadow ">
@@ -34,14 +34,14 @@
     <div class="card shadow ">
         <img src="{{ asset( 'image/2.PNG') }}" class="card-img-top" alt="...">
         <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+        <h5 class="card-title">Grupo de Estudiantes</h5>
+        <p class="card-text">Encuentra todos los Estudiantes registrados o en una Disciplina especifica.</p>
         </div>
     </div>
     <div class="card bg-primary text-white text-center p-3 shadow ">
         <blockquote class="blockquote mb-0">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat.</p>
+        <p>No importa lo lento que vayas, como lo lejos que llegues.</p> 
+        <!-- It does not matter how slowly you go as long as you do not stop -->
         <footer class="blockquote-footer text-white">
             <small>
             Someone famous in <cite title="Source Title">Source Title</cite>
@@ -58,16 +58,10 @@
     </div>
     <div class="card shadow ">
         <img src="{{ asset( 'image/3.PNG') }}" class="card-img-top" alt="...">
-    </div>
-    <div class="card p-3 text-right shadow ">
-        <blockquote class="blockquote mb-0">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-        <footer class="blockquote-footer">
-            <small class="text-muted">
-            Someone famous in <cite title="Source Title">Source Title</cite>
-            </small>
-        </footer>
-        </blockquote>
+        <div class="card-body">
+        <h5 class="card-title">Estudiantes</h5>
+        <p class="card-text">Saber donde has estado, en todo lugar y en todo momento.</p>
+        </div>
     </div>
     <div class="card shadow ">
         <div class="card-body">
@@ -109,8 +103,8 @@
 <section>
 <div class="jumbotron jumbotron-fluid m-0">
   <div class="container">
-    <h1 class="display-4">Fluid jumbotron</h1>
-    <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+    <h1 class="display-4">Documentación</h1>
+    <p class="lead">Puedes ver toda la documentación de este proyecto abajo.</p>
   </div>
 </div>
 </section>
@@ -120,10 +114,10 @@
         <div class="col-md-6 mb-md-0 p-md-4">
             <img src="{{ asset( 'image/GitHub.png') }}" class="w-100" alt="...">
         </div>
-        <div class="col-md-6 position-static p-4 pl-md-0">
-            <h5 class="mt-0">Columns with stretched link</h5>
-            <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
-            <a href="#" class="stretched-link">Go somewhere</a>
+        <div class="col-md-6 position-static p-4 pl-md-0 d-flex flex-column justify-content-center">
+            <h5 class="mt-0">Sigue el proyecto en GitHub.</h5>
+            <p>Si lo deseas, puedes ver todo el proyecto en mi GitHub. Puedes descargarlo, y usarlo para tus estudios, hobbies o simplemente para mirarlo. Espero que lo disfrutes.</p>
+            <a href="#" class="stretched-link">Ir a GitHub</a>
         </div>
         </div>
     </div>
@@ -131,7 +125,7 @@
 <section class="container my-5">
 <div class="row d-flex shadow-lg">
 <nav id="navbar-example3" class="col-sm-3 navbar navbar-light bg-light d-flex flex-column justify-content-start">
-  <a class="navbar-brand" href="#">Navbar</a>
+  <a class="navbar-brand" href="#">Docs</a>
   <nav class="nav nav-pills flex-column">
     <a class="nav-link" href="#item-1">Item 1</a>
     <nav class="nav nav-pills flex-column">

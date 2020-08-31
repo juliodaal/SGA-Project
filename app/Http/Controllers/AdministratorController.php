@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Http\Controllers\FileAdminDataController;
+use App\Http\Controllers\EmailController;
 use Exception;
 
 class AdministratorController extends Controller
@@ -64,11 +65,14 @@ class AdministratorController extends Controller
                     'type_user_from_type_users'=> 3,
                     'card_id'=> $request->cardId
                 ]);
+                $mail = new EmailController($request->name,$request->email,$pass);
+                $resultSendEmail = $mail->sendEmail();
+                if($resultSendEmail !== true){ throw new Exception('Erro no envio do Email com a Senha para o Utilizador'); }
             } catch (\Exception $e) {
                 if(!isset($msg)){ $msg = null; }
                 return FileAdminDataController::reportError('/admin',$e,$msg);
             }
-            return redirect('/admin')->with('successfully', 'Administrador adicionado com sucesso ' . $pass);  
+            return redirect('/admin')->with('successfully', 'Administrador adicionado com sucesso ');  
         }
     }
 

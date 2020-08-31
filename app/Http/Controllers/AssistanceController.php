@@ -23,11 +23,8 @@ class AssistanceController extends Controller
             $classRoom = 'f369';
             $entry = 0;
             $date = '2020-08-25';
-            $startTime = '00:00:00'; //
-            $endTime = '18:10:00'; //'18:59:00'
-            // $acronymCareer = 'ti';
-            // $acronymDiscipline = 'FPOO';
-            // $group_sudents = 1;
+            $startTime = '00:00:00';
+            $endTime = '18:10:00'; 
 
             Assistance::create([
                 'number_student' => $numberStudent,
@@ -35,10 +32,7 @@ class AssistanceController extends Controller
                 'entry' => $entry,
                 'date_to_class' => $date,
                 'startTime' => $startTime,
-                'endtime' => $endTime,
-                // 'acronym_career' => $acronymCareer,
-                // 'acronym_discipline' => $acronymDiscipline,
-                // 'group_sudents' => $group_sudents
+                'endtime' => $endTime
             ]);
         } catch (\Exception $e) {
             dd($e);

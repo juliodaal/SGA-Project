@@ -48,8 +48,8 @@ class PasswordController extends Controller
             $resultSendEmail = $mail->sendEmailPassword();
             if($resultSendEmail !== true){ throw new Exception('Erro no envio do Email com a Senha para o Utilizador'); }    
         } catch (\Exception $e) {
-            return FileAdminDataController::reportError('/admin',$e);
+            return FileAdminDataController::reportError('/home',$e);
         }
-        return redirect('/admin')->with('successfully', 'Senha enviada com sucesso');  
+        return redirect('/home')->with('successfully', 'Senha enviada com sucesso');  
     }
 }

@@ -55,5 +55,7 @@ Route::get('/home/{career}/{discipline}/{group}/{date}/{startTime}/{endTime}/dat
 Route::get('/home/{student}/{date}/list/date', 'HomeController@dateList');
 Route::resource('/home/inscriptions', 'InscriptionController');
 
+// Assistance
+Route::get('/assistance', 'AssistanceController@assistance');
 
 

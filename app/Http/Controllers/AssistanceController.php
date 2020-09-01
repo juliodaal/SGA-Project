@@ -19,12 +19,12 @@ class AssistanceController extends Controller
 
     public function assistance(){
         try {
-            $numberStudent = 412541254;
-            $classRoom = 'f369';
+            $numberStudent = 234567891;
+            $classRoom = 'E135';
             $entry = 0;
-            $date = '2020-08-25';
+            $date = '2020-09-02';
             $startTime = '00:00:00';
-            $endTime = '18:10:00'; 
+            $endTime = '09:24:00'; 
 
             Assistance::create([
                 'number_student' => $numberStudent,
@@ -35,7 +35,6 @@ class AssistanceController extends Controller
                 'endtime' => $endTime
             ]);
         } catch (\Exception $e) {
-            dd($e);
             return FileAdminDataController::reportError('/home',$e);
         }
         return redirect('/home');

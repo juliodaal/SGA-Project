@@ -74,6 +74,9 @@ class HomeController extends Controller
             case 3:
                     return view('Admin.index');
                 break;
+            case 4:
+                    return view('Admin.index');
+                break;
         } 
     }
     public function verifyTypeUser()

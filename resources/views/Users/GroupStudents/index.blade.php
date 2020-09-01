@@ -52,12 +52,17 @@
             <td>{{ $startTime }}</td>
             <td>{{ $endTime }}</td>
             @if(count($assisStudents))
+            {{ $flagOne = false }}
             {{ $flag = false }}
                 @foreach($assisStudents as $assisStudent)
                     @if($student->number_student == $assisStudent->number_student)
-                        <td><input type="checkbox" aria-label="Student Assistance" checked></td>
-                        <?php $flag = true ?>
+                        @if($flagOne == false)
+                            <td><input type="checkbox" aria-label="Student Assistance" checked></td>
+                            <?php $flagOne = true ?>
+                            <?php $flag = true ?>
+                        @endif
                     @else
+                    <?php $flagOne = false ?>
                         @if ($loop->last)
                             @if($flag == false)
                                 <td><input type="checkbox" aria-label="Student Assistance"></td> 
@@ -65,6 +70,8 @@
                         @endif   
                     @endif
                 @endforeach
+            @else
+                <td><input type="checkbox" aria-label="Student Assistance"></td>
             @endif
             @if($assisStudents)
             <td><a href="/home/{{ $student->number_student }}/{{ $date }}/list/date">Ver</a></td>

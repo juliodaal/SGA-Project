@@ -50,10 +50,10 @@ class FileAdminDataController extends Controller
             }
         } catch (\Exception $e) {
             if(!isset($msg)){ $msg = null; }
-            return $this->reportError('/admin',$e,$msg);
+            return $this->reportError('/home',$e,$msg);
         }
 
-        return redirect('/admin')->with('successfully', 'Disciplinas adicionadas com sucesso');
+        return redirect('/home')->with('successfully', 'Disciplinas adicionadas com sucesso');
     }
 
     public function career(Request $nameFile){
@@ -79,10 +79,10 @@ class FileAdminDataController extends Controller
             }
         } catch (\Exception $e) {
             if(!isset($msg)){ $msg = null; }
-            return $this->reportError('/admin',$e,$msg);
+            return $this->reportError('/home',$e,$msg);
         }
 
-        return redirect('/admin')->with('successfully', 'Cursos adicionados com sucesso');
+        return redirect('/home')->with('successfully', 'Cursos adicionados com sucesso');
     }
 
     public function student(Request $nameFile){
@@ -162,10 +162,10 @@ class FileAdminDataController extends Controller
                 $student->delete();
             }
             if(!isset($msg)){ $msg = null; }
-            return $this->reportError('/admin',$e,$msg);
+            return $this->reportError('/home',$e,$msg);
         }
 
-        return redirect('/admin')->with('successfully', 'Studantes adicionados com sucesso');
+        return redirect('/home')->with('successfully', 'Studantes adicionados com sucesso');
     }
 
     public function professor(Request $nameFile){
@@ -239,18 +239,18 @@ class FileAdminDataController extends Controller
                         }
                     } 
                 }
+                $mail = new EmailController($name,$email,$pass);
+                $resultSendEmail = $mail->sendEmail();
+                if($resultSendEmail !== true){ throw new Exception('Erro no envio do Email com a Senha para o Utilizador'); }    
             }
-            $mail = new EmailController($name,$email,$pass);
-            $resultSendEmail = $mail->sendEmail();
-            if($resultSendEmail !== true){ throw new Exception('Erro no envio do Email com a Senha para o Utilizador'); }    
-        } catch (\Exception $e) {
+            } catch (\Exception $e) {
             if(isset($user)){ $user->delete(); }
             if(isset($professor)){ $professor->delete(); }
             if(!isset($msg)){ $msg = null; }
-            return $this->reportError('/admin',$e,$msg);
+            return $this->reportError('/home',$e,$msg);
         }
 
-        return redirect('/admin')->with('successfully', 'Professores adicionados com sucesso');
+        return redirect('/home')->with('successfully', 'Professores adicionados com sucesso');
     }
 
     public function program(Request $nameFile){
@@ -310,20 +310,9 @@ class FileAdminDataController extends Controller
                 }
             }
         } catch (\Exception $e) {
-            return $this->reportError('/admin',$e);
+            return $this->reportError('/home',$e);
         }
-        return redirect('/admin')->with('successfully', 'Programas adicionados com sucesso');
-    }
-
-    public function configSheet($urlFile){
-        $nameFile = public_path($urlFile);
-        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-        
-        $spreadsheet = $reader->load($nameFile);
-
-        $worksheet = $spreadsheet->getActiveSheet();
-        $highestRow = $worksheet->getHighestRow();
-        return ['spreadsheet' => $spreadsheet,'highestRow' => $highestRow]; 
+        return redirect('/home')->with('successfully', 'Programas adicionados com sucesso');
     }
 
     public function administrator(Request $nameFile){
@@ -361,9 +350,9 @@ class FileAdminDataController extends Controller
             $resultSendEmail = $mail->sendEmail();
             if($resultSendEmail !== true){ throw new Exception('Erro no envio do Email com a Senha para o Utilizador'); } 
         } catch (\Exception $e) {
-            return $this->reportError('/admin',$e,$msg);
+            return $this->reportError('/home',$e,$msg);
         }
-        return redirect('/admin')->with('successfully', 'Administradores adicionados com sucesso');
+        return redirect('/home')->with('successfully', 'Administradores adicionados com sucesso');
     }
 
     public function educationalPlan(Request $nameFile){
@@ -374,7 +363,7 @@ class FileAdminDataController extends Controller
                 $acronym = $data['spreadsheet']->getActiveSheet()->getCell('A'.$i)->getValue();
                 $acronymDiscipline = $data['spreadsheet']->getActiveSheet()->getCell('B'.$i)->getValue();
                 $semester = $data['spreadsheet']->getActiveSheet()->getCell('C'.$i)->getValue();
-
+                
 
                 if(!$acronym && !$acronymDiscipline && !$semester){
                     break;
@@ -386,10 +375,10 @@ class FileAdminDataController extends Controller
                     throw new Exception('Acronimo Semestre vazio',204);
                 } else {
                     
-                    $msg = '"'. $request->acronymCareer . '" - "' . $request->acronymDiscipline . '"';
+                    $msg = '"'. $acronym . '" - "' . $acronymDiscipline . '"';
                     $career = Career::where('acronym_career', '=', $acronym)->first();
                     $discipline = Discipline::where('acronym_discipline', '=', $acronymDiscipline)->first();
-                
+                    
                     if(!is_null($career) && !is_null($discipline)){
                         EducationalPlan::create([
                             'acronym_career_from_careers' => strtoupper($acronym),
@@ -402,9 +391,9 @@ class FileAdminDataController extends Controller
                 }
             }
         } catch (\Exception $e) {
-            return $this->reportError('/admin',$e);
+            return $this->reportError('/home',$e);
         }
-        return redirect('/admin')->with('successfully', 'Cursos adicionados com sucesso');
+        return redirect('/home')->with('successfully', 'Cursos adicionados com sucesso');
     }
 
     public static function reportError($route,$e,$msg = null){
@@ -431,6 +420,17 @@ class FileAdminDataController extends Controller
                 }
                 break;
         }
+    }
+
+    public function configSheet($urlFile){
+        $nameFile = public_path($urlFile);
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+        
+        $spreadsheet = $reader->load($nameFile);
+
+        $worksheet = $spreadsheet->getActiveSheet();
+        $highestRow = $worksheet->getHighestRow();
+        return ['spreadsheet' => $spreadsheet,'highestRow' => $highestRow]; 
     }
 
     public static function validateFile($request,$nameAttach,$extension,$fileToSave,$action,$redirectOnError){

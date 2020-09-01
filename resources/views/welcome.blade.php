@@ -103,14 +103,14 @@
         <div class="col-md-6 position-static p-4 pl-md-0 d-flex flex-column justify-content-center">
             <h5 class="mt-0">Sigue el proyecto en GitHub.</h5>
             <p>Si lo deseas, puedes ver todo el proyecto en mi GitHub. Puedes descargarlo, y usarlo para tus estudios, hobbies o simplemente para mirarlo. Espero que lo disfrutes.</p>
-            <a href="https://github.com/juliodaal/SGA-Project---Version-2-" class="stretched-link">Ir a GitHub</a>
+            <a href="https://github.com/juliodaal/SGA-Project---Version-2-" class="stretched-link" target="_blank">Ir a GitHub</a>
         </div>
         </div>
     </div>
 </section>
 <section class="container my-5">
 <div class="row d-flex shadow-lg">
-<nav id="navbar-example3" class="col-sm-3 navbar navbar-light bg-light d-flex flex-column justify-content-start">
+<nav id="navbar-example3" class="col-sm-3 navbar navbar-light bg-light d-flex justify-content-center overflow-auto" style="height: 80vh">
   <a class="navbar-brand" href="#">Docs</a>
   <nav class="nav nav-pills flex-column">
     <a class="nav-link" href="#item-1">Instalación</a>
@@ -119,37 +119,83 @@
       <a class="nav-link ml-3 my-1" href="#item-1-2">Intalación Laravel</a>
       <a class="nav-link ml-3 my-1" href="#item-1-3">Intalación Git</a>
       <a class="nav-link ml-3 my-1" href="#item-1-4">Clonar Proyecto</a>
+      <a class="nav-link ml-3 my-1" href="#item-1-5">Correr Proyecto</a>
     </nav>
     <a class="nav-link" href="#item-2">Base de Datos</a>
         <nav class="nav nav-pills flex-column">
             <a class="nav-link ml-3 my-1" href="#item-2-1">Modelo Entidad-Relación (MER)</a>
+            <a class="nav-link ml-3 my-1" href="#item-2-2">Conexión Base de Datos</a>
+            <a class="nav-link ml-3 my-1" href="#item-2-3">Migraciones</a>
+            <a class="nav-link ml-3 my-1" href="#item-2-4">Modelos</a>
         </nav>
-    <a class="nav-link" href="#item-3">Item 3</a>
+    <a class="nav-link" href="#item-3">Estructura</a>
     <nav class="nav nav-pills flex-column">
-      <a class="nav-link ml-3 my-1" href="#item-3-1">Item 3-1</a>
-      <a class="nav-link ml-3 my-1" href="#item-3-2">Item 3-2</a>
+      <a class="nav-link ml-3 my-1" href="#item-3-1">Controllers</a>
+      <a class="nav-link ml-3 my-1" href="#item-3-2">Middlewares</a>
+      <a class="nav-link ml-3 my-1" href="#item-3-3">Routes</a>
+      <a class="nav-link ml-3 my-1" href="#item-3-4">Vistas</a>
+      <a class="nav-link ml-3 my-1" href="#item-3-5">Public</a>
     </nav>
   </nav>
 </nav>
 <div class="col-sm-9 p-4 overflow-auto" data-spy="scroll" data-target="#navbar-example3" data-offset="0" style="height: 80vh;">
   <h4 class="my-5" id="item-1">Instalación</h4>
     <h5 class="my-5" id="item-1-1">Intalación Composer</h5>
-    <p>Laravel utiliza Composer para gestionar sus dependencias. Así que, antes de usar Laravel, asegúrate de tener instalado Composer en tu pc. A través del siguiente enlace, puedes instalar composer en tu pc. <a href="https://getcomposer.org/download/" target="_blank">Intallar Composer</a>.</p>
+    <p><strong class="text-danger">Laravel</strong> utiliza Composer para gestionar sus dependencias. Así que, antes de usar <strong class="text-danger">Laravel</strong>, asegúrate de tener instalado Composer en tu pc. A través del siguiente enlace, puedes instalar composer en tu pc, <a href="https://getcomposer.org/download/" target="_blank">Intallar Composer</a>.</p>
     <h5 class="my-5" id="item-1-2">Intalación Laravel</h5>
-    <p>Primero, descarga el instalador de <strong class="text-danger">Laravel</strong> usando <strong>Composer</strong>, escribiendo el siguiente comando en tu consola: <br><br> <samp class="shadow-sm bg-white p-2 rounded-pill">composer global require laravel/installer</samp> <br><br> Puedes ver la documentación oficial de <strong class="text-danger">Laravel</strong> en el siguiente enlace <a href="https://laravel.com/docs/7.x/installation" target="_blank">Ver Docs</a>.</p>
+    <p>Primero, descarga el instalador de <strong class="text-danger">Laravel</strong> usando <strong>Composer</strong>, escribiendo el siguiente comando en tu consola: <br><br> <samp class="shadow-sm bg-white p-2 rounded-pill">composer global require laravel/installer</samp> <br><br> Puedes ver la documentación oficial de <strong class="text-danger">Laravel</strong> en el siguiente enlace, <a href="https://laravel.com/docs/7.x/installation" target="_blank">Ver Docs</a>.</p>
     <h5 class="my-5" id="item-1-3">Intalación Git</h5>
-    <p>Puedes instalar Git a través del siguiente enlace <a href="https://git-scm.com/downloads" target="_blank">Instalar Git</a></p>
+    <p>Puedes instalar Git a través del siguiente enlace, <a href="https://git-scm.com/downloads" target="_blank">Instalar Git</a></p>
     <h5 class="my-5" id="item-1-4">Clonar Proyecto</h5>
-    <p>Primeramente debes clonar el proyecto desde Github.com <a href="https://github.com/juliodaal/SGA-Project" target="_blank">Ver proyecto en GitHub</a>, para clonarlo debes ejecutar en consola el siguiente comando: <br><br> <samp class="shadow-sm bg-white p-2 rounded-pill">$ git clone https://github.com/juliodaal/SGA-Project.git</samp></p>
+    <p>Primeramente debes clonar el proyecto desde Github.com, <a href="https://github.com/juliodaal/SGA-Project" target="_blank">Ver proyecto en GitHub</a>, para clonarlo debes ejecutar en consola el siguiente comando: <br><br> <samp class="shadow-sm bg-white p-2 rounded-pill">$ git clone https://github.com/juliodaal/SGA-Project.git</samp></p>
+    <h5 class="my-5" id="item-1-5">Correr Proyecto</h5>
+    <p>Para correr el proyecto, debe a través de tu consola, acceder a la carpeta del proyecto, una vez dentro del proyecto debes ejecutar el comando:</p>
+    <p><samp class="shadow-sm bg-white p-2 rounded-pill">php artisan serve</samp></p>
   <h4 class="my-5" id="item-2">Base de Datos</h4>
     <h5 class="my-5" id="item-2-1">Modelo Entidad-Relación (MER)</h5>
-    <p></p>
-  <h4 class="my-5" id="item-3">Item 3</h4>
-  <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. A fuga nobis, consectetur culpa omnis corporis perferendis optio officia similique, autem reiciendis quas nulla cupiditate nihil error harum fugit maiores aut!</p>
-  <h5 class="my-5" id="item-3-1">Item 3-1</h5>
-  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa fugiat optio numquam placeat rem officiis ex, necessitatibus esse non reprehenderit eos enim, maiores architecto facilis ea dignissimos qui cumque praesentium.</p>
-  <h5 class="my-5" id="item-3-2">Item 3-2</h5>
-  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus libero pariatur blanditiis dolor rem eum praesentium cumque cupiditate, qui fugiat quisquam quasi commodi atque similique repudiandae odio assumenda in obcaecati!</p>
+    <p>Puedes conseguir el Modelo Entidad-Relación en GitHub a través del siguiente enlace, <a href="https://github.com/juliodaal/SGA-Project/blob/master/public/DB%20Structure/DB%20Structure.png" target="_blank">Ver Modelo ER</a>.</p>
+    <h5 class="my-5" id="item-2-2">Conexión Base de Datos</h5>
+    <p>La conexión con la base de datos está establecida en la sección principal del proyecto, en el archivo <samp class="shadow-sm bg-white p-2 rounded-pill">.env</samp></p>
+    <p>El proyecto está conectado a una base de datos <span class="text-primary">MySql</span>, al localhost <span class="text-primary">127.0.0.1</span>, puerto <span class="text-primary">3306</span>, username <span class="text-primary">root</span>, y el nombre de la base de datos es <span class="text-primary">sga_database</span>.</p>
+    <p>Para obtener mayor información sobre como gestionar el archivo <samp class="shadow-sm bg-white p-2 rounded-pill">.env</samp>, puedes acceder a la documentación oficial en <strong class="text-danger">Laravel</strong>, <a href="https://laravel.com/docs/7.x/database" target="_blank">Ver Docs</a>.</p>
+    <h5 class="my-5" id="item-2-3">Migraciones</h5>
+    <p>Encontrarás las migraciones en <samp class="shadow-sm bg-white p-2 rounded-pill">Database\migrations</samp></p>
+    <p>Para crear nuevas migraciones puedes ejecutar el siguiente comando:
+    <p><samp class="shadow-sm bg-white p-2 rounded-pill">php artisan make:migration << name_migration >></samp></p>
+    <p>Para obtener mayor información sobre como gestionar las migraciones, puedes acceder a la documentación oficial en <strong class="text-danger">Laravel</strong>, <a href="https://laravel.com/docs/7.x/migrations#introduction" target="_blank">Ver Docs</a>.</p>
+    <h5 class="my-5" id="item-2-4">Modelos</h5>
+    <p>Todos los modelos se encuentran directamente en <samp class="shadow-sm bg-white p-2 rounded-pill">App</samp>, con el nombre en singular de cada una de las tablas en la base de datos.</p>
+    <p>Para crear nuevos Modelos puedes ejecutar el siguiente comando:
+    <p><samp class="shadow-sm bg-white p-2 rounded-pill">php artisan make:model << name_model >></samp></p>
+    <p>Para obtener información sobre como gestionar los Modelos, puedes acceder a la documentación oficial en <strong class="text-danger">Laravel</strong>, <a href="https://laravel.com/docs/7.x/eloquent#defining-models" target="_blank">Ver Docs</a>.</p>
+  <h4 class="my-5" id="item-3">Estructura</h4>
+    <h5 class="my-5" id="item-3-1">Controllers</h5>
+    <p>Todos los Controladores se encuentran en <samp class="shadow-sm bg-white p-2 rounded-pill">App\Http\Controllers</samp></p>
+    <p>Para crear nuevos Controladores puedes ejecutar el siguiente comando:
+    <p><samp class="shadow-sm bg-white p-2 rounded-pill">php artisan make:controller << name_controller >></samp></p>
+    <p>Para obtener información sobre como gestionar los Controladores, puedes acceder a la documentación oficial en <strong class="text-danger">Laravel</strong>, <a href="https://laravel.com/docs/7.x/controllers#introduction" target="_blank">Ver Docs</a>.</p>
+    <h5 class="my-5" id="item-3-2">Middlewares</h5>
+    <p>Todos los Middlewares se encuentran en <samp class="shadow-sm bg-white p-2 rounded-pill">App\Http\Middleware</samp></p>
+    <p>Para crear nuevos Middlewares puedes ejecutar el siguiente comando:
+    <p><samp class="shadow-sm bg-white p-2 rounded-pill">php artisan make:middleware << name_middleware >></samp></p>
+    <p>Para obtener información sobre como gestionar los Middlewares, puedes acceder a la documentación oficial en <strong class="text-danger">Laravel</strong>, <a href="https://laravel.com/docs/7.x/middleware#introduction" target="_blank">Ver Docs</a>.</p>
+    <h5 class="my-5" id="item-3-3">Routes</h5>
+    <p>Todos las Rutas se encuentran en <samp class="shadow-sm bg-white p-2 rounded-pill">Routes\web.php</samp></p>
+    <p>Las Rutas tienen la siguiente estructura:</p> 
+    <p>Route::<span class="text-primary">nombreMetodo</span>('<span class="text-primary">url</span>', '<span class="text-primary">ejecución</span>');</p>
+    <p>Por ejemplo:</p>
+    <p><samp class="shadow-sm bg-white p-2 rounded-pill">Route::get('/home', 'HomeController@index');</samp></p>
+    <p>Para obtener información sobre como gestionar las Rutas, puedes acceder a la documentación oficial en <strong class="text-danger">Laravel</strong>, <a href="https://laravel.com/docs/7.x/routing#route-parameters" target="_blank">Ver Docs</a>.</p>
+    <h5 class="my-5" id="item-3-4">Vistas</h5>
+    <p>Todos las Vistas se encuentran en <samp class="shadow-sm bg-white p-2 rounded-pill">Resources\views</samp></p>
+    <p>Para crear una nueva Vista, debes crear un nuevo archivo dentro de la carpeta views con la extensión <span class="text-primary">.blade.php</span></p>
+    <p>Por ejemplo:</p>
+    <p><span class="text-primary">myView.blade.php</span></p>
+    <p>Para obtener información sobre como gestionar las Vistas, puedes acceder a la documentación oficial en <strong class="text-danger">Laravel</strong>, <a href="https://laravel.com/docs/7.x/views#creating-views" target="_blank">Ver Docs</a>.</p>
+    <h5 class="my-5" id="item-3-5">Public</h5>
+    <p>En la carpeta Public, puedes encontrar las Imágenes, los estilos CSS, los Archivos.xlsx y diferentes archivos a los cuales puedes acceder.</p>
+    <p>Para acceder a la carpeta Public a través del código puede usar la siguiente linea:</p>
+    <p>Ejemplo: <samp class="shadow-sm bg-white p-2 rounded-pill">{{'{'.'{'.  'asset' . '("image/image.png")' .'}'.'}'}}</samp></p>
 </div>
 </div>
 </section>

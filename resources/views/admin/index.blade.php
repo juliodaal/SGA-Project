@@ -245,6 +245,7 @@
             </div>
         </div>
     </div>
+    @if(session()->get('type_user') == 4)
     <div class="card">
         <div class="card-header" id="headingSix">
             <h2 class="mb-0">
@@ -281,6 +282,7 @@
             </div>
         </div>
     </div>
+    @endif
     <div class="card">
         <div class="card-header" id="headingSeven">
             <h2 class="mb-0">

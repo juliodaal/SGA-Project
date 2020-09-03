@@ -23,7 +23,7 @@ class disciplineController extends Controller
         try {
             $disciplines = Discipline::orderBy('acronym_discipline')->get();
         } catch (\Exception $e) {
-            return FileAdminDataController::reportError('/admin',$e);
+            return FileAdminDataController::reportError('/home',$e);
         }
         return view('admin.Discipline.index', compact('disciplines'));
     }
@@ -58,9 +58,9 @@ class disciplineController extends Controller
                 ]);
             } catch (\Exception $e) {
                 if(!isset($msg)){ $msg = null; }
-                return FileAdminDataController::reportError('/admin',$e,$msg);
+                return FileAdminDataController::reportError('/home',$e,$msg);
             }
-            return redirect('/admin')->with('successfully', 'Disciplina adicionada com sucesso');  
+            return redirect('/home')->with('successfully', 'Disciplina agregada con éxito');  
         }
     }
 
@@ -109,7 +109,7 @@ class disciplineController extends Controller
         } catch (\Exception $e) {
             return FileAdminDataController::reportError('/admin/discipline/' . $id . '/edit',$e);
         }
-        return redirect('/admin/discipline')->with('successfully', 'Disciplinas alterada com sucesso'); 
+        return redirect('/admin/discipline')->with('successfully', 'Disciplinas alterada con éxito'); 
     }
 
     /**
@@ -125,6 +125,6 @@ class disciplineController extends Controller
         } catch (\Exception $e) {
             return FileAdminDataController::reportError('/admin/discipline/' . $id . '/edit',$e);
         }
-        return redirect('/admin/discipline')->with('successfully', 'Disciplinas apagada com sucesso'); 
+        return redirect('/admin/discipline')->with('successfully', 'Disciplinas eliminada con éxito'); 
     }
 }

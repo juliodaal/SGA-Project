@@ -53,7 +53,7 @@
 </ul>
 @else
 <div class="jumbotron text-center">
-    <h1 class="display-4">Adminitrador não encontrado :(</h1>
+    <h1 class="display-4">Adminitrador no encontrado :(</h1>
 </div>
 @endif
 @endsection

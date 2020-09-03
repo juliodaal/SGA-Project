@@ -26,7 +26,7 @@ class CareerController extends Controller
         try {
             $careers = Career::orderBy('acronym_career')->get();
         } catch (\Exception $e) {
-            return FileAdminDataController::reportError('/admin',$e);
+            return FileAdminDataController::reportError('/home',$e);
         }
         return view('admin.Career.index', compact('careers'));
     }
@@ -61,9 +61,9 @@ class CareerController extends Controller
                 ]);
             } catch (\Exception $e) {
                 if(!isset($msg)){ $msg = null; }
-                return FileAdminDataController::reportError('/admin',$e,$msg);
+                return FileAdminDataController::reportError('/home',$e,$msg);
             }
-            return redirect('/admin')->with('successfully', 'Curso adicionado com sucesso');  
+            return redirect('/home')->with('successfully', 'Curso agregado con éxito');  
         }
     }
 
@@ -119,7 +119,7 @@ class CareerController extends Controller
             } catch (\Exception $e) {
                 return FileAdminDataController::reportError('/admin/career/' . $id . '/edit',$e);
             }
-            return redirect('/admin/career')->with('successfully', 'Curso alterado com sucesso'); 
+            return redirect('/admin/career')->with('successfully', 'Curso alterado con éxito'); 
     }
 
     /**
@@ -135,7 +135,7 @@ class CareerController extends Controller
         } catch (\Exception $e) {
             return FileAdminDataController::reportError('/admin/career/' . $id . '/edit',$e);
         }
-        return redirect('/admin/career')->with('successfully', 'Curso apagado com sucesso'); 
+        return redirect('/admin/career')->with('successfully', 'Curso eliminado con éxito'); 
     }
 
     public function updateData($listDatas,$column,$attr){

@@ -7,14 +7,14 @@
 <table class="table">
 <thead>
     <tr>
-      <th scope="col">Nome</th>
-      <th scope="col">Curso</th>
+      <th scope="col">Nombre Profesor</th>
+      <th scope="col">Carrera</th>
       <th scope="col">Disciplina</th>
-      <th scope="col">Data</th>
-      <th scope="col">Començo Aula</th>
-      <th scope="col">Fim Aula</th>
+      <th scope="col">Fecha</th>
+      <th scope="col">Comienzo Aula</th>
+      <th scope="col">Fin Aula</th>
       <th scope="col">Sala</th>
-      <th scope="col">Edit</th>
+      <th scope="col">Editar</th>
     </tr>
 </thead>
 <tbody>
@@ -27,14 +27,14 @@
       <td>{{ $program->start_class }}</td>
       <td>{{ $program->end_class }}</td>
       <td>{{ $program->classroom_number }}</td>
-      <td><a href="/admin/program/{{$program->id}}/edit">Edit</a></td>
+      <td><a href="/admin/program/{{$program->id}}/edit">Editar</a></td>
     </tr>
     @endforeach
 </tbody>
 </table>
 @else
 <div class="jumbotron text-center">
-    <h1 class="display-4">Programa não encontrado :(</h1>
+    <h1 class="display-4">Programa no encontrado :(</h1>
 </div>
 @endif
 @endsection

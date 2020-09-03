@@ -29,17 +29,17 @@
     </ol>
   @endisset
 </nav>
-<button type="button" class="btn btn-primary mb-4" id="button-dates">Calendário</button>
+<button type="button" class="btn btn-primary mb-4" id="button-dates">Calendario</button>
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">Nome Estudante</th>
-      <th scope="col">Número Estudante</th>
-      <th scope="col">Data</th>
-      <th scope="col">Començo Aula</th>
-      <th scope="col">Fim Aula</th>
-      <th scope="col">Assistiu?</th>
-      <th scope="col">Ver Aluno</th>
+      <th scope="col">Nombre Estudiante</th>
+      <th scope="col">Número Estudiante</th>
+      <th scope="col">Fecha</th>
+      <th scope="col">Comienzo Aula</th>
+      <th scope="col">Fin Aula</th>
+      <th scope="col">Asistió?</th>
+      <th scope="col">Ver Alumno</th>
     </tr>
   </thead>
   <tbody>

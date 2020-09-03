@@ -21,10 +21,10 @@
   <thead>
     <tr>
       <th scope="col">Número Estudante</th>
-      <th scope="col">Data</th>
+      <th scope="col">Fecha</th>
       <th scope="col">Aula</th>
-      <th scope="col">Horas</th>
-      <th scope="col"><span class="text-success">Entrada</span> / <span class="text-danger">Saída</span></th>
+      <th scope="col">Hora</th>
+      <th scope="col"><span class="text-success">Entrada</span> / <span class="text-danger">Salida</span></th>
     </tr>
   </thead>
   @isset($assistances)
@@ -39,7 +39,7 @@
       <td><span class="text-success">Entrada</span></td>
       @else
       <td>{{ $assistance->endtime }}</td>
-      <td><span class="text-danger">Saída</span></td>
+      <td><span class="text-danger">Salida</span></td>
       @endif
     </tr>
     @endforeach

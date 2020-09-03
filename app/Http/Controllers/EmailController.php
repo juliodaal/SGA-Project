@@ -24,14 +24,14 @@ class EmailController extends Controller
     public function sendEmail(){
         try {
             $data = [
-                'title' => 'Olá ' . $this->name . ',',
-                'content'=> 'Bem-vindo à SGA, o seu e-mail associado é ' . $this->email . ' e a sua palavra-passe é ' . $this->password  
+                'title' => 'Hola ' . $this->name . ',',
+                'content'=> 'Bienvenido a SGA, su email asociado es: ' . $this->email . ' y su contraseña es : ' . $this->password  
             ];
             Mail::send('emails.sendPassword.index',$data,function($msg){
-                $msg->to($this->email,$this->name)->subject('Bem-vindo a SGA!');
+                $msg->to($this->email,$this->name)->subject('Bienvenido a SGA!');
             });
         } catch (\Exception $e) {
-            return FileAdminDataController::reportError('/admin',$e);
+            return FileAdminDataController::reportError('/home',$e);
         }
         return true;   
     }
@@ -39,14 +39,14 @@ class EmailController extends Controller
     public function sendEmailPassword(){
         try {
             $data = [
-                'title' => 'Olá ' . $this->name . ',',
-                'content'=> 'A sua nova palavra-passe é ' . $this->password  
+                'title' => 'Hola ' . $this->name . ',',
+                'content'=> 'Su nueva contraseña es: ' . $this->password  
             ];
             Mail::send('emails.sendPassword.index',$data,function($msg){
-                $msg->to($this->email,$this->name)->subject('Nova Palavra-passe SGA!');
+                $msg->to($this->email,$this->name)->subject('Nueva contraseña SGA!');
             });
         } catch (\Exception $e) {
-            return FileAdminDataController::reportError('/admin',$e);
+            return FileAdminDataController::reportError('/home',$e);
         }
         return true;   
     }

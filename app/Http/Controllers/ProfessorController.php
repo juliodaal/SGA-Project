@@ -88,21 +88,21 @@ class ProfessorController extends Controller
                     ]);
                     $mail = new EmailController($request->name,$request->email,$pass);
                     $resultSendEmail = $mail->sendEmail();
-                    if($resultSendEmail !== true){ throw new Exception('Erro no envio do Email com a Senha para o Utilizador'); }    
+                    if($resultSendEmail !== true){ throw new Exception('Error en el envío del email con la contraseña para el Usuario'); }    
                 } else {
                     if($validateCareer !== true){
-                        throw new Exception('Curso não existe');
+                        throw new Exception('Curso no existe');
                     } else if($validateDiscipline !== true){
-                        throw new Exception('Disciplina não existe');
+                        throw new Exception('Disciplina no existe');
                     }
                 }                   
             } catch (\Exception $e) {
                 if(isset($user)){ $user->delete(); } 
                 if(isset($professor)){ $professor->delete(); }
                 if(!isset($msg)){ $msg = null; }
-                return FileAdminDataController::reportError('/admin',$e,$msg);
+                return FileAdminDataController::reportError('/home',$e,$msg);
             }
-            return redirect('/admin')->with('successfully', 'Professor adicionado com sucesso ');  
+            return redirect('/home')->with('successfully', 'Professor adicionado com sucesso ');  
         }
     }
 
@@ -176,7 +176,7 @@ class ProfessorController extends Controller
         } catch (\Exception $e) {
             return FileAdminDataController::reportError('/admin/professor',$e);
         }
-        return redirect('/admin/professor')->with('successfully', 'Professor alterado com sucesso');
+        return redirect('/admin/professor')->with('successfully', 'Profesor alterado con éxito');
     }
 
     /**
@@ -195,7 +195,7 @@ class ProfessorController extends Controller
         } catch (\Exception $e) {
             return FileAdminDataController::reportError('/admin/professor',$e);
         }
-        return redirect('/admin/professor')->with('successfully', 'Professor foi apagado com sucesso'); 
+        return redirect('/admin/professor')->with('successfully', 'Profesor fue eliminado con éxito'); 
     }
 
     public function findProfessor(Request $request)
@@ -216,7 +216,7 @@ class ProfessorController extends Controller
             } else if($request->studentCareer){
                 $professors = Professor::join('users', 'professors.id_professor_from_users', '=', 'users.id')->where('acronym_career', '=', $request->studentCareer)->select('professors.id','name')->get();
             } else {
-                throw new Exception('Erro ao encontra o Professor');
+                throw new Exception('Error al encontrar al Profesor');
             }
         } catch (\Exception $e) {
             return FileAdminDataController::reportError('/admin/professor',$e);

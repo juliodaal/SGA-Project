@@ -20,6 +20,6 @@ class ResetPassword extends Controller
         } catch (\Exception $e) {
             return FileAdminDataController::reportError('/home',$e);
         }
-        return redirect('/')->with('successfully', 'Senha enviada ao Email ' . $request->email);
+        return redirect('/')->with('successfully', 'Contraseña enviada al Email ' . $request->email);
     }
 }

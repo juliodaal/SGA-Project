@@ -36,14 +36,14 @@ class FileAdminDataController extends Controller
                 $acronym = $data['spreadsheet']->getActiveSheet()->getCell('A'.$i)->getValue();
                 $name = $data['spreadsheet']->getActiveSheet()->getCell('B'.$i)->getValue();
                 
-                $msg = '"'. $acronym . '" ou "' . $name . '"';
+                $msg = '"'. $acronym . '" o "' . $name . '"';
 
                 if(!$acronym && !$name){
                     break;
                 } else if(!$acronym){
-                    throw new Exception('Acronimo vazio',204);
+                    throw new Exception('Acrónimo Vacío',204);
                 } else if(!$name) {
-                    throw new Exception('Nome vazio',204);
+                    throw new Exception('Nombre Vacío',204);
                 } else {
                     Discipline::create(['acronym_discipline'=>$acronym,'name'=>$name]);
                 }
@@ -53,7 +53,7 @@ class FileAdminDataController extends Controller
             return $this->reportError('/home',$e,$msg);
         }
 
-        return redirect('/home')->with('successfully', 'Disciplinas adicionadas com sucesso');
+        return redirect('/home')->with('successfully', 'Disciplinas agregadas con éxito');
     }
 
     public function career(Request $nameFile){
@@ -65,14 +65,14 @@ class FileAdminDataController extends Controller
                 $acronym = $data['spreadsheet']->getActiveSheet()->getCell('A'.$i)->getValue();
                 $name = $data['spreadsheet']->getActiveSheet()->getCell('B'.$i)->getValue();
                 
-                $msg = '"'. $acronym . '" ou "' . $name . '"';
+                $msg = '"'. $acronym . '" o "' . $name . '"';
 
                 if(!$acronym && !$name){
                     break;
                 } else if(!$acronym){
-                    throw new Exception('Acronimo vazio',204);
+                    throw new Exception('Acrónimo Vacío',204);
                 } else if(!$name) {
-                    throw new Exception('Nome vazio',204);
+                    throw new Exception('Nombre Vacío',204);
                 } else {
                     Career::create(['acronym_career'=>$acronym,'name'=>$name]);
                 }
@@ -82,7 +82,7 @@ class FileAdminDataController extends Controller
             return $this->reportError('/home',$e,$msg);
         }
 
-        return redirect('/home')->with('successfully', 'Cursos adicionados com sucesso');
+        return redirect('/home')->with('successfully', 'Cursos agregados con éxito');
     }
 
     public function student(Request $nameFile){
@@ -99,20 +99,20 @@ class FileAdminDataController extends Controller
                 $acronymTwo = $data['spreadsheet']->getActiveSheet()->getCell('F'.$i)->getValue();
                 $acronymThree = $data['spreadsheet']->getActiveSheet()->getCell('G'.$i)->getValue();
 
-                $msg = '"'. $numberStudent . '" ou "' . $email . '"';
+                $msg = '"'. $numberStudent . '" o "' . $email . '"';
 
                 if(!$name && !$numberStudent && !$email && !$cardId && !$acronym){
                     break;
                 } else if(!$name){
-                    throw new Exception('Nome vazio',204);
+                    throw new Exception('Nombre Vacío',204);
                 } else if(!$numberStudent) {
-                    throw new Exception('Numero Estudante vazio',204);
+                    throw new Exception('Número Estudiante Vacío',204);
                 } else if(!$email) {
-                    throw new Exception('Email vazio',204);
+                    throw new Exception('Email Vacío',204);
                 } else if(!$cardId) {
-                    throw new Exception('Id Cartão vazio',204);
+                    throw new Exception('Id Tarjeta Vacío',204);
                 } else if(!$acronym) {
-                    throw new Exception('Acronimo Curso vazio',204);
+                    throw new Exception('Acrónimo Curso Vacío',204);
                 }  else {
 
                 $arrayCareers = ['studentCareer'=>$acronym,'studentCareerTwo'=>$acronymTwo,'studentCareerThree'=> $acronymThree];
@@ -148,9 +148,9 @@ class FileAdminDataController extends Controller
                         ]);
                         $mail = new EmailController($name,$email,$pass);
                         $resultSendEmail = $mail->sendEmail();
-                        if($resultSendEmail !== true){ throw new Exception('Erro no envio do Email com a Senha para o Utilizador'); }    
+                        if($resultSendEmail !== true){ throw new Exception('Error en el envío del email con la contraseña para el Usuario'); }    
                     } else {
-                        throw new Exception('Verifique os cursos, há um que não existe.');
+                        throw new Exception('Verifique los cursos, hay uno que no existe.');
                     }
                 }
             }
@@ -165,7 +165,7 @@ class FileAdminDataController extends Controller
             return $this->reportError('/home',$e,$msg);
         }
 
-        return redirect('/home')->with('successfully', 'Studantes adicionados com sucesso');
+        return redirect('/home')->with('successfully', 'Estudiante agregado con éxito');
     }
 
     public function professor(Request $nameFile){
@@ -190,17 +190,17 @@ class FileAdminDataController extends Controller
                 if(!$name && !$numberProfessor && !$email && !$cardId && !$acronym && !$acronymDiscipline){
                     break;
                 } else if(!$name){
-                    throw new Exception('Nome vazio',204);
+                    throw new Exception('Nombre Vacío',204);
                 } else if(!$numberProfessor) {
-                    throw new Exception('Numero Professor vazio',204);
+                    throw new Exception('Número Profesor Vacío',204);
                 } else if(!$email) {
-                    throw new Exception('Email vazio',204);
+                    throw new Exception('Email Vacío',204);
                 } else if(!$cardId) {
-                    throw new Exception('Id Cartão vazio',204);
+                    throw new Exception('Id Tarjeta Vacío',204);
                 } else if(!$acronym) {
-                    throw new Exception('Acronimo Curso vazio',204);
+                    throw new Exception('Acrónimo Curso Vacío',204);
                 } else if(!$acronymDiscipline) {
-                    throw new Exception('Acronimo Disciplina vazio',204);
+                    throw new Exception('Acrónimo Disciplina Vacío',204);
                 }  else {
 
                     $arrayCareers = ['studentCareer'=>$acronym,'studentCareerTwo'=>$acronymTwo,'studentCareerThree'=> $acronymThree];
@@ -233,15 +233,15 @@ class FileAdminDataController extends Controller
                         ]);
                     } else {
                         if($validateCareer !== true){
-                            throw new Exception('Curso não existe');
+                            throw new Exception('Curso no existe');
                         } else if($validateDiscipline !== true){
-                            throw new Exception('Disciplina não existe');
+                            throw new Exception('Disciplina no existe');
                         }
                     } 
                 }
                 $mail = new EmailController($name,$email,$pass);
                 $resultSendEmail = $mail->sendEmail();
-                if($resultSendEmail !== true){ throw new Exception('Erro no envio do Email com a Senha para o Utilizador'); }    
+                if($resultSendEmail !== true){ throw new Exception('Error en el envío del Email con la contraseñá para el Usuario'); }    
             }
             } catch (\Exception $e) {
             if(isset($user)){ $user->delete(); }
@@ -250,7 +250,7 @@ class FileAdminDataController extends Controller
             return $this->reportError('/home',$e,$msg);
         }
 
-        return redirect('/home')->with('successfully', 'Professores adicionados com sucesso');
+        return redirect('/home')->with('successfully', 'Profesores agregados con éxito');
     }
 
     public function program(Request $nameFile){
@@ -270,21 +270,21 @@ class FileAdminDataController extends Controller
                 if(!$acronym && !$acronymDiscipline && !$numberProfessor && !$date && !$startTime && !$endTime && !$classRoom && !$group){
                     break;
                 } else if(!$acronym){
-                    throw new Exception('Acronimo Curso vazio',204);
+                    throw new Exception('Acrónimo Carrera Vacío',204);
                 } else if(!$acronymDiscipline) {
-                    throw new Exception('Acronimo Disciplina vazio',204);
+                    throw new Exception('Acrónimo Disciplina Vacío',204);
                 } else if(!$numberProfessor) {
-                    throw new Exception('Número Professor vazio',204);
+                    throw new Exception('Número Profesor Vacío',204);
                 } else if(!$date) {
-                    throw new Exception('Data vazio',204);
+                    throw new Exception('Fecha Vacía',204);
                 } else if(!$startTime) {
-                    throw new Exception('Começo Aula vazio',204);
+                    throw new Exception('Comienzo Aula Vacío',204);
                 } else if(!$endTime) {
-                    throw new Exception('Fim Aula vazio',204);
+                    throw new Exception('Fin Aula Vacío',204);
                 } else if(!$classRoom) {
-                    throw new Exception('Aula vazio',204);
+                    throw new Exception('Aula Vacío',204);
                 } else if(!$group && $group != 0) {
-                    throw new Exception('Número Grupo vazio',204);
+                    throw new Exception('Número Grupo Vacío',204);
                 } else {
                     
                     $array = ['acronymCareer'=>$acronym,'acronymDiscipline'=>$acronymDiscipline,'numberProfessor'=>$numberProfessor,'groupStudents'=>$group,'date'=>$date,'startTime'=>$startTime,'endTime'=>$endTime];
@@ -312,7 +312,7 @@ class FileAdminDataController extends Controller
         } catch (\Exception $e) {
             return $this->reportError('/home',$e);
         }
-        return redirect('/home')->with('successfully', 'Programas adicionados com sucesso');
+        return redirect('/home')->with('successfully', 'Programas agregados con éxito');
     }
 
     public function administrator(Request $nameFile){
@@ -329,11 +329,11 @@ class FileAdminDataController extends Controller
                 if(!$name && !$email && !$cardId){
                     break;
                 } else if(!$name){
-                    throw new Exception('Nome vazio',204);
+                    throw new Exception('Nombre Vacío',204);
                 } else if(!$email) {
-                    throw new Exception('Email vazio',204);
+                    throw new Exception('Email Vacío',204);
                 } else if(!$cardId) {
-                    throw new Exception('ID Card vazio',204);
+                    throw new Exception('Id Tarjeta Vacío',204);
                 } else {
 
                     $pass = Str::random(9);
@@ -348,11 +348,11 @@ class FileAdminDataController extends Controller
             }
             $mail = new EmailController($name,$email,$pass);
             $resultSendEmail = $mail->sendEmail();
-            if($resultSendEmail !== true){ throw new Exception('Erro no envio do Email com a Senha para o Utilizador'); } 
+            if($resultSendEmail !== true){ throw new Exception('Error en el envío del email con la contraseña para el Usuario'); } 
         } catch (\Exception $e) {
             return $this->reportError('/home',$e,$msg);
         }
-        return redirect('/home')->with('successfully', 'Administradores adicionados com sucesso');
+        return redirect('/home')->with('successfully', 'Administradores agregados con éxito');
     }
 
     public function educationalPlan(Request $nameFile){
@@ -368,11 +368,11 @@ class FileAdminDataController extends Controller
                 if(!$acronym && !$acronymDiscipline && !$semester){
                     break;
                 } else if(!$acronym){
-                    throw new Exception('Acronimo Curso vazio',204);
+                    throw new Exception('Acrónimo Carrera Vacío',204);
                 } else if(!$acronymDiscipline) {
-                    throw new Exception('Acronimo Disciplina vazio',204);
+                    throw new Exception('Acrónimo Disciplina Vacío',204);
                 } else if(!$semester) {
-                    throw new Exception('Acronimo Semestre vazio',204);
+                    throw new Exception('Acrónimo Semestre Vacío',204);
                 } else {
                     
                     $msg = '"'. $acronym . '" - "' . $acronymDiscipline . '"';
@@ -386,14 +386,14 @@ class FileAdminDataController extends Controller
                             'semester' => $semester
                         ]);   
                     } else {
-                        throw new Exception('Este curso ou disciplina não existem');
+                        throw new Exception('Este curso o disciplina no existen');
                     }
                 }
             }
         } catch (\Exception $e) {
             return $this->reportError('/home',$e);
         }
-        return redirect('/home')->with('successfully', 'Cursos adicionados com sucesso');
+        return redirect('/home')->with('successfully', 'Cursos agregados con éxite');
     }
 
     public static function reportError($route,$e,$msg = null){
@@ -404,17 +404,17 @@ class FileAdminDataController extends Controller
         }
         switch ($numError) {
             case 1049:
-                return redirect($route)->with('error','Erro na ligação à base de dados');
+                return redirect($route)->with('error','Error en la conexión con la Base de Datos');
                 break;
             case 1062:
-                return redirect($route)->with('error', $msg . ' já existem');
+                return redirect($route)->with('error', $msg . ' ya existen');
                 break;
             case 204:
                 return redirect($route)->with('error', $e->getMessage());
                 break;
             default:
                 if($e->getMessage() == 'The given data was invalid.'){
-                     return redirect($route)->with('error', 'Campos não preenchidos'); 
+                     return redirect($route)->with('error', 'Campos no llenados'); 
                 } else {
                     return redirect($route)->with('error', $e->getMessage());
                 }
@@ -440,10 +440,10 @@ class FileAdminDataController extends Controller
                     $request->file($nameAttach)->move($fileToSave,$nameFile); 
                     return redirect()->action($action,['nameFile' => $nameFile]);
                 } else {
-                    return redirect($redirectOnError)->with('error','Ficheiro no tipo Excel');
+                    return redirect($redirectOnError)->with('error','Archivo no tipo Excel');
                 }
             } catch (\Exception $e) {
-                return redirect($redirectOnError)->with('error', 'Ficheiro não encontrado');
+                return redirect($redirectOnError)->with('error', 'Archivo no encontrado');
             }
     }
 
@@ -456,9 +456,9 @@ class FileAdminDataController extends Controller
                 if(is_null($request->studentCareerTwo) || !is_null($careerTwo)){
                     if(is_null($request->studentCareerThree) || !is_null($careerThree)){
                         return true;
-                    } else { throw new Exception('Curso ' . strtoupper($request->studentCareerThree) . ' não existe'); }
-                } else { throw new Exception('Curso ' . strtoupper($request->studentCareerTwo) . ' não existe'); }
-            } else { throw new Exception('Curso ' . strtoupper($request->studentCareer) . ' não existe'); }
+                    } else { throw new Exception('Carrera ' . strtoupper($request->studentCareerThree) . ' no existe'); }
+                } else { throw new Exception('Carrera ' . strtoupper($request->studentCareerTwo) . ' no existe'); }
+            } else { throw new Exception('Carrera ' . strtoupper($request->studentCareer) . ' no existe'); }
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -475,9 +475,9 @@ class FileAdminDataController extends Controller
                 if(is_null($request->professorDisciplineTwo) || !is_null($disciplineTwo)){
                     if(is_null($request->professorDisciplineThree) || !is_null($disciplineThree)){
                         return true;
-                    } else { throw new Exception('Disciplina ' . strtoupper($request->professorDisciplineThree) . ' não existe'); }
-                } else { throw new Exception('Disciplina ' . strtoupper($request->professorDisciplineTwo) . ' não existe'); }
-            } else { throw new Exception('Disciplina ' . strtoupper($request->professorDiscipline) . ' não existe'); } 
+                    } else { throw new Exception('Disciplina ' . strtoupper($request->professorDisciplineThree) . ' no existe'); }
+                } else { throw new Exception('Disciplina ' . strtoupper($request->professorDisciplineTwo) . ' no existe'); }
+            } else { throw new Exception('Disciplina ' . strtoupper($request->professorDiscipline) . ' no existe'); } 
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -507,10 +507,10 @@ class FileAdminDataController extends Controller
                     if(!is_null($careerProfessor) || !is_null($careerProfessorTwo) || !is_null($careerProfessorThree)){
                         if(!is_null($disciplineProfessor) || !is_null($disciplineProfessorTwo) || !is_null($disciplineProfessorThree)){
                             return true;
-                        } else { throw new Exception('Disciplina não Associada ao Professor'); }
-                    } else { throw new Exception('Curso não Associado ao Professor'); } 
-                } else { throw new Exception('Um programa já existe para o professor a mesma hora'); }
-            } else { throw new Exception('Dados não existentes'); }
+                        } else { throw new Exception('Disciplina no asociada al Profesor'); }
+                    } else { throw new Exception('Carrera no asociada al Profesor'); } 
+                } else { throw new Exception('Un programa con la misma hora ya existe para este profesor'); }
+            } else { throw new Exception('Datos no existentes'); }
         } catch (\Exception $e) {
             return $e->getMessage();
         }

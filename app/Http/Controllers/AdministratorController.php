@@ -67,12 +67,12 @@ class AdministratorController extends Controller
                 ]);
                 $mail = new EmailController($request->name,$request->email,$pass);
                 $resultSendEmail = $mail->sendEmail();
-                if($resultSendEmail !== true){ throw new Exception('Erro no envio do Email com a Senha para o Utilizador'); }
+                if($resultSendEmail !== true){ throw new Exception('Error en el envío del email con la contraseña para el Usuario'); }
             } catch (\Exception $e) {
                 if(!isset($msg)){ $msg = null; }
-                return FileAdminDataController::reportError('/admin',$e,$msg);
+                return FileAdminDataController::reportError('/home',$e,$msg);
             }
-            return redirect('/admin')->with('successfully', 'Administrador adicionado com sucesso ');  
+            return redirect('/home')->with('successfully', 'Administrador agregado con éxito');  
         }
     }
 
@@ -87,7 +87,7 @@ class AdministratorController extends Controller
         try { 
             $administrators = User::where('type_user_from_type_users', '=', 3)->get();
         } catch (\Exception $e) {
-            return FileAdminDataController::reportError('/admin',$e);
+            return FileAdminDataController::reportError('/home',$e);
         }
         return view('admin.Administrator.index',compact('administrators'));
     }
@@ -132,7 +132,7 @@ class AdministratorController extends Controller
         } catch (\Exception $e) {
             return FileAdminDataController::reportError('/admin/administrator/' . $id . '/edit',$e);
         }
-        return redirect('/admin/administrator')->with('successfully', 'Adminitrador alterado com sucesso'); 
+        return redirect('/admin/administrator')->with('successfully', 'Adminitrador alterado con éxito'); 
     }
 
     /**
@@ -148,6 +148,6 @@ class AdministratorController extends Controller
         } catch (\Exception $e) {
             return FileAdminDataController::reportError('/admin/administrator',$e);
         }
-        return redirect('/admin/administrator')->with('successfully', 'Administrador apagado com sucesso'); 
+        return redirect('/admin/administrator')->with('successfully', 'Administrador eliminado con éxito'); 
     }
 }

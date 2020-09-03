@@ -47,7 +47,7 @@
 </ul>
 @else
 <div class="jumbotron text-center">
-    <h1 class="display-4">Não há disciplinas para se inscrever...</h1>
+    <h1 class="display-4">No hay disciplinas para inscribirse :(</h1>
 </div>
 @endif
 @endsection

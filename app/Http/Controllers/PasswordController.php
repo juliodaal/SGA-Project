@@ -46,10 +46,10 @@ class PasswordController extends Controller
             ]);
             $mail = new EmailController($user->name,$user->email,$pass);
             $resultSendEmail = $mail->sendEmailPassword();
-            if($resultSendEmail !== true){ throw new Exception('Erro no envio do Email com a Senha para o Utilizador'); }    
+            if($resultSendEmail !== true){ throw new Exception('Error en el envío del email con la contraseña para el Usuario'); }    
         } catch (\Exception $e) {
             return FileAdminDataController::reportError('/home',$e);
         }
-        return redirect('/home')->with('successfully', 'Senha enviada com sucesso');  
+        return redirect('/home')->with('successfully', 'Contraseña enviada con éxito');  
     }
 }

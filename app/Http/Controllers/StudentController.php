@@ -217,7 +217,7 @@ class StudentController extends Controller
             } else if($request->StudentCareer){
                 $students = Student::join('users', 'students.id_student_from_users', '=', 'users.id')->where('acronym_career', '=', $request->StudentCareer)->select('students.id','name')->get();
             } else {
-                throw new Exception('Erro ao encontra o Estudante');
+                throw new Exception('Error al encontrar al Estudiante');
             }
         } catch (\Exception $e) {
             return FileAdminDataController::reportError('/admin/student',$e);

@@ -75,7 +75,7 @@
                             </a>
                         @if(session()->get('type_user') == 1)
                             <a class="navbar-brand text-muted font-weight-light" style="font-size:18px;" href="{{ url('/home/inscriptions') }}">
-                                Inscrições
+                                Inscripciones 
                             </a>
                         @endif
                         @endauth

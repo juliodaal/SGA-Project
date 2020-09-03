@@ -64,7 +64,7 @@ class InscriptionController extends Controller
     public function create(Request $request)
     {
         try {
-            $msg = '"' . $request['number_student'] . '"' . 'ou' . '"' . $request['discipline'] . '"' . 'ou' . '"' . $request['career'] . '"';
+            $msg = '"' . $request['number_student'] . '"' . 'o' . '"' . $request['discipline'] . '"' . 'o' . '"' . $request['career'] . '"';
             Inscription::create([
                 'number_student_from_students' => $request['number_student'],
                 'acronym_discipline_from_disciplines' => $request['discipline'],
@@ -74,7 +74,7 @@ class InscriptionController extends Controller
             if(!isset($msg)){ $msg = null; }
             return FileAdminDataController::reportError('/home',$e,$msg);
         }
-        return redirect('/home')->with('successfully', 'Disciplina adicionada com sucesso');  
+        return redirect('/home')->with('successfully', 'Disciplina agregada con éxito');  
     }
 
     /**

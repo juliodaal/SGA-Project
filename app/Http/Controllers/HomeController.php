@@ -108,7 +108,7 @@ class HomeController extends Controller
             return FileAdminDataController::reportError('/home',$e);
         }
         return view('Users.GroupStudents.index', [
-            'breadcrumbs' => ['Disciplinas','Turma'],
+            'breadcrumbs' => ['Disciplinas','Curso'],
             'students' => $data->students,
             'programs' => $data->programs,
             'career' => $career,
@@ -134,7 +134,7 @@ class HomeController extends Controller
             return FileAdminDataController::reportError('/home',$e);
         }
         return view('Users.GroupStudents.index', [
-            'breadcrumbs' => ['Disciplinas','Turma'],
+            'breadcrumbs' => ['Disciplinas','Curso'],
             'students' => $data->students,
             'programs' => $data->programs,
             'assisStudents' => $assisStudents,
@@ -157,7 +157,7 @@ class HomeController extends Controller
         }
         return view('Users.GroupStudents.assistance', [
             'assistances' => $assistances,
-            'breadcrumbs' => ['Disciplinas','Turma','Aluno']
+            'breadcrumbs' => ['Disciplinas','Curso','Aluno']
         ]);
     }
 

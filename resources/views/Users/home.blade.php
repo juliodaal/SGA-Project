@@ -53,7 +53,7 @@
 </ul>
 @else
 <div class="jumbotron text-center">
-    <h1 class="display-4">Não há disciplinas, cursos ou grupos de estudantes disponíveis :(</h1>
+    <h1 class="display-4">No hay disciplinas, cursos o grupos de estudiantes disponibles :(</h1>
 </div>
 @endif
 @else
@@ -76,8 +76,8 @@
   </ul>
 @else
 <div class="jumbotron text-center">
-    <h1 class="display-4">Não há disciplinas registadas nos teus cursos :(</h1>
-    <p>Faz click em <a href="{{ url('/home/inscriptions') }}">Inscrições</a> para inscrever tuas disciplinas</p>
+    <h1 class="display-4">No hay disciplinas registradas  en tus cursos :(</h1>
+    <p>Has click en <a href="{{ url('/home/inscriptions') }}">Inscripciones</a> para inscribir tus disciplinas.</p>
 </div>
 @endif
 @endif

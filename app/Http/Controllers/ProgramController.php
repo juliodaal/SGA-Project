@@ -79,9 +79,9 @@ class ProgramController extends Controller
                 }
             } catch (\Exception $e) {
                 if(!isset($msg)){ $msg = null; }
-                return FileAdminDataController::reportError('/admin',$e,$msg);
+                return FileAdminDataController::reportError('/home',$e,$msg);
             }
-            return redirect('/admin')->with('successfully', 'Programa adicionado com sucesso ');  
+            return redirect('/home')->with('successfully', 'Programa agregado con éxito');  
         }
     }
 
@@ -136,12 +136,12 @@ class ProgramController extends Controller
                     'group_from_students' => $request->groupStudents
                 ]);
             } else {
-                throw new Exception('Verifique os dados inseridos, não foi possível modificar este programa');
+                throw new Exception('Verifique los datos introducidos, no fue posible modificar este programa');
             }
             } catch (\Exception $e) {
                 return FileAdminDataController::reportError('/admin/program',$e);
             }
-            return redirect('/admin/program')->with('successfully', 'Programa alterado com sucesso');
+            return redirect('/admin/program')->with('successfully', 'Programa alterado con éxito');
     }
 
     /**
@@ -157,7 +157,7 @@ class ProgramController extends Controller
         } catch (\Exception $e) {
             return FileAdminDataController::reportError('/admin/program',$e);
         }
-        return redirect('/admin/program')->with('successfully', 'Programa foi apagado com sucesso'); 
+        return redirect('/admin/program')->with('successfully', 'Programa fue eliminado con éxito'); 
     }
     
     public function findProgram(Request $request)
@@ -181,7 +181,7 @@ class ProgramController extends Controller
                     )
                 ->get();
             }  else {
-                throw new Exception('Erro ao encontra o Programa');
+                throw new Exception('Error al encontrar el programa');
             }
         } catch (\Exception $e) {
             return FileAdminDataController::reportError('/admin/program',$e);

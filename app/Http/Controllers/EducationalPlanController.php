@@ -64,13 +64,13 @@ class EducationalPlanController extends Controller
                         'semester' => strtoupper($request->semester)
                     ]);
                 } else {
-                    throw new Exception('Este curso ou disciplina não existem');
+                    throw new Exception('Este curso o disciplina no existe');
                 }
             } catch (\Exception $e){
                 if(!isset($msg)){ $msg = null; }
-                return FileAdminDataController::reportError('/admin',$e,$msg);
+                return FileAdminDataController::reportError('/home',$e,$msg);
             }
-            return redirect('/admin')->with('successfully', 'Curso adicionado com sucesso '); 
+            return redirect('/home')->with('successfully', 'Curso agregado con éxito'); 
         }
     }
 
@@ -123,9 +123,9 @@ class EducationalPlanController extends Controller
     {
         try {
             if(EducationalPlan::findOrFail($id)->delete()){
-                return redirect('/admin/plan')->with('successfully', 'O Plano de Educação foi apagado com sucesso'); 
+                return redirect('/admin/plan')->with('successfully', 'El Plan de Educación fue elimina con éxito'); 
             } else {
-                throw new Exception('Erro na ligação à base de dados');
+                throw new Exception('Error en la conexión con la Base de Datos');
             }
         } catch (\Exception $e) {
             return FileAdminDataController::reportError('/admin/plan',$e);
@@ -141,7 +141,7 @@ class EducationalPlanController extends Controller
                     $plans = EducationalPlan::all();
                 }
             } else {
-                throw new Exception('Erro ao encontra o Plano de Educação');
+                throw new Exception('Error al intentar encontrar el plan de Educación');
             }
         } catch (\Exception $e) {
             return FileAdminDataController::reportError('/admin/plan',$e);

@@ -216,7 +216,7 @@ To update the data of a User, Career, Discipline, etc. As an Administrator or To
 Then, click on edit, change the data and click on send.
 To delete, click on Delete and you're done.
 
-# bscribe to disciplines
+# Subscribe  to disciplines
 In order for a student to enroll in a specific discipline, the student must enter the application with his/her credentials, go to the Registration section and click on Subscribe in a specific discipline.
 
 # Mailgun

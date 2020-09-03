@@ -59,3 +59,91 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Installation
+
+# Intalation Composer
+
+Laravel uses Composer to manage its dependencies. So, before using Laravel, make sure you have Composer installed on your pc. Through the following link, you can install Composer in your pc, [Intallar Composer](https://getcomposer.org/download/).
+
+# Laravel Installation
+
+First, download the Laravel installer using Composer, by typing the following command in your console
+
+```
+composer global require laravel/installer
+
+```
+ 
+You can see the official Laravel documentation in the following link, [See Docs](https://laravel.com/docs/7.x/installation).
+
+ 
+# Git Installation
+
+You can install Git through the following link, [Install Git](https://git-scm.com/downloads).
+
+# Clone Project
+
+First you must clone the project , [See project in GitHub](https://github.com/juliodaal/SGA-Project), to clone it you must execute in console the following command:
+ 
+```
+$ git clone https://github.com/juliodaal/SGA-Project.git
+
+```
+
+# Running Project
+
+To run the project, you must through your console, access to the folder of the project, once inside the project you must execute the command:
+
+```
+php artisan serve
+
+```
+
+## Data Base
+
+Entity-Relationship Model (ERM)
+You can get the Entity-Relationship Model through the following link, [See ER Model](https://github.com/juliodaal/SGA-Project/blob/master/public/DB%20Structure/DB%20Structure.png).
+
+# Database Connection
+
+The connection to the database is established in the main section of the project, in the .env file
+The project is connected to a MySql database, localhost 127.0.0.1, port 3306, username root, and the database name is sga_database.
+For more information about how to manage the .env file, you can access the official documentation at Laravel, [See Docs](https://laravel.com/docs/7.x/database).
+
+# Migrations
+
+You will find the migrations in Database\migrations
+To create new migrations you can execute the following command:
+
+```
+php artisan make:migration << name_migration >>
+
+```
+For more information on how to manage migrations, you can access the official documentation at Laravel, [See Docs](https://laravel.com/docs/7.x/migrations#introduction).
+
+# Models
+
+All models are directly in the App folder, with the singular name of each table in the database.
+To create new models you can execute the following command:
+
+```
+php artisan make:model << name_model >>
+
+```
+For information on how to manage the Models, you can access the official documentation in Laravel, [See Docs](https://laravel.com/docs/7.x/eloquent#defining-models).
+
+## Structure
+
+# Controllers
+
+All the controllers are in the App\Http\Controllers
+To create new Controllers you can execute the following command:
+
+```
+php artisan make:controller << name_controller >>
+
+```
+
+For information on how to manage the Controllers, you can access the official documentation at Laravel, [See Docs](https://laravel.com/docs/7.x/controllers#introduction).
+

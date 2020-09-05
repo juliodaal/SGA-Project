@@ -55,7 +55,6 @@ We must create our own APP_KEY, and you can use the following command to do it:
 
 ```
 php artisan key:generate
-
 ```
 For more information visit the official documentation of Laravel, .[env laravel](https://laravel.com/docs/7.x/configuration#environment-configuration "env laravel").
 

@@ -72,7 +72,6 @@ DB_PORT=3306
 DB_DATABASE=sga_database
 DB_USERNAME=root
 DB_PASSWORD=
-
 ```
 For more information about the connection to the database, see the following link, [See Docs](https://laravel.com/docs/7.x/database).
 
@@ -83,7 +82,6 @@ Then, run all the migrations to our database, you can do it with the following c
 
 ```
 php artisan migrate
-
 ```
 
 To run the project, you must through your console, access to the folder of the project, once inside the project you must execute the command:
@@ -189,19 +187,20 @@ Then you enter the following command:
 
 ```
 App\User::create([ 'name'=>'Top Admin', 'email'=>'topAdmin@gmail.com', 'password'=>Illuminate\Support\Facades\Hash::make(123), 'type_user_from_type_users'=>4, 'card_id'=>'421421421b' ]);
-Note: you can change all values except the type_user_from_type_users as this is a value that is used in other areas within the application.
 ```
+> Note: you can change all values except the type_user_from_type_users as this is a value that is used in other areas within the application.
 
 ## Create
 To create an Administrator, Student, teacher, careers, disciplines, education plan and programs you must first create a Top Admin type User, then once inside the application in the /home, you will have different forms to create all of them.
 
-```
-Note: you must have configured Mailgun for the Users to receive their password to their email.
-```
 
-## date or Remove
+> Note: you must have configured Mailgun for the Users to receive their password to their email. You can see the Mailgun section for more information.
+
+
+## Update or Remove
 
 To update the data of a User, Career, Discipline, etc. As an Administrator or Top Admin, in /home you must go to the sections "see", either "See Students" or "See Disciplines", etc. Once there you must fill in the fields to search, just one field is enough (to show all the Students, Teachers and Administrators. In the section of the Name you can put "*" and click on Search)
+
 Then, click on edit, change the data and click on send.
 To delete, click on Delete and you're done.
 

@@ -41,7 +41,7 @@
 <ul class="list-group list-group-flush">
     @foreach($disciplines as $discipline)
         <li class="list-group-item bg-transparent">{{ $discipline['career'] }} - {{ $discipline['discipline'] }} - {{ $discipline['name'] }}
-            <a class="float-right" href="/home/inscriptions/create?discipline={{$discipline['discipline']}}&number_student={{$discipline['number_student']}}&career={{$discipline['career']}}">Inscrever</a>
+            <a class="float-right" href="/home/inscriptions/create?discipline={{$discipline['discipline']}}&number_student={{$discipline['number_student']}}&career={{$discipline['career']}}">Inscribir</a>
         </li>
     @endforeach
 </ul>

@@ -76,7 +76,7 @@
   </ul>
 @else
 <div class="jumbotron text-center">
-    <h1 class="display-4">No hay disciplinas registradas  en tus cursos :(</h1>
+    <h1 class="display-3">No hay disciplinas registradas  en tus cursos :(</h1>
     <p>Has click en <a href="{{ url('/home/inscriptions') }}">Inscripciones</a> para inscribir tus disciplinas.</p>
 </div>
 @endif

@@ -1,6 +1,34 @@
 @extends('layouts.app')
 
+@section('title','Reset Contraseña')
+
 @section('content')
+@if($errors->isNotEmpty())
+        <div class="alert alert-warning alert-dismissible fade show rounded border border-warning" role="alert">
+            <strong>Campos Vacíos</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+@endif
+@if(session()->has('error'))
+    <div class="alert alert-warning alert-dismissible fade show rounded border border-warning" role="alert">
+        <strong>{{ session()->get('error') }}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {!! session()->forget('error') !!}
+@endif
+@if(session()->has('successfully'))
+    <div class="alert alert-success alert-dismissible fade show rounded border border-success" role="alert">
+        <strong>{{ session()->get('successfully') }}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {!! session()->forget('successfully') !!}
+@endif
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -14,7 +42,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('password.email') }}">
+                    <form method="POST" action="/reset/password/send">
                         @csrf
 
                         <div class="form-group row">

@@ -33,6 +33,9 @@ Route::post('/admin/plan/findPlan', 'EducationalPlanController@findPlan')->name(
 // Mail
 Route::get('/mail/password','EmailController@sendEmail')->name('mail.password.sendEmail');
 
+//Forgot Password
+Route::post('/reset/password/send','ResetPassword@forgotPassword')->name('reset.password.send.forgotPassword');
+
 // Generate Password
 Route::get('/admin/generate/password', 'PasswordController@generatePassword')->name('password.generatePassword');
 

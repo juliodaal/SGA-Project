@@ -16,8 +16,9 @@ class AuthAdmin
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::check() && session()->get('type_user') == 3)
-            return $next($request);
+        if(Auth::check())
+	    if(session()->get('type_user') == 3 || session()->get('type_user') == 4)
+	        return $next($request);
         return redirect('/');
     }
 }
